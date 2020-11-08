@@ -13,11 +13,11 @@ use apoyo_alimentario;
 /**************** USERS AUTHENTICATION ************************/
 drop table if exists rol;
 create table rol(
-   role_id integer primary key,
+   id_rol integer primary key,
    role_name varchar (30) unique not null
 );
-insert into rol(role_id, role_name) values(1, 'estudiante');
-insert into rol(role_id, role_name) values(2, 'administrador');
+insert into rol(id_rol, role_name) values(1, 'estudiante');
+insert into rol(id_rol, role_name) values(2, 'administrador');
 
 drop table if exists usuario;
 create table usuario(
@@ -26,11 +26,11 @@ create table usuario(
   password varchar( 50 ) not null,
   created_on timestamp not null,
   last_login timestamp,
-  role_id integer not null, 
+  id_rol integer not null,
   PRIMARY KEY (id_user)
 );
-insert into usuario(username, password, created_on, role_id) values ('student1', 'ouau32u1', current_timestamp, 1);
-insert into usuario(username, password, created_on, role_id) values ('admin1', 'ouau32u1', current_timestamp, 2);
+insert into usuario(username, password, created_on, id_rol) values ('student1', 'ouau32u1', current_timestamp, 1);
+insert into usuario(username, password, created_on, id_rol) values ('admin1', 'ouau32u1', current_timestamp, 2);
 
 
 /**************** CONVOCATORIA ************************/
@@ -49,13 +49,34 @@ create table periodo(
 insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin)
             values (1, '2020-3','2020-10-27 00:00:00', '2020-12-27 23:59:59');
 
+drop table if exists estado_convocatoria;
+create table estado_convocatoria(
+    id_estado_convocatoria serial primary key,
+    estado varchar(30),
+    descripcion varchar(200)
+);
+insert into estado_convocatoria(id_estado_convocatoria, estado) values(1, "activa");
+insert into estado_convocatoria(id_estado_convocatoria, estado) values(2, "finalizada");
+
 drop table if exists convocatoria;
 create table convocatoria(
   id_convocatoria serial primary key, 
   fecha_inicio timestamp not null,
   fecha_fin timestamp not null,
   id_periodo integer not null,
-  foreign key(id_periodo) references periodo(id_periodo)
+  id_estado_convocatoria integer not null,
+  foreign key(id_periodo) references periodo(id_periodo),
+  foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria)
+);
+
+drop table if exists historico_convocatoria;
+create table historico_convocatoria(
+  id_historico_convocatoria serial primary key,
+  id_convocatoria integer,
+  id_estado_convocatoria integer not null,
+  fecha timestamp not null,
+  foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria),
+  foreign key(convocatoria) references convocatoria(id_convocatoria)
 );
 
 /* fecha inicio < fecha fin */
@@ -65,15 +86,42 @@ insert into convocatoria(fecha_inicio, fecha_fin, id_periodo)
 
 /**************** ESTUDIANTES ************************/
 
-drop table if exists condicion_socioeconomica;
-create table condicion_socioeconomica(
-  id_condicion_socieconomica serial primary key, 
-  condiciones_familiares smallint , /* estrato */ /* check estrato is valid? */
-  procedencia varchar(200), /**/ 
-  condiciones_de_salud varchar(10) /* una tabla catalogo, (bien, regular ...)? */
+
+drop table if exists estado_documento;
+create table estado_documento(
+  id_estado_documento serial primary key,
+  nombre varchar(30),
+  descripcion varchar(200)
 );
-insert into condicion_socioeconomica(id_condicion_socieconomica, condiciones_familiares, procedencia, condiciones_de_salud)
-      values (1, 2, 'indigena', 'excelente');
+
+
+drop table if exist solicitud_documento;
+create table solicitud_documento(
+    id_solicitud integer not null,
+    id_documento integer not null,
+    id_estado_documento integer,
+    revision varchar(300),
+    url varchar(1000),
+    foreign key(id_estado_documento) references estado_documento(id_estado_documento)
+);
+
+
+
+
+drop table if exist tipo_documento;
+create table tipo_documento(
+  id_tipo_documento serial primary key,
+  nombre varchar(200)
+);
+
+drop table if exists document;
+create table document(
+  id_document serial primary key,
+  nombre varchar(200),
+  tipo_documento integer not null,
+  puntaje smallint
+);
+insert into document(id_document, nombre, puntaje) values (1, 2, 'indigena', 'excelente');
 
 
 drop table if exists facultad;
@@ -97,7 +145,7 @@ insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) val
 
 drop table if exists estudiante;
 create table estudiante(
-  codigo serial primary key, 
+  id_estudiante serial primary key, 
   identificacion varchar(30), /* take into account international students*/
   nombre varchar(50) not null,
   apellido varchar(50) not null,
@@ -105,13 +153,12 @@ create table estudiante(
   matriculas_restantes smallint, 
   email varchar(100), 
   password varchar(256), 
-  id_condicion_socieconomica integer not null,
+  id_document integer not null,
   id_proyecto_curricular integer not null, 
-  foreign key(id_condicion_socieconomica) references condicion_socioeconomica(id_condicion_socieconomica),
   foreign key(id_proyecto_curricular) references proyecto_curricular(id_proyecto_curricular)
 );
 
-insert into estudiante(codigo, identificacion, nombre, apellido, promedio, matriculas_restantes, email, password, id_condicion_socieconomica, id_proyecto_curricular)
+insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, password, id_document, id_proyecto_curricular)
 values (1, '1018345847', 'jhon', 'doe', 4.5, 8, 'jhon@email.com', '0x23heoe7ik', 1 , 2);
 
 
@@ -134,21 +181,30 @@ insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6
 drop table if  exists solicitud;
 create table solicitud(
   id_solicitud serial primary key, 
-  codigo_estudiante integer not null, 
+  id_estudiante integer not null, 
   puntaje smallint, /* check puntaje [0, 100] */
   fecha_de_creacion timestamp not null, 
-  /* datos de la solicitud */
-
-  /* */
   id_estado_solicitud integer not null, 
   id_convocatoria integer not null, /* if I insert a register should check convocatoria is active */
   foreign key (id_convocatoria) references convocatoria(id_convocatoria),
   foreign key (id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
-  foreign key (codigo_estudiante) references estudiante(codigo)
+  foreign key (id_estudiante) references estudiante(id_estudiante)
 );
 
 
-insert into solicitud(id_solicitud, codigo_estudiante, fecha_de_creacion, id_estado_solicitud, id_convocatoria) values (1, 1, current_timestamp, 1, 1);
+
+insert into solicitud(id_solicitud, id_estudiante, fecha_de_creacion, id_estado_solicitud, id_convocatoria) values (1, 1, current_timestamp, 1, 1);
+
+drop table if exists historico_solicitud;
+create table historico_solicitud(
+  id_historico_solicitud serial primary key,
+  id_solicitud integer,
+  id_estado_solicitud integer,
+  foreign key(id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
+  fecha timestamp not null
+);
+
+
 
 
 /**************** PUNTAJES Y SUBSIDIOS ************************/
@@ -177,19 +233,51 @@ create table tipo_subsidio(
 );
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(1, 'tipo A',100, 90, 30); 
 
-drop table if  exists beneficiario;
-create table beneficiario(
-  id_beneficiario serial primary key, 
-  id_tipo_subsidio integer not null, 
-  id_solicitud integer not null,
-  foreign key(id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
-  foreign key(id_solicitud) references solicitud(id_solicitud)
+drop table if exists subsidio_periodo;
+create table subsidio_periodo(
+  id_tipo_subsidio integer,
+  id_periodo integer,
+  cantidad_de_almuerzos_ofertados integer
+  foreign key id_tipo_subsidio references tipo_subsidio(id_tipo_subsidio),
+  foreign key id_periodo references periodo(id_periodo)
 );
-/* a beneficiario is created if the solicitud was accepted */
-insert into beneficiario(id_beneficiario, id_tipo_subsidio, id_solicitud) values(1, 1, 1);
+
+/**************** ACTIVIDADES ************************/
+
+drop table if exists estado_actividad;
+create table estado_actividad(
+  id_estado_actividad serial primary key,
+  nombre varchar(200),
+  descripcion varchar(2000)
+);
 
 
-/****************  RETIRO DE ESTUDIANTE  ************************/
-/****************  MANEJO DE TICKETS  ************************/
-/****************  ACTIVIDADES DE SERVICIO  ************************/
+drop table if exists actividad;
+create table actividad(
+  id_actividad serial primary key,
+  nombre varchar(200),
+  descripcion varchar(1000),
+  horas_equivalentes smallint
+);
+
+drop table if exists responsable_actividad;
+create table responsable_actividad(
+  id_responsable serial primary key,
+  nombre varchar(30),
+  email varchar(100)
+);
+
+drop table if exists actividad_beneficiario;
+create table actividad_beneficiario(
+  id_solicitud integer,
+  id_actividad integer,
+  id_estado_actividad integer,
+  id_responsable integer
+);
+
+
+/**************** TICKET and BENEFICIARIO ************************/
+
+
+
 
