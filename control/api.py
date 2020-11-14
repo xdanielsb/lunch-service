@@ -1,8 +1,10 @@
+import psycopg2
 from flask import Flask
 from dao.user import User
-import psycopg2
+from dao.periodo import Periodo
+from dao.convocatoria import Convocatoria
 import os
-
+import json
 
 app = Flask(__name__)
 app.config.from_object("config")
@@ -26,19 +28,28 @@ class Connection:
         cur.execute(query)
         cur.close()
 
-    def valid_user(self, username, password):
-        q = "select count(*) from usuario as u, estudiante as e where u.id_usuario = e.id_usuario and e.identificacion = '{}' and u.password = '{}'".format(
-            username, password
-        )
-        return {"res": len(self.query(q))}
 
+conn = Connection()
 
-con = Connection()
+userDao = User(conn)
+periodoDao = Periodo(conn)
+convocatoriaDao = Convocatoria(conn)
 
 
 @app.route("/login/<username>/<password>")
 def valid_user(username, password):
-    return con.valid_user(username, password)
+    return userDao.exist(username, password)
+
+
+@app.route("/periodo")
+def get_periodos():
+    return json.dumps(periodoDao.get_all())
+
+
+@app.route("/periodo/new/<fecha_inicio>/<fecha_fin>")
+def create_periodo(fecha_inicio, fecha_fin):
+    print(fecha_inicio, fecha_fin)
+    return ""
 
 
 if __name__ == "__main__":
