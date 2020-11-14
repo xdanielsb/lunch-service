@@ -1,13 +1,12 @@
 import psycopg2
-from flask import Flask
-from dao.user import User
-from dao.periodo import Periodo
-from dao.convocatoria import Convocatoria
+from flask import request
+from flask import Flask, render_template
+from control.dao.user import User
 import os
 import json
 
 app = Flask(__name__)
-app.config.from_object("config")
+# app.config.from_object("config")
 
 
 class Connection:
@@ -30,26 +29,14 @@ class Connection:
 
 
 conn = Connection()
-
 userDao = User(conn)
-periodoDao = Periodo(conn)
-convocatoriaDao = Convocatoria(conn)
 
-
-@app.route("/login/<username>/<password>")
-def valid_user(username, password):
-    return userDao.exist(username, password)
-
-
-@app.route("/periodo")
-def get_periodos():
-    return json.dumps(periodoDao.get_all())
-
-
-@app.route("/periodo/new/<fecha_inicio>/<fecha_fin>")
-def create_periodo(fecha_inicio, fecha_fin):
-    print(fecha_inicio, fecha_fin)
-    return ""
+@app.route("/login",methods = ['POST', 'GET'])
+def login():
+    if request.method == "POST":
+        if(userDao.exist(request.form['username'], request.form['password']):
+            return render_template('home.html')
+    return render_template('login.html')
 
 
 if __name__ == "__main__":
