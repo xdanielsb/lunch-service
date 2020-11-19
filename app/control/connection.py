@@ -1,5 +1,6 @@
 import psycopg2
 
+
 class Connection:
     def __init__(self):
         self.conn = psycopg2.connect(
@@ -17,5 +18,3 @@ class Connection:
         cur = self.conn.cursor()
         cur.execute(query)
         cur.close()
-
-

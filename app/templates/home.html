@@ -18,7 +18,7 @@
         Sistema de Apoyo Alimentario
       </a>
       <ul class="nav navbar-nav nav-flex-icons principal-ud nav-flex-icons">
-        <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
       </ul>
     </div>
   </nav>
@@ -31,17 +31,19 @@
             <div class="profile-userpic d-flex mt-2">
               <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Men-Profile-Image-715x657.png" width="120em" height="120em" class="img-responsive mx-auto " alt="">
             </div>
+            {% if g.user %}
             <div class="profile-usertitle">
               <div class="col-xs-1 text-center">
-                Ana Maria
+                {{ g.user['name'] }}
               </div>
               <div class="col-xs-1 text-center">
-                Administrador Bienestar Social
+                {{ g.user['rol'] }}
               </div>
               <div class="col-xs-1 text-center">
-                ana@email.udistrital.edu.co
+                {{ g.user['email'] }}
               </div>
             </div>
+            {% endif %}
           </div>
           <div class="col-md-6 col-xl-5 mb-4">
             <div class="card wow fadeInRight animated" data-wow-delay="0.3s">

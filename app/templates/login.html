@@ -21,7 +21,7 @@
           <div class="card">
             <div class="card-body">
               <form class="text-center" action="{{ url_for('login') }}" method ="POST" style="color: #757575;">
-                <img src="img/fork-spoon.png" class=" rounded-circle " width="120em" height="120em" />
+                <img src="{{ url_for('static', filename='img/fork-spoon.png') }}" class=" rounded-circle " width="120em" height="120em" />
                 <h3 class="font-weight-bold my-4 pb-2 text-center dark-grey-text">Sistema de Apoyo Alimentario</h3>
                 <hr>
                 <div class="col-md-10 mx-auto">
