@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGA</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <nav class="mb-1 fixed-top navbar navbar-expand-lg navbar-light scrolling-navbar ">
+    <div class="container principal-ud">
+      <a class="navbar-brand " href="#">
+        Sistema de Apoyo Alimentario
+      </a>
+      <ul class="nav navbar-nav nav-flex-icons principal-ud nav-flex-icons">
+        <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="container" style="margin-top: 5em">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Información General</h5>
+        <p class="card-text">
+        <div class="form-group">
+          <label for="sel1">Periodo</label>
+          <select class="form-control" id="sel1">
+            <option>2020-3</option>
+            <option>2020-1</option>
+            <option>2019-3</option>
+          </select>
+          <label for="fechaInicio">Fecha de Inicio</label>
+          <input type="date" placeholder="Fecha de inicio" id="fechaInicio" class="form-control">
+          <label for="fechaFin">Fecha Fin</label>
+          <input type="date" placeholder="Fecha de fin" id="fechaFin" class="form-control ">
+          <label for="cantidadAlumerzos">Cantidad de Almuerzos</label>
+          <input type="number" placeholder="Cantidad de Almuerzos" id="cantidadAlumerzos" class="form-control ">
+        </div>
+        </p>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Cupos por Tipo Subsidio</h5>
+        <p class="card-text">
+        <div class="form-group">
+          <label for="tipoA"># Tipo A</label>
+          <input type="number" placeholder="#Tipo A" id="tipoA" class="form-control ">
+          <label for="tipoB"># Tipo B</label>
+          <input type="number" placeholder="#Tipo B" id="tipoB" class="form-control ">
+          <label for="tipoC"># Tipo C</label>
+          <input type="number" placeholder="#Tipo C" id="tipoC" class="form-control ">
+        </div>
+        </p>
+      </div>
+    </div>
+
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Cupos por Facultad</h5>
+        <p class="card-text">
+        <div class="form-group">
+          <label for="inge"># Ingenieria</label>
+          <input type="number" placeholder="Ingeniería" id="inge" class="form-control ">
+          <label for="asab"># ASAB</label>
+          <input type="number" placeholder="ASAB" id="asab" class="form-control ">
+        </div>
+        </p>
+      </div>
+    </div>
+
+    <div class="text-center">
+    <a href="#" class="btn btn-primary"> Crear Convocatoria </a>
+  </div>
+  </section>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+</body>
+
+</html>
