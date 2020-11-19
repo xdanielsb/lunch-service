@@ -53,7 +53,7 @@
         <div class="form-group">
           {% for facultad in data['facultades'] %}
           <label for="fac{{facultad[0]}}">{{facultad[1]}}</label>
-          <input type="number" placeholder="" name="fac{{facultad[0]}}" class="form-control ">
+          <input type="number" placeholder="" id="fac{{facultad[0]}}" name="fac{{facultad[0]}}" class="form-control ">
           {% endfor %}
         </div>
         </p>
