@@ -9,8 +9,7 @@ from control.connection import Connection
 app = Flask(__name__)
 app.config.from_object("config.Config")
 
-conn = Connection()
-userDao = User(conn)
+conn = None
 
 
 @app.before_request
@@ -39,7 +38,10 @@ def login_required(view):
 
 @app.route("/", methods=["POST", "GET"])
 def login():
+    global conn
     if request.method == "POST":
+        conn = Connection(username="maria")
+        userDao = User(conn)
         username = request.form["username"]
         password = request.form["password"]
         error = None
@@ -62,21 +64,23 @@ def login():
 def home():
     return render_template("home.html")
 
+
 @app.route("/solicitud")
 @login_required
 def solicitud():
     return render_template("solicitud.html")
+
 
 @app.route("/revisar_solicitud")
 @login_required
 def revisar_solicitud():
     return render_template("revisar-solicitud.html")
 
+
 @app.route("/convocotoria")
 @login_required
 def convocatoria():
     return render_template("convocatoria.html")
-
 
 
 @app.route("/logout")

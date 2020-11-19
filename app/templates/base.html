@@ -14,7 +14,7 @@
 <body>
   <nav class="mb-1 fixed-top navbar navbar-expand-lg navbar-light scrolling-navbar ">
     <div class="container principal-ud">
-      <a class="navbar-brand " href="#">
+      <a class="navbar-brand " href="{{ url_for('home') }}">
         Sistema de Apoyo Alimentario
       </a>
       <ul class="nav navbar-nav nav-flex-icons principal-ud nav-flex-icons">
@@ -23,7 +23,7 @@
     </div>
   </nav>
 
-  <section class="content">
+  <section class="content" style="margin-top:5em">
     {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
     {% endfor %}
