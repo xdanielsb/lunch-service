@@ -17,7 +17,7 @@
 <div class="login">
   <section class="p-5 text-center">
     {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
+    <div class="alert alert-primary" role="alert"> {{ message }}</div>
     {% endfor %}
     <div class="row">
       <div class="col-md-4 mx-auto">

@@ -25,7 +25,7 @@
 
   <section class="container" style="margin-top:10em">
     {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
+    <div class="alert alert-primary" role="alert"> {{ message }}</div>
     {% endfor %}
     {% block content %}{% endblock %}
   </section>
