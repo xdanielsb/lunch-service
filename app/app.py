@@ -7,12 +7,10 @@ import os
 import json
 from datetime import date
 
-from control.connection import Connection
+from control.connection import get_db, query, execute
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
-
-conn = None
 
 
 @app.before_request
@@ -24,8 +22,9 @@ def load_logged_in_user():
         # TODO: query from db this data
         g.user = {
             "name": "Matilda Harris",
+            "password": "",
             "rol": "Estudiante",
-            "email": "matilda@udistrital.co",
+            "email": "matilda@udistrital.co"
         }
 
 
@@ -41,10 +40,8 @@ def login_required(view):
 
 @app.route("/", methods=["POST", "GET"])
 def login():
-    global conn
     if request.method == "POST":
-        conn = Connection()
-        userDao = User(conn)
+        userDao = User()
         username = request.form["username"]
         password = request.form["password"]
         error = None
@@ -71,8 +68,7 @@ def home():
 @app.route("/solicitud")
 @login_required
 def solicitud():
-    global conn
-    convocatoria = Convocatoria(conn)
+    convocatoria = Convocatoria()
     today = date.today()
     if convocatoria.is_active(fecha_actual=today.strftime("%Y-%m-%d")) is not True:
         flash("No hay convocatoria activa")

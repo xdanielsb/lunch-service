@@ -1,23 +1,30 @@
 import psycopg2
+from flask import g
 
 
-class Connection:
-    def __init__(self, username="postgres", password=""):
-        self.conn = psycopg2.connect(
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'dbconn'):
+        g.dbconn = psycopg2.connect(
             host="localhost",
             database="apoyo_alimentario",
-            user=username,
-            password=password,
+            user="postgres" if g.user is None else g.user["name"],
+            password="" if g.user is None else g.user["password"],
         )
+    return g.dbconn
 
-    def query(self, query):
-        cur = self.conn.cursor()
-        cur.execute(query)
-        ans = cur.fetchone()
-        cur.close()
-        return ans
 
-    def execute(self, statement):
-        cur = self.conn.cursor()
-        cur.execute(query)
-        cur.close()
+def query(query):
+    cur = get_db().cursor()
+    cur.execute(query)
+    ans = cur.fetchone()
+    cur.close()
+    return ans
+
+
+def execute(statement):
+    cur = get_db().cursor()
+    cur.execute(query)
+    cur.close()
