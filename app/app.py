@@ -19,7 +19,8 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = "get the real id of the db"
+        # TODO: query from db this data
+        g.user = {"name": "Matilda Harris", "rol": "Estudiante"}
 
 
 def login_required(view):
@@ -47,7 +48,9 @@ def login():
             session["user_id"] = username
             return redirect(url_for("home"))
         flash(error)
-    return render_template("login.html")
+    if g.user is None:
+        return render_template("login.html")
+    return render_template("home.html")
 
 
 @app.route("/home")
