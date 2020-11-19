@@ -53,8 +53,8 @@ create table usuario(
   ultimo_accesso timestamp default current_timestamp,
   id_rol integer not null
 );
-insert into usuario(id_usuario, password, fecha_creacion, id_rol) values (1, 'sha-ouau32u1', current_timestamp, 1);
-insert into usuario(id_usuario, password, fecha_creacion, id_rol) values (2, 'sha-ouau32u1', current_timestamp, 2);
+insert into usuario(id_usuario, password, fecha_creacion, id_rol) values (1, 'pass', current_timestamp, 1);
+insert into usuario(id_usuario, password, fecha_creacion, id_rol) values (2, 'pass', current_timestamp, 2);
 
 
 /**************** CONVOCATORIA ************************/
@@ -186,7 +186,7 @@ create table estudiante(
 );
 
 insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular, id_usuario)
-values (1, '1018345847', 'jhon', 'doe', 4.5, 8, 'jhon@email.com', 2, 1);
+values (1, '20131020001', 'jhon', 'doe', 4.5, 8, 'jhon@email.com', 2, 1);
 
 
 /**************** SOLICITUD APOYO ALIMENTARIO ************************/
