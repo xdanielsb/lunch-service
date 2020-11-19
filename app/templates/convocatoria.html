@@ -1,60 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="content">
+<div class="content">
+  <form class="text-center" action="{{ url_for('convocatoria') }}" method="POST">
+
     <h2>Convocatoria</h2>
     <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Información General</h5>
-      <p class="card-text">
-      <div class="form-group">
-        <label for="sel1">Periodo</label>
-        <select class="form-control" id="sel1">
-          {% for periodo in data['periodo'] %}
-          <option value="{{periodo[0]}}">{{ periodo[1] }} </option>
+      <div class="card-body">
+        <h5 class="card-title">Información General</h5>
+        <p class="card-text">
+        <div class="form-group">
+          <label for="sel1">Periodo</label>
+          <select name="id_periodo" class="form-control" id="sel1">
+            {% for periodo in data['periodo'] %}
+            <option value="{{periodo[0]}}">{{ periodo[1] }} </option>
+            {% endfor %}
+          </select>
+          <label for="fechaInicio">Fecha de Inicio</label>
+          <input type="date" placeholder="Fecha de inicio" name="fecha_inicio" class="form-control">
+          <label for="fechaFin">Fecha Fin</label>
+          <input type="date" placeholder="Fecha de fin" name="fecha_fin" class="form-control ">
+          <label for="sel2">Estado Convocatoria</label>
+          <select name="id_estado_convocatoria" class="form-control" id="sel2">
+            {% for estadocon in data['estados_convocatoria'] %}
+            <option value="{{estadocon[0]}}">{{ estadocon[1] }} </option>
+            {% endfor %}
+          </select>
+
+        </div>
+        </p>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Cupos por Tipo Subsidio</h5>
+        <p class="card-text">
+        <div class="form-group">
+          {% for tsubsidio in data['tipos_subsidio']%}
+          <label for="tipo{{tsubsidio[0]}}">Subsidio {{tsubsidio[1]}}</label>
+          <input type="number" placeholder="" name="tipo{{tsubsidio[0]}}" class="form-control ">
           {% endfor %}
-        </select>
-        <label for="fechaInicio">Fecha de Inicio</label>
-        <input type="date" placeholder="Fecha de inicio" id="fechaInicio" class="form-control">
-        <label for="fechaFin">Fecha Fin</label>
-        <input type="date" placeholder="Fecha de fin" id="fechaFin" class="form-control ">
-        <label for="cantidadAlumerzos">Cantidad de Almuerzos</label>
-        <input type="number" placeholder="" id="cantidadAlumerzos" class="form-control ">
+        </div>
+        </p>
       </div>
-      </p>
     </div>
-  </div>
 
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Cupos por Tipo Subsidio</h5>
-      <p class="card-text">
-      <div class="form-group">
-        {% for tsubsidio in data['tipos_subsidio']%}
-        <label for="tipo{{tsubsidio[0]}}">Subsidio {{tsubsidio[1]}}</label>
-        <input type="number" placeholder="" id="tipo{{tsubsidio[0]}}" class="form-control ">
-        {% endfor %}
-      </div>
-      </p>
-    </div>
-  </div>
-
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Cupos por Facultad</h5>
-      <p class="card-text">
-      <div class="form-group">
-        {% for facultad in data['facultades'] %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Cupos por Facultad</h5>
+        <p class="card-text">
+        <div class="form-group">
+          {% for facultad in data['facultades'] %}
           <label for="fac{{facultad[0]}}">{{facultad[1]}}</label>
-        <input type="number" placeholder="" id="fac{{facultad[0]}}" class="form-control ">
-        {% endfor %}
+          <input type="number" placeholder="" name="fac{{facultad[0]}}" class="form-control ">
+          {% endfor %}
+        </div>
+        </p>
       </div>
-      </p>
     </div>
-  </div>
 
-  <div class="text-center">
-    <a href="#" class="btn btn-primary"> Crear Convocatoria </a>
-  </div>
+    <div class="text-center">
+      <input type="submit" class="btn btn-primary" value="Crear Convocatoria">
+    </div>
+  </form>
 </div>
 {% endblock %}

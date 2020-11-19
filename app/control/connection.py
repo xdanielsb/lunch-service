@@ -26,5 +26,5 @@ def query(query):
 
 def execute(statement):
     cur = get_db().cursor()
-    cur.execute(query)
+    cur.execute(statement)
     cur.close()

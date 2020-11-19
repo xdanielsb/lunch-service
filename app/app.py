@@ -5,6 +5,7 @@ from control.dao.convocatoria import Convocatoria
 from control.dao.periodo import Periodo
 from control.dao.tipo_subsidio import TipoSubsidio
 from control.dao.facultad import Facultad
+from control.dao.estado_convocatoria import EstadoConvocatoria
 import functools
 import os
 import json
@@ -85,21 +86,25 @@ def revisar_solicitud():
     return render_template("revisar-solicitud.html")
 
 
-@app.route("/convocotoria")
+@app.route("/convocotoria", methods=["POST", "GET"])
 @login_required
 def convocatoria():
+    data = {}
     if request.method == "POST":
-        pass
+        convocatoria = Convocatoria()
+        convocatoria.create(request.form)
     else:
         # TODO: make fecha_actual global
         today = date.today()
         periodo = Periodo().get_active_period(fecha_actual=today.strftime("%Y-%m-%d"))
         tipos_subsidio = TipoSubsidio().get_all()
         facultades = Facultad().get_all()
+        estados_convoc = EstadoConvocatoria().get_all()
         data = {
             "periodo": periodo,
             "tipos_subsidio": tipos_subsidio,
             "facultades": facultades,
+            "estados_convocatoria": estados_convoc,
         }
         if len(periodo) == 0:
             flash("No hay periodos activos.")

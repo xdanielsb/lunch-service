@@ -1,4 +1,4 @@
-from ..connection import query
+from ..connection import query, execute
 
 
 class Convocatoria:
@@ -7,3 +7,12 @@ class Convocatoria:
             fecha_actual, fecha_actual
         )
         return query(q)[0] != 0
+
+    def create(self, data):
+        q = "insert into convocatoria(fecha_inicio, fecha_fin, id_periodo, id_estado_convocatoria) values ('{}', '{}', {}, {})".format(
+            data["fecha_inicio"],
+            data["fecha_fin"],
+            data["id_periodo"],
+            data["id_estado_convocatoria"],
+        )
+        execute(q)
