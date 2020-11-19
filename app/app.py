@@ -2,6 +2,9 @@ from flask import request
 from flask import Flask, render_template, flash, redirect, url_for, session, g
 from control.dao.user import User
 from control.dao.convocatoria import Convocatoria
+from control.dao.periodo import Periodo
+from control.dao.tipo_subsidio import TipoSubsidio
+from control.dao.facultad import Facultad
 import functools
 import os
 import json
@@ -21,10 +24,10 @@ def load_logged_in_user():
     else:
         # TODO: query from db this data
         g.user = {
-            "name": "Matilda Harris",
+            "name": "postgres",
             "password": "",
             "rol": "Estudiante",
-            "email": "matilda@udistrital.co"
+            "email": "matilda@udistrital.co",
         }
 
 
@@ -71,7 +74,7 @@ def solicitud():
     convocatoria = Convocatoria()
     today = date.today()
     if convocatoria.is_active(fecha_actual=today.strftime("%Y-%m-%d")) is not True:
-        flash("No hay convocatoria activa")
+        flash("No hay convocatoria activa.")
         return redirect(url_for("home"))
     return render_template("solicitud.html")
 
@@ -88,8 +91,20 @@ def convocatoria():
     if request.method == "POST":
         pass
     else:
-        pass
-    return render_template("convocatoria.html")
+        # TODO: make fecha_actual global
+        today = date.today()
+        periodo = Periodo().get_active_period(fecha_actual=today.strftime("%Y-%m-%d"))
+        tipos_subsidio = TipoSubsidio().get_all()
+        facultades = Facultad().get_all()
+        data = {
+            "periodo": periodo,
+            "tipos_subsidio": tipos_subsidio,
+            "facultades": facultades,
+        }
+        if len(periodo) == 0:
+            flash("No hay periodos activos.")
+            return redirect(url_for("home"))
+    return render_template("convocatoria.html", data=data)
 
 
 @app.route("/logout")

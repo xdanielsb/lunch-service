@@ -1,4 +1,4 @@
-from ..connection import query 
+from ..connection import query
 
 
 class User:

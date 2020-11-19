@@ -6,7 +6,7 @@ def get_db():
     """Opens a new database connection if there is none yet for the
     current application context.
     """
-    if not hasattr(g, 'dbconn'):
+    if not hasattr(g, "dbconn"):
         g.dbconn = psycopg2.connect(
             host="localhost",
             database="apoyo_alimentario",
@@ -19,7 +19,7 @@ def get_db():
 def query(query):
     cur = get_db().cursor()
     cur.execute(query)
-    ans = cur.fetchone()
+    ans = [row for row in cur]
     cur.close()
     return ans
 

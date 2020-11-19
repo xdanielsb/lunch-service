@@ -1,61 +1,60 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <div class="content">
+    <h2>Convocatoria</h2>
     <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Información General</h5>
-        <p class="card-text">
-        <div class="form-group">
-          <label for="sel1">Periodo</label>
-          <select class="form-control" id="sel1">
-            <option>2020-3</option>
-            <option>2020-1</option>
-            <option>2019-3</option>
-          </select>
-          <label for="fechaInicio">Fecha de Inicio</label>
-          <input type="date" placeholder="Fecha de inicio" id="fechaInicio" class="form-control">
-          <label for="fechaFin">Fecha Fin</label>
-          <input type="date" placeholder="Fecha de fin" id="fechaFin" class="form-control ">
-          <label for="cantidadAlumerzos">Cantidad de Almuerzos</label>
-          <input type="number" placeholder="Cantidad de Almuerzos" id="cantidadAlumerzos" class="form-control ">
-        </div>
-        </p>
+    <div class="card-body">
+      <h5 class="card-title">Información General</h5>
+      <p class="card-text">
+      <div class="form-group">
+        <label for="sel1">Periodo</label>
+        <select class="form-control" id="sel1">
+          {% for periodo in data['periodo'] %}
+          <option value="{{periodo[0]}}">{{ periodo[1] }} </option>
+          {% endfor %}
+        </select>
+        <label for="fechaInicio">Fecha de Inicio</label>
+        <input type="date" placeholder="Fecha de inicio" id="fechaInicio" class="form-control">
+        <label for="fechaFin">Fecha Fin</label>
+        <input type="date" placeholder="Fecha de fin" id="fechaFin" class="form-control ">
+        <label for="cantidadAlumerzos">Cantidad de Almuerzos</label>
+        <input type="number" placeholder="" id="cantidadAlumerzos" class="form-control ">
       </div>
+      </p>
     </div>
+  </div>
 
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Cupos por Tipo Subsidio</h5>
-        <p class="card-text">
-        <div class="form-group">
-          <label for="tipoA"># Tipo A</label>
-          <input type="number" placeholder="#Tipo A" id="tipoA" class="form-control ">
-          <label for="tipoB"># Tipo B</label>
-          <input type="number" placeholder="#Tipo B" id="tipoB" class="form-control ">
-          <label for="tipoC"># Tipo C</label>
-          <input type="number" placeholder="#Tipo C" id="tipoC" class="form-control ">
-        </div>
-        </p>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Cupos por Tipo Subsidio</h5>
+      <p class="card-text">
+      <div class="form-group">
+        {% for tsubsidio in data['tipos_subsidio']%}
+        <label for="tipo{{tsubsidio[0]}}">Subsidio {{tsubsidio[1]}}</label>
+        <input type="number" placeholder="" id="tipo{{tsubsidio[0]}}" class="form-control ">
+        {% endfor %}
       </div>
+      </p>
     </div>
+  </div>
 
-
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Cupos por Facultad</h5>
-        <p class="card-text">
-        <div class="form-group">
-          <label for="inge"># Ingenieria</label>
-          <input type="number" placeholder="Ingeniería" id="inge" class="form-control ">
-          <label for="asab"># ASAB</label>
-          <input type="number" placeholder="ASAB" id="asab" class="form-control ">
-        </div>
-        </p>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Cupos por Facultad</h5>
+      <p class="card-text">
+      <div class="form-group">
+        {% for facultad in data['facultades'] %}
+          <label for="fac{{facultad[0]}}">{{facultad[1]}}</label>
+        <input type="number" placeholder="" id="fac{{facultad[0]}}" class="form-control ">
+        {% endfor %}
       </div>
+      </p>
     </div>
+  </div>
 
-    <div class="text-center">
+  <div class="text-center">
     <a href="#" class="btn btn-primary"> Crear Convocatoria </a>
   </div>
+</div>
 {% endblock %}
-
