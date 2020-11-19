@@ -20,7 +20,11 @@ def load_logged_in_user():
         g.user = None
     else:
         # TODO: query from db this data
-        g.user = {"name": "Matilda Harris", "rol": "Estudiante", "email":"matilda@udistrital.co"}
+        g.user = {
+            "name": "Matilda Harris",
+            "rol": "Estudiante",
+            "email": "matilda@udistrital.co",
+        }
 
 
 def login_required(view):
