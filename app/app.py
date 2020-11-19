@@ -1,9 +1,12 @@
 from flask import request
 from flask import Flask, render_template, flash, redirect, url_for, session, g
 from control.dao.user import User
+from control.dao.convocatoria import Convocatoria
 import functools
 import os
 import json
+from datetime import date
+
 from control.connection import Connection
 
 app = Flask(__name__)
@@ -40,7 +43,7 @@ def login_required(view):
 def login():
     global conn
     if request.method == "POST":
-        conn = Connection(username="maria")
+        conn = Connection()
         userDao = User(conn)
         username = request.form["username"]
         password = request.form["password"]
@@ -68,6 +71,12 @@ def home():
 @app.route("/solicitud")
 @login_required
 def solicitud():
+    global conn
+    convocatoria = Convocatoria(conn)
+    today = date.today()
+    if convocatoria.is_active(fecha_actual=today.strftime("%Y-%m-%d")) is not True:
+        flash("No hay convocatoria activa")
+        return redirect(url_for("home"))
     return render_template("solicitud.html")
 
 
@@ -80,6 +89,10 @@ def revisar_solicitud():
 @app.route("/convocotoria")
 @login_required
 def convocatoria():
+    if request.method == "POST":
+        pass
+    else:
+        pass
     return render_template("convocatoria.html")
 
 
