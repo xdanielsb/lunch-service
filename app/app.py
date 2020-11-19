@@ -62,6 +62,22 @@ def login():
 def home():
     return render_template("home.html")
 
+@app.route("/solicitud")
+@login_required
+def solicitud():
+    return render_template("solicitud.html")
+
+@app.route("/revisar_solicitud")
+@login_required
+def revisar_solicitud():
+    return render_template("revisar-solicitud.html")
+
+@app.route("/convocotoria")
+@login_required
+def convocatoria():
+    return render_template("convocatoria.html")
+
+
 
 @app.route("/logout")
 def logout():
