@@ -8,12 +8,10 @@ from control.connection import Connection
 app = Flask(__name__)
 app.config.from_object("config.Config")
 
-
-
 conn = Connection()
 userDao = User(conn)
 
-@app.route("/login",methods = ['POST', 'GET'])
+@app.route("/",methods = ['POST', 'GET'])
 def login():
     if request.method == "POST":
         if(userDao.exist(request.form['username'], request.form['password'])):
