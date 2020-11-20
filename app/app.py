@@ -1,19 +1,21 @@
-from flask import request
-from flask import Flask, render_template, flash, redirect, url_for, session, g
-from control.dao.user import User
+import functools
+import json
+import os
+from datetime import date
+
+from flask import (Flask, flash, g, redirect, render_template, request,
+                   session, url_for)
+from werkzeug.utils import secure_filename
+
+from control.connection import execute, get_db, query
 from control.dao.convocatoria import Convocatoria
-from control.dao.periodo import Periodo
-from control.dao.tipo_subsidio import TipoSubsidio
-from control.dao.facultad import Facultad
-from control.dao.estado_convocatoria import EstadoConvocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
-import functools
-import os
-import json
-from datetime import date
-from werkzeug.utils import secure_filename
-from control.connection import get_db, query, execute
+from control.dao.estado_convocatoria import EstadoConvocatoria
+from control.dao.facultad import Facultad
+from control.dao.periodo import Periodo
+from control.dao.tipo_subsidio import TipoSubsidio
+from control.dao.user import User
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
