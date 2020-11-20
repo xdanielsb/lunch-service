@@ -124,8 +124,17 @@ def convocatoria(id_convocatoria=None):
     if request.method == "POST":
         convocatoria_facultad = ConvocatoriaFacultad()
         convocatoria_tipo_subsidio = ConvocatoriaTipoSubsidio()
-        convocatoria.create(request.form)
-        flash("Convocatoria creada exitosamente")
+        isUpdate = (
+            True if convocatoria.exist(request.form["id_convocatoria"]) else False
+        )
+
+        if isUpdate:
+            convocatoria.update(request.form)
+            flash("Convocatoria actualizada exitosamente")
+        else:
+            convocatoria.create(request.form)
+            flash("Convocatoria creada exitosamente")
+
         for field in request.form:
             if field.startswith("facultad"):
                 id_facultad = int(field.replace("facultad", ""))
@@ -134,8 +143,10 @@ def convocatoria(id_convocatoria=None):
                     "id_convocatoria": request.form["id_convocatoria"],
                     "cantidad_de_almuerzos": request.form[field],
                 }
-                convocatoria_facultad.create(data)
-        flash("Cantidad de Almuerzos por Facultad fueron agregados")
+                if isUpdate:
+                    convocatoria_facultad.update(data)
+                else:
+                    convocatoria_facultad.create(data)
 
         for field in request.form:
             if field.startswith("tipo_subsidio"):
@@ -145,8 +156,10 @@ def convocatoria(id_convocatoria=None):
                     "id_convocatoria": request.form["id_convocatoria"],
                     "cantidad_de_almuerzos_ofertados": request.form[field],
                 }
-                convocatoria_tipo_subsidio.create(data)
-        flash("Cantidad de Almuerzos por Tipo Subsidio fueron agregados")
+                if isUpdate:
+                    convocatoria_tipo_subsidio.update(data)
+                else:
+                    convocatoria_tipo_subsidio.create(data)
         return redirect(url_for("convocatoria_view"))
     else:
         # TODO: make fecha_actual global
@@ -168,12 +181,21 @@ def convocatoria(id_convocatoria=None):
             "facultades": facultades,
             "estados_convocatoria": estados_convoc,
         }
-        print(data)
 
         if id_convocatoria is not None:
             data["id_convocatoria"] = id_convocatoria
             if convocatoria.exist(id_convocatoria):
-                pass
+                ans0 = convocatoria.get(id_convocatoria=id_convocatoria)[0]
+                data["fecha_inicio"] = ans0[0]
+                data["fecha_fin"] = ans0[1]
+                data["id_periodo"] = ans0[2]
+                data["id_estado_convocatoria"] = ans0[3]
+                ans1 = ConvocatoriaFacultad().get(id_convocatoria=id_convocatoria)
+                for id_fac, num in ans1:
+                    data["facultad{}".format(id_fac)] = num
+                ans2 = ConvocatoriaTipoSubsidio().get(id_convocatoria=id_convocatoria)
+                for id_tipo_sub, num in ans2:
+                    data["tipo_subsidio{}".format(id_tipo_sub)] = num
         else:
             data["id_convocatoria"] = convocatoria.get_next_id()
 
