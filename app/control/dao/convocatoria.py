@@ -15,4 +15,10 @@ class Convocatoria:
             data["id_periodo"],
             data["id_estado_convocatoria"],
         )
+        print(data)
+        print(q)
         execute(q)
+    
+    def get_all(self):
+        q = "select id_convocatoria, fecha_inicio, fecha_fin, id_periodo, id_estado_convocatoria from convocatoria"
+        return query(q)

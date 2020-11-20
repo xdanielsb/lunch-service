@@ -120,6 +120,8 @@ def convocatoria():
     if request.method == "POST":
         convocatoria = Convocatoria()
         convocatoria.create(request.form)
+        flash("Convocatoria creada exitosamente")
+        return redirect(url_for("convocatoria_view"))
     else:
         # TODO: make fecha_actual global
         today = date.today()
@@ -137,6 +139,13 @@ def convocatoria():
             flash("No hay periodos activos.")
             return redirect(url_for("home"))
     return render_template("convocatoria.html", data=data)
+
+
+@app.route("/convocatoria/view")
+@login_required
+def convocatoria_view():
+    convocatorias = Convocatoria().get_all()
+    return render_template("consultar-convocatoria.html", convocatorias=convocatorias)
 
 
 @app.route("/logout")

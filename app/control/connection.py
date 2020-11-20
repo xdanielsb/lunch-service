@@ -17,7 +17,8 @@ def get_db():
 
 
 def query(query):
-    cur = get_db().cursor()
+    conn = get_db()
+    cur = conn.cursor()
     cur.execute(query)
     ans = [row for row in cur]
     cur.close()
@@ -25,6 +26,8 @@ def query(query):
 
 
 def execute(statement):
-    cur = get_db().cursor()
+    conn = get_db()
+    cur = conn.cursor()
     cur.execute(statement)
+    conn.commit()
     cur.close()

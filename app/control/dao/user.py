@@ -6,4 +6,5 @@ class User:
         q = "select count(*) from usuario as u, estudiante as e where u.id_usuario = e.id_usuario and e.identificacion = '{}' and u.password = '{}'".format(
             username, password
         )
-        return query(q)[0] != 0
+        ans = query(q)[0]
+        return ans[0] != 0

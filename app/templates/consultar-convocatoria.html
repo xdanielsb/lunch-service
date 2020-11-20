@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">id_convocatoria</th>
+      <th scope="col">fecha_inicio</th>
+      <th scope="col">fecha_fin</th>
+      <th scope="col">id_periodo</th>
+      <th scope="col">id_estado_convocatoria </th>
+      <th scope="col"> Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for convocatoria in convocatorias %}
+    <tr>
+      {% for field in convocatoria %}
+      <td> {{field}}</td>
+      {% endfor %}
+      <td> <a href="#" class="btn btn-danger"> Eliminar </a> <a href="#" class="btn btn-primary"> Actualizar </a>
+      <td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
