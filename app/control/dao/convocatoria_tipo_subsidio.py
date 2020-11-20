@@ -22,3 +22,4 @@ class ConvocatoriaTipoSubsidio:
             data["id_tipo_subsidio"],
             data["id_convocatoria"],
         )
+        execute(q)

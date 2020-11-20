@@ -1,13 +1,10 @@
 import functools
-import json
 import os
 from datetime import date
 
-from flask import (Flask, flash, g, redirect, render_template, request,
-                   session, url_for)
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
-from control.connection import execute, get_db, query
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio

@@ -1,4 +1,4 @@
-from ..connection import execute, query
+from ..connection import query
 
 
 class Facultad:

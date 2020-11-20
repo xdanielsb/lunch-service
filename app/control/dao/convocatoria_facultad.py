@@ -18,3 +18,4 @@ class ConvocatoriaFacultad:
         q = "update convocatoria_facultad set  cantidad_de_almuerzos={} where id_facultad={} and id_convocatoria={}".format(
             data["cantidad_de_almuerzos"], data["id_facultad"], data["id_convocatoria"]
         )
+        execute(q)
