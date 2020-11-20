@@ -119,6 +119,7 @@ def convocatoria():
     data = {}
     if request.method == "POST":
         convocatoria = Convocatoria()
+        request.form["convocatoria_id"] = convocatoria.get_next_id()
         convocatoria.create(request.form)
         flash("Convocatoria creada exitosamente")
         return redirect(url_for("convocatoria_view"))

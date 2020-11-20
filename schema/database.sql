@@ -29,7 +29,7 @@ drop table if exists solicitud;
 drop table if exists historico_solicitud;
 drop table if exists convocatoria_facultad;
 drop table if exists tipo_subsidio;
-drop table if exists subsidio_periodo;
+drop table if exists tipo_subsidio_convocatoria;
 drop table if exists beneficiario;
 drop table if exists ticket;
 drop table if exists estado_actividad;
@@ -86,8 +86,8 @@ insert into estado_convocatoria(id_estado_convocatoria, estado) values(3, 'publi
 
 create table convocatoria(
   id_convocatoria serial primary key,
-  fecha_inicio timestamp not null,
-  fecha_fin timestamp not null constraint chk_convocatoria_fecha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
+  fecha_inicio date not null,
+  fecha_fin date not null constraint chk_convocatoria_fecha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
   id_periodo integer not null unique,
   id_estado_convocatoria integer not null,
   foreign key(id_periodo) references periodo(id_periodo),
@@ -236,14 +236,7 @@ create table solicitud_documento(
 
 /**************** PUNTAJES Y SUBSIDIOS ************************/
 
-create table convocatoria_facultad(
-  id_facultad  integer not null,
-  id_convocatoria integer not null,
-  cantidad_de_almuerzos smallint not null constraint chk_convocatoria_facultad_cantidad_almuerzos_greater_than_zero check(cantidad_de_almuerzos>=0),
-  primary key(id_facultad, id_convocatoria),
-  foreign key( id_convocatoria) references convocatoria(id_convocatoria),
-  foreign key( id_facultad) references facultad(id_facultad)
-);
+
 
 create table tipo_subsidio(
   id_tipo_subsidio serial primary key,
@@ -257,13 +250,22 @@ insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, punto
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(2, 'tipo B',70, 80, 40);
 
 
-create table subsidio_periodo(
-  id_periodo integer,
+create table convocatoria_facultad(
+  id_facultad  integer not null,
+  id_convocatoria integer not null,
+  cantidad_de_almuerzos smallint not null constraint chk_convocatoria_facultad_cantidad_almuerzos_greater_than_zero check(cantidad_de_almuerzos>=0),
+  primary key(id_facultad, id_convocatoria),
+  foreign key( id_convocatoria) references convocatoria(id_convocatoria),
+  foreign key( id_facultad) references facultad(id_facultad)
+);
+
+create table tipo_subsidio_convocatoria(
+  id_convocatoria integer,
   id_tipo_subsidio integer,
   cantidad_de_almuerzos_ofertados  smallint constraint chk_subsidio_periodo_cantidad_almuerzos_positive check(cantidad_de_almuerzos_ofertados>=0),
   foreign key( id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
-  foreign key (id_periodo) references periodo(id_periodo),
-  primary key(id_tipo_subsidio, id_periodo)
+  foreign key (id_convocatoria) references convocatoria(id_convocatoria),
+  primary key(id_tipo_subsidio, id_convocatoria)
 );
 
 /**************** TICKET and BENEFICIARIO ************************/
