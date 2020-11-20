@@ -6,6 +6,8 @@ from control.dao.periodo import Periodo
 from control.dao.tipo_subsidio import TipoSubsidio
 from control.dao.facultad import Facultad
 from control.dao.estado_convocatoria import EstadoConvocatoria
+from control.dao.convocatoria_facultad import ConvocatoriaFacultad
+from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
 import functools
 import os
 import json
@@ -119,9 +121,32 @@ def convocatoria():
     data = {}
     if request.method == "POST":
         convocatoria = Convocatoria()
-        request.form["convocatoria_id"] = convocatoria.get_next_id()
-        convocatoria.create(request.form)
+        convocatoria_facultad = ConvocatoriaFacultad()
+        convocatoria_tipo_subsidio = ConvocatoriaTipoSubsidio()
+        id_convocatoria = convocatoria.get_next_id()
+        convocatoria.create(id_convocatoria, request.form)
         flash("Convocatoria creada exitosamente")
+        for field in request.form:
+            if field.startswith("facultad"):
+                id_facultad = int(field.replace("facultad", ""))
+                data = {
+                    "id_facultad": id_facultad,
+                    "id_convocatoria": id_convocatoria,
+                    "cantidad_de_almuerzos": request.form[field],
+                }
+                convocatoria_facultad.create(data)
+        flash("Cantidad de Almuerzos por Facultad fueron agregados")
+
+        for field in request.form:
+            if field.startswith("tipo_subsidio"):
+                id_tipo_subsidio = int(field.replace("tipo_subsidio", ""))
+                data = {
+                    "id_tipo_subsidio": id_tipo_subsidio,
+                    "id_convocatoria": id_convocatoria,
+                    "cantidad_de_almuerzos_ofertados": request.form[field],
+                }
+                convocatoria_tipo_subsidio.create(data)
+        flash("Cantidad de Almuerzos por Tipo Subsidio fueron agregados")
         return redirect(url_for("convocatoria_view"))
     else:
         # TODO: make fecha_actual global
@@ -147,6 +172,14 @@ def convocatoria():
 def convocatoria_view():
     convocatorias = Convocatoria().get_all()
     return render_template("consultar-convocatoria.html", convocatorias=convocatorias)
+
+
+@app.route("/convocatoria/delete/<id_convocatoria>")
+@login_required
+def convocatoria_delete(id_convocatoria):
+    Convocatoria().delete(id_convocatoria)
+    flash("Convocatoria {} fue eliminada exitosamente.".format(id_convocatoria))
+    return redirect(url_for("home"))
 
 
 @app.route("/logout")

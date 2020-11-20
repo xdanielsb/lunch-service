@@ -39,7 +39,7 @@
         <div class="form-group">
           {% for tsubsidio in data['tipos_subsidio']%}
           <label for="tipo{{tsubsidio[0]}}">Subsidio {{tsubsidio[1]}}</label>
-          <input type="number" placeholder="" name="tipo{{tsubsidio[0]}}" class="form-control ">
+          <input type="number" placeholder="" name="tipo_subsidio{{tsubsidio[0]}}" class="form-control ">
           {% endfor %}
         </div>
         </p>
@@ -53,7 +53,7 @@
         <div class="form-group">
           {% for facultad in data['facultades'] %}
           <label for="fac{{facultad[0]}}">{{facultad[1]}}</label>
-          <input type="number" placeholder="" id="fac{{facultad[0]}}" name="fac{{facultad[0]}}" class="form-control ">
+          <input type="number" placeholder="" id="facultad{{facultad[0]}}" name="fac{{facultad[0]}}" class="form-control ">
           {% endfor %}
         </div>
         </p>
