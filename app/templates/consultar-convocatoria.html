@@ -17,7 +17,7 @@
       {% for field in convocatoria %}
       <td> {{field}}</td>
       {% endfor %}
-      <td> <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> <a href="#" class="btn btn-primary"> Actualizar </a>
+      <td> <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
       <td>
     </tr>
     {% endfor %}

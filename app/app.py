@@ -116,22 +116,22 @@ def revisar_solicitud():
 
 
 @app.route("/convocotoria", methods=["POST", "GET"])
+@app.route("/convocotoria/<id_convocatoria>", methods=["POST", "GET"])
 @login_required
-def convocatoria():
+def convocatoria(id_convocatoria=None):
     data = {}
+    convocatoria = Convocatoria()
     if request.method == "POST":
-        convocatoria = Convocatoria()
         convocatoria_facultad = ConvocatoriaFacultad()
         convocatoria_tipo_subsidio = ConvocatoriaTipoSubsidio()
-        id_convocatoria = convocatoria.get_next_id()
-        convocatoria.create(id_convocatoria, request.form)
+        convocatoria.create(request.form)
         flash("Convocatoria creada exitosamente")
         for field in request.form:
             if field.startswith("facultad"):
                 id_facultad = int(field.replace("facultad", ""))
                 data = {
                     "id_facultad": id_facultad,
-                    "id_convocatoria": id_convocatoria,
+                    "id_convocatoria": request.form["id_convocatoria"],
                     "cantidad_de_almuerzos": request.form[field],
                 }
                 convocatoria_facultad.create(data)
@@ -142,7 +142,7 @@ def convocatoria():
                 id_tipo_subsidio = int(field.replace("tipo_subsidio", ""))
                 data = {
                     "id_tipo_subsidio": id_tipo_subsidio,
-                    "id_convocatoria": id_convocatoria,
+                    "id_convocatoria": request.form["id_convocatoria"],
                     "cantidad_de_almuerzos_ofertados": request.form[field],
                 }
                 convocatoria_tipo_subsidio.create(data)
@@ -151,19 +151,32 @@ def convocatoria():
     else:
         # TODO: make fecha_actual global
         today = date.today()
-        periodo = Periodo().get_active_period(fecha_actual=today.strftime("%Y-%m-%d"))
+        periodo = Periodo()
+        active_periodo = periodo.get_active_period(
+            fecha_actual=today.strftime("%Y-%m-%d")
+        )
+        if len(active_periodo) == 0:
+            flash("No hay periodos activos.")
+            return redirect(url_for("home"))
+
         tipos_subsidio = TipoSubsidio().get_all()
         facultades = Facultad().get_all()
         estados_convoc = EstadoConvocatoria().get_all()
         data = {
-            "periodo": periodo,
+            "periodo": active_periodo,
             "tipos_subsidio": tipos_subsidio,
             "facultades": facultades,
             "estados_convocatoria": estados_convoc,
         }
-        if len(periodo) == 0:
-            flash("No hay periodos activos.")
-            return redirect(url_for("home"))
+        print(data)
+
+        if id_convocatoria is not None:
+            data["id_convocatoria"] = id_convocatoria
+            if convocatoria.exist(id_convocatoria):
+                pass
+        else:
+            data["id_convocatoria"] = convocatoria.get_next_id()
+
     return render_template("convocatoria.html", data=data)
 
 
@@ -171,6 +184,13 @@ def convocatoria():
 @login_required
 def convocatoria_view():
     convocatorias = Convocatoria().get_all()
+    return render_template("consultar-convocatoria.html", convocatorias=convocatorias)
+
+
+@app.route("/convocatoria/edit/<id_convocatoria>")
+@login_required
+def convocatoria_edit(id_convocatoria):
+    convocatorias = Convocatoria().get(id_convocatoria=id_convocatoria)
     return render_template("consultar-convocatoria.html", convocatorias=convocatorias)
 
 

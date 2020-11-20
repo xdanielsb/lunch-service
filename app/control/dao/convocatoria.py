@@ -6,17 +6,29 @@ class Convocatoria:
         q = "select count(*) from convocatoria where fecha_inicio<='{}' and fecha_fin>='{}'".format(
             fecha_actual, fecha_actual
         )
-        return query(q)[0] != 0
+        ans = query(q)[0]
+        return ans[0] != 0
 
-    def create(self, id_convocatoria, data):
+    def exist(id_convocatoria):
+        q = "select count(*) from convocatoria where id_convocatoria = {}".format(
+            id_convocataria
+        )
+        ans = query(q)[0]
+        return ans[0] != 0
+
+    def create(self, data):
         q = "insert into convocatoria(id_convocatoria, fecha_inicio, fecha_fin, id_periodo, id_estado_convocatoria) values ({}, '{}', '{}', {}, {})".format(
-            id_convocatoria,
+            data["id_convocatoria"],
             data["fecha_inicio"],
             data["fecha_fin"],
             data["id_periodo"],
             data["id_estado_convocatoria"],
         )
         execute(q)
+
+    def get(self, id_convocatoria):
+        q = ""
+        return query(q)
 
     def delete(self, id_convocatoria):
         q = "delete from convocatoria where id_convocatoria={}".format(id_convocatoria)

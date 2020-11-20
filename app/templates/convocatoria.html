@@ -10,6 +10,7 @@
         <h5 class="card-title">Información General</h5>
         <p class="card-text">
         <div class="form-group">
+          <input type="hidden"  name="id_convocatoria" value="{{data["id_convocatoria"]}}">
           <label for="sel1">Periodo</label>
           <select name="id_periodo" class="form-control" id="sel1">
             {% for periodo in data['periodo'] %}
@@ -52,8 +53,8 @@
         <p class="card-text">
         <div class="form-group">
           {% for facultad in data['facultades'] %}
-          <label for="fac{{facultad[0]}}">{{facultad[1]}}</label>
-          <input type="number" placeholder="" id="facultad{{facultad[0]}}" name="fac{{facultad[0]}}" class="form-control ">
+          <label for="facultad{{facultad[0]}}">{{facultad[1]}}</label>
+          <input type="number" placeholder="" id="facultad{{facultad[0]}}" name="facultad{{facultad[0]}}" class="form-control ">
           {% endfor %}
         </div>
         </p>
@@ -62,6 +63,7 @@
 
     <div class="text-center">
       <input type="submit" class="btn btn-primary" value="Crear Convocatoria">
+      <input type="submit" class="btn btn-primary" value="Actualizar Convocatoria">
     </div>
   </form>
 </div>
