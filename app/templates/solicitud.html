@@ -1,56 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="apoyo-gradient">
-      <!-- Content -->
-      <div class="container mt-5">
-        <div class="row mask apoyo-gradient d-flex justify-content-center align-items-center">
-          <!--Grid row-->
-
-          <div class="col-md-6">
-
-            <div class="input-group mb-3">
-              <label for="">Formulario de Solicitud de ingreso al Programa Apoyo Alimentario.</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-            <div class="input-group mb-3">
-              <label for=""> Carta dirigida al director del Centro de Bienestar Institucional.</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-            <div class="input-group mb-3">
-              <label for="">Certificado de estratificación del lugar de residencia del estudiante.</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-            <div class="input-group mb-3">
-              <label for="">Fotocopia de la factura de un recibo de servicio público de su domicilio.</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-
+<form class="text-center" action="{{ url_for('solicitud') }}" method="POST" enctype="multipart/form-data">
+  <div class="apoyo-gradient">
+    <div class="container mt-5">
+      <div class="row mask apoyo-gradient d-flex justify-content-center align-items-center">
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <label for="">Formulario de Solicitud de ingreso al Programa Apoyo Alimentario.</label>
+            <input type="file" name="formulario_solicitud" class="form-control-file" id="" placeholder="Seleccionar Archivo">
           </div>
-
-          <div class="col-md-6">
-            <div class="input-group mb-3">
-              <label for="">Certificado de desplazamiento forzoso por violencia del Departamento</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-            <div class="input-group mb-3">
-              <label for="">Si es padre/madre, certificado Civil de nacimiento de los o las hijas.</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-            <div class="input-group mb-3">
-              <label for="">Certificado de Discapacidad Medica, avalado por Bienestar Institucional</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
-            <div class="input-group mb-3">
-              <label for="">Examen y Diagnostico Médico, Enfermedades presentes del estudiante.</label>
-              <input type="file" class="form-control-file" id="" placeholder="Seleccionar Archivo">
-            </div>
+          <div class="input-group mb-3">
+            <label for=""> Carta dirigida al director del Centro de Bienestar Institucional.</label>
+            <input type="file" name="carta_director" class="form-control-file" id="" placeholder="Seleccionar Archivo">
           </div>
-          <a href="#" class="btn btn-primary">Enviar Solicitud</a>
-          <!--Grid row-->
+          <div class="input-group mb-3">
+            <label for="">Certificado de estratificación del lugar de residencia del estudiante.</label>
+            <input type="file" name="certificado_estrato" class="form-control-file" id="" placeholder="Seleccionar Archivo">
+          </div>
+          <div class="input-group mb-3">
+            <label for="">Fotocopia de la factura de un recibo de servicio público de su domicilio.</label>
+            <input type="file" name="recibo_pago" class="form-control-file" id="" placeholder="Seleccionar Archivo">
+          </div>
         </div>
-        <!-- Mask & flexbox options-->
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <label for="">Certificado de desplazamiento forzoso por violencia del Departamento</label>
+            <input type="file" name="dezplazamiento_forsozo" class="form-control-file" id="" placeholder="Seleccionar Archivo">
+          </div>
+          <div class="input-group mb-3">
+            <label for="">Si es padre/madre, certificado Civil de nacimiento de los o las hijas.</label>
+            <input type="file" name="rcivil_hijos" class="form-control-file" id="" placeholder="Seleccionar Archivo">
+          </div>
+          <div class="input-group mb-3">
+            <label for="">Certificado de Discapacidad Medica, avalado por Bienestar Institucional</label>
+            <input type="file" name="certificado_disc" class="form-control-file" id="" placeholder="Seleccionar Archivo">
+          </div>
+          <div class="input-group mb-3">
+            <label for="">Examen y Diagnostico Médico, Enfermedades presentes del estudiante.</label>
+            <input type="file" name="examen_diagnos" class="form-control-file" id="" placeholder="Seleccionar Archivo">
+          </div>
+        </div>
+          <input type="submit" class="btn btn-primary" value="Guardar">
       </div>
-
+    </div>
+</form>
 {% endblock %}
-

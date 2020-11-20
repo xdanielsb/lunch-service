@@ -12,7 +12,7 @@ import functools
 import os
 import json
 from datetime import date
-
+from werkzeug.utils import secure_filename
 from control.connection import get_db, query, execute
 
 app = Flask(__name__)
@@ -85,18 +85,19 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/solicitud")
+@app.route("/solicitud", methods=["GET", "POST"])
 @login_required
 def solicitud():
     if request.method == "POST":
-        if "files[]" not in request.files:
-            flash("No file part")
-            return redirect(request.url)
-        files = request.files.getlist("files[]")
-        for file in files:
+        for name_file in request.files:
+            file = request.files[name_file]
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                print(
+                    "Saving file in "
+                    + os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                )
+                # file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         flash("File(s) successfully uploaded")
         return redirect(url_for("home"))
 
