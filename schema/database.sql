@@ -65,7 +65,7 @@ create table periodo(
   nombre varchar(10) not null, 
   descripcion varchar(200) , 
   fecha_inicio timestamp not null, 
-  fecha_fin timestamp not null check(fecha_fin>fecha_inicio), 
+  fecha_fin timestamp not null constraint chk_periodo_feacha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio), 
   semanas_periodo integer  generated always as (trunc(date_part('day'::text,fecha_fin-fecha_inicio)/7)) stored
 );
 
@@ -87,8 +87,8 @@ insert into estado_convocatoria(id_estado_convocatoria, estado) values(3, 'publi
 create table convocatoria(
   id_convocatoria serial primary key, 
   fecha_inicio timestamp not null,
-  fecha_fin timestamp not null check(fecha_fin>fecha_inicio),
-  id_periodo integer not null,
+  fecha_fin timestamp not null constraint chk_convocatoria_fecha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
+  id_periodo integer not null unique,
   id_estado_convocatoria integer not null,
   foreign key(id_periodo) references periodo(id_periodo),
   foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria)
@@ -138,7 +138,7 @@ create table documento(
   id_documento serial primary key,
   nombre varchar(200),
   id_tipo_documento integer not null,
-  puntaje smallint check(puntaje>=0 and puntaje <=100),
+  puntaje smallint constraint chk_documento_puntaje_greater_than_zero check(puntaje>=0 and puntaje <=100),
   foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
 );
 insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (1, 1, 'Formulario de Solicitud Completo', 100);
@@ -176,7 +176,7 @@ create table estudiante(
   identificacion varchar(30) unique,
   nombre varchar(50) not null,
   apellido varchar(50) not null,
-  promedio numeric(3,2) check(promedio >=0 and promedio <=5.0),
+  promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0),
   matriculas_restantes smallint default 10, 
   email varchar(100),
   id_usuario integer not null,
@@ -207,7 +207,7 @@ insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6
 create table solicitud(
   id_solicitud serial primary key, 
   id_estudiante integer not null, 
-  puntaje smallint check(puntaje >=0 and puntaje <=100), /* check puntaje [0, 100] */
+  puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100), /* check puntaje [0, 100] */
   ultima_actualizacion timestamp not null default current_timestamp, 
   id_estado_solicitud integer not null, 
   id_convocatoria integer not null, /* if I insert a register should check convocatoria is active */
@@ -247,7 +247,7 @@ create table solicitud_documento(
 create table convocatoria_facultad(
   id_facultad  integer not null,
   id_convocatoria integer not null,
-  cantidad_de_almuerzos smallint not null check(cantidad_de_almuerzos>=0),
+  cantidad_de_almuerzos smallint not null constraint chk_convocatoria_facultad_cantidad_almuerzos_greater_than_zero check(cantidad_de_almuerzos>=0),
   primary key(id_facultad, id_convocatoria),
   foreign key( id_convocatoria) references convocatoria(id_convocatoria),
   foreign key( id_facultad) references facultad(id_facultad)
@@ -260,8 +260,8 @@ create table tipo_subsidio(
   id_tipo_subsidio serial primary key, 
   nombre varchar(30) not null, 
   descripcion varchar(200),
-  porcentaje_subsidiado smallint not null check(porcentaje_subsidiado>=0 and porcentaje_subsidiado<=100),
-  puntos_requeridos  smallint not null check( puntos_requeridos>=0), 
+  porcentaje_subsidiado smallint not null constraint chk_tipo_subsidiado_porcentaje_in_zero_hundred_range check(porcentaje_subsidiado>=0 and porcentaje_subsidiado<=100),
+  puntos_requeridos  smallint not null constraint chk_tipo_subsidiado_puntos_requeridos_greater_than_zero check( puntos_requeridos>=0), 
   horas_semanales_a_cumplir smallint not null
 );
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(1, 'tipo A',100, 90, 30); 
@@ -271,7 +271,7 @@ insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, punto
 create table subsidio_periodo(
   id_periodo integer,
   id_tipo_subsidio integer,
-  cantidad_de_almuerzos_ofertados smallint check(cantidad_de_almuerzos_ofertados>=0),
+  cantidad_de_almuerzos_ofertados  smallint constraint chk_subsidio_periodo_cantidad_almuerzos_positive check(cantidad_de_almuerzos_ofertados>=0),
   foreign key( id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
   foreign key (id_periodo) references periodo(id_periodo),
   primary key(id_tipo_subsidio, id_periodo)
@@ -291,7 +291,7 @@ create table ticket(
   id_beneficiario integer not null,
   fecha_creacion timestamp default current_timestamp,
   fecha_uso timestamp,
-  id_tipo_ticket varchar(15) check(id_tipo_ticket in('refrigerio', 'almuerzo')),
+  id_tipo_ticket varchar(15) constraint chk_ticket_tipo_in_defined_types check(id_tipo_ticket in('refrigerio', 'almuerzo')),
   foreign key (id_beneficiario) references beneficiario(id_beneficiario)
 );
 
@@ -310,7 +310,7 @@ create table actividad(
   id_actividad serial primary key,
   nombre varchar(200) not null,
   descripcion varchar(1000),
-  horas_equivalentes smallint not null check(horas_equivalentes >=0)
+  horas_equivalentes smallint not null constraint chk_actividad_horas_positive check(horas_equivalentes >=0)
 );
 
 create table responsable_actividad(
