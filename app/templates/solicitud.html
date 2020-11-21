@@ -4,6 +4,7 @@
 
 {% if id_convocatoria %}
 <p><b>Convocatoria Activa:</b> {{id_convocatoria[0]}}</p>
+<p> <i> Todos los documentos deben estar en formato pdf </i> <p>
 {% endif %}
 <form class="" action="{{ url_for('solicitud') }}" method="POST" enctype="multipart/form-data">
   <input type="hidden" value="{{id_convocatoria[0]}}" name="id_convocatoria">

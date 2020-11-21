@@ -242,12 +242,15 @@ create table documento_solicitud(
   id_puntaje_tipo_documento integer,
   id_estado_documento integer,
   id_tipo_documento integer not null,
-  revision varchar(300),
+  comentarios varchar(300),
   url varchar(200) not null,
+  necesita_cambios numeric(1,0) default 0,
+  revisado numeric(1,0) default 0,
   foreign key(id_estado_documento) references estado_documento(id_estado_documento),
   foreign key(id_solicitud) references solicitud(id_solicitud) on delete cascade,
   foreign key(id_puntaje_tipo_documento) references puntaje_tipo_documento(id_puntaje_tipo_documento),
-  foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
+  foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento),
+  primary key(id_solicitud, id_tipo_documento)
 );
 
 /**************** PUNTAJES Y SUBSIDIOS ************************/

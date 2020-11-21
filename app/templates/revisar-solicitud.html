@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-  
-<form class="text-center" action="{{ url_for('login') }}" method="POST">
-  {% for  id_tipo_documento, nombre, url in documentos_solicitud %}
+
+<form class="text-center" action="{{ url_for('revisar_solicitud') }}" method="POST">
+  <input type="number" name="id_solicitud" value="{{id_solicitud}}">
+  {% for  id_tipo_documento, nombre, url,necesita_cambios, revisado in documentos_solicitud %}
   <div class="row">
     <div class="col md-6">
       <div class="card mb-4">
@@ -13,20 +14,29 @@
     <div class="col md-6">
       <div class="card mb-4">
         <label class="mt-2 mb-2" for="sel1"><b>{{nombre}}</b></label>
-        <select class="form-control " id="sel1">
-          {% for puntaje in puntajes[id_tipo_documento] %}
-            <option> {{puntaje[0]}}</option>
-        {% endfor %}
+        <select class="form-control " name="tipo_puntaje{{id_tipo_documento}}">
+          {% if puntajes %}
+          {% for nombre, id_tipo_documento, puntaje, id_puntaje_tipo_documento in puntajes[id_tipo_documento] %}
+            <option value="{{id_puntaje_tipo_documento}}"> {{nombre}}</option>
+          {% endfor %}
+          {% endif %}
         </select>
         <label for="notas">Comentarios</label>
         <textarea class="form-control" name="comentario{{id_tipo_documento}}" rows="3"></textarea>
         <div class="form-check mt-2">
-          <input type="checkbox" id="revisado{{id_tipo_documento}}" class="form-check-input big-checkbox " name="revisado{{id_tipo_documento}}">
+          <input type="checkbox" id="necesita_cambios{{id_tipo_documento}}" class="form-check-input big-checkbox " name="revisado{{id_tipo_documento}}" {% if necesita_cambios == 1 %} checked {% endif %}>
+          <label for="necesita_cambios{{id_tipo_documento}}" class="form-check-label">Necesita Cambios</label>
+        </div>
+        <div class="form-check mt-2">
+          <input type="checkbox" id="revisado{{id_tipo_documento}}" class="form-check-input big-checkbox " name="revisado{{id_tipo_documento}}" {% if revisado == 1 %} checked {% endif %}>
           <label for="revisado{{id_tipo_documento}}" class="form-check-label">Revisado</label>
         </div>
       </div>
     </div>
   </div>
   {% endfor %}
+  <div class="text-center">
+    <input type="submit" class="btn btn-primary" value="Guardar">
+  </div>
 </form>
 {% endblock %}

@@ -2,9 +2,6 @@ import functools
 import os
 from datetime import date
 
-from flask import Flask, flash, g, redirect, render_template, request, session, url_for
-from werkzeug.utils import secure_filename
-
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
@@ -12,11 +9,14 @@ from control.dao.documento_solicitud import DocumentoSolicitud
 from control.dao.estado_convocatoria import EstadoConvocatoria
 from control.dao.facultad import Facultad
 from control.dao.periodo import Periodo
+from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
 from control.dao.user import User
-from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
+from flask import (Flask, flash, g, redirect, render_template, request,
+                   session, url_for)
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -29,7 +29,7 @@ if not os.path.isdir(UPLOAD_FOLDER):
     os.mkdir(UPLOAD_FOLDER)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = set(["txt", "pdf", "png", "jpg", "jpeg"])
+ALLOWED_EXTENSIONS = set(["pdf"])
 
 
 def allowed_file(filename):
@@ -249,10 +249,27 @@ def solicitud():
     )
 
 
-@app.route("/revisar_solicitud")
-@app.route("/revisar_solicitud/<id_solicitud>")
+@app.route("/revisar_solicitud", methods=["GET", "POST"])
+@app.route("/revisar_solicitud/<id_solicitud>", methods=["GET", "POST"])
 @login_required
 def revisar_solicitud(id_solicitud=None):
+    if request.method == "POST":
+        tipos_documento = TipoDocumento().get_all()
+        documento_solicitud = DocumentoSolicitud()
+        for idt, _, nombre_tipo in tipos_documento:
+            if "revisado{}".format(idt) in request.form:
+                data = {
+                    "comentarios": request.form["comentario{}".format(idt)],
+                    "id_solicitud": request.form["id_solicitud"],
+                    "id_tipo_documento": idt,
+                    "revisado": 1 if "revisado{}".format(idt) in request.form else 0,
+                    "id_puntaje_tipo_documento": request.form[
+                        "tipo_puntaje{}".format(idt)
+                    ],
+                }
+                documento_solicitud.update(data)
+                flash("Documento {} Revisado".format(nombre_tipo))
+        return redirect(url_for("revisar_solicitud"))
     if id_solicitud is not None:
         documentos_solicitud = DocumentoSolicitud().get(id_solicitud)
         puntajes = PuntajeTipoDocumento().get_all()
@@ -260,6 +277,7 @@ def revisar_solicitud(id_solicitud=None):
             "revisar-solicitud.html",
             documentos_solicitud=documentos_solicitud,
             puntajes=puntajes,
+            id_solicitud=id_solicitud,
         )
     solicitudes = Solicitud().get_all()
     return render_template("listar-solicitudes.html", solicitudes=solicitudes)
