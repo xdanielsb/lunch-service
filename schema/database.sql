@@ -49,7 +49,7 @@ insert into rol(id_rol, nombre) values(2, 'administrador');
 create table usuario(
   id_usuario serial primary key,
   password varchar( 256 ) not null,
-  fecha_creacion timestamp not null,
+  fecha_creacion date not null, /* Tipo de dato date*/
   ultimo_accesso timestamp default current_timestamp,
   id_rol integer not null
 );
@@ -64,9 +64,9 @@ create table periodo(
   id_periodo serial primary key,
   nombre varchar(10) not null,
   descripcion varchar(200) ,
-  fecha_inicio timestamp not null,
-  fecha_fin timestamp not null constraint chk_periodo_feacha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
-  semanas_periodo integer  generated always as (trunc(date_part('day'::text,fecha_fin-fecha_inicio)/7)) stored
+  fecha_inicio date not null, /* Fecha tipo date y no timestamp */
+  fecha_fin date not null constraint chk_periodo_feacha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
+  semanas_periodo integer  generated always as (trunc(date_part('day'::text,fecha_fin-fecha_inicio)/7)) stored  /* Fecha tipo date y no timestamp */
 );
 
 insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin)
@@ -166,8 +166,8 @@ create table estudiante(
   identificacion varchar(30) unique not null,
   nombre varchar(50) not null,
   apellido varchar(50) not null,
-  promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0),
-  matriculas_restantes smallint default 10,
+  promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0) not null, /* ¿Por qué promdeio no es not null? */
+  matriculas_restantes smallint default 10 not null, /* ¿Por qué matriculas restantes no es not null? */
   email varchar(100),
   id_usuario integer not null,
   id_proyecto_curricular integer not null,
@@ -197,7 +197,7 @@ insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6
 create table solicitud(
   id_solicitud serial primary key,
   id_estudiante integer not null,
-  puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100),
+  puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100) not null, /* Por qué no es not null? */
   ultima_actualizacion timestamp not null default current_timestamp,
   id_estado_solicitud integer default 1,
   id_convocatoria integer not null,
@@ -279,10 +279,10 @@ create table beneficiario(
 create table ticket(
   id_ticket serial primary key,
   id_beneficiario integer not null,
-  fecha_creacion timestamp default current_timestamp,
-  fecha_uso timestamp,
+  fecha_creacion date default current_timestamp not null, /* Tipo de dato a date y ¿por qué no es not null?, si ya tiene id, debe tener una fecha de creación */
+  fecha_uso date,
   id_tipo_ticket varchar(15) constraint chk_ticket_tipo_in_defined_types check(id_tipo_ticket in('refrigerio', 'almuerzo')),
-  foreign key (id_beneficiario) references beneficiario(id_beneficiario)
+  foreign key (id_beneficiario) references beneficiario(id_beneficiario) not null /* Por qué no es not null? */
 );
 
 
