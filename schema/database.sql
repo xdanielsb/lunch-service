@@ -77,7 +77,7 @@ values (2, '2020-1','2020-02-01 00:00:00', '2020-05-29 23:59:59');
 
 create table estado_convocatoria(
   id_estado_convocatoria serial primary key,
-  estado varchar(30),
+  estado varchar(30) not null,
   descripcion varchar(200)
 );
 insert into estado_convocatoria(id_estado_convocatoria, estado) values(1, 'activa');
@@ -110,7 +110,7 @@ create table historico_convocatoria(
 
 create table estado_documento(
   id_estado_documento serial primary key,
-  nombre varchar(30),
+  nombre varchar(30) not null,
   descripcion varchar(200)
 );
 insert into estado_documento(id_estado_documento, nombre) values (1, 'Sin Revisar');
@@ -121,7 +121,7 @@ insert into estado_documento(id_estado_documento, nombre) values (4, 'Rechazado'
 
 create table tipo_documento(
   id_tipo_documento serial primary key,
-  obligatorio numeric(1,0) check(obligatorio in(0, 1)),
+  obligatorio numeric(1,0) check(obligatorio in(0, 1)) not null,
   nombre varchar(200)
 );
 insert into tipo_documento(nombre, obligatorio) values('Formulario de Solicitud de ingreso al Programa Apoyo Alimentario', 1);
@@ -135,7 +135,7 @@ insert into tipo_documento(nombre, obligatorio) values('Examen y Diagnostico Mé
 
 create table puntaje_tipo_documento(
   id_puntaje_tipo_documento serial primary key,
-  nombre varchar(200),
+  nombre varchar(200) not null,
   id_tipo_documento integer not null,
   puntaje smallint constraint chk_documento_puntaje_greater_than_zero check(puntaje>=0 and puntaje <=100),
   foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
@@ -163,7 +163,7 @@ insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) val
 
 create table estudiante(
   id_estudiante serial primary key,
-  identificacion varchar(30) unique,
+  identificacion varchar(30) unique not null,
   nombre varchar(50) not null,
   apellido varchar(50) not null,
   promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0),
@@ -211,8 +211,8 @@ create table solicitud(
 
 create table historico_solicitud(
   id_historico_solicitud serial primary key,
-  id_solicitud integer,
-  id_estado_solicitud integer,
+  id_solicitud integer not null,
+  id_estado_solicitud integer not null,
   foreign key(id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
   foreign key(id_solicitud) references solicitud(id_solicitud),
   fecha timestamp not null
@@ -270,8 +270,8 @@ create table tipo_subsidio_convocatoria(
 /**************** TICKET and BENEFICIARIO ************************/
 create table beneficiario(
   id_beneficiario serial primary key,
-  id_tipo_subsidio integer,
-  id_solicitud integer,
+  id_tipo_subsidio integer not null,
+  id_solicitud integer not null,
   foreign key (id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
   foreign key (id_solicitud) references solicitud(id_solicitud)
 );
@@ -291,7 +291,7 @@ create table ticket(
 
 create table estado_actividad(
   id_estado_actividad serial primary key,
-  nombre varchar(200),
+  nombre varchar(200) not null,
   descripcion varchar(2000)
 );
 

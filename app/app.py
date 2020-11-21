@@ -228,7 +228,7 @@ def solicitud():
                     "url": url,
                 }
                 documento_s.create(data)
-        flash("Archivos (exitosamente) guardada")
+        flash("Archivos exitosamente guardados")
         return redirect(url_for("home"))
 
     convocatoria = Convocatoria()
