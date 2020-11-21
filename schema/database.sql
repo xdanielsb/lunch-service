@@ -203,14 +203,16 @@ insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6
 create table solicitud(
   id_solicitud serial primary key,
   id_estudiante integer not null,
-  puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100), /* check puntaje [0, 100] */
+  puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100),
   ultima_actualizacion timestamp not null default current_timestamp,
   id_estado_solicitud integer not null,
-  id_convocatoria integer not null, /* if I insert a register should check convocatoria is active */
+  id_convocatoria integer not null, 
   foreign key (id_convocatoria) references convocatoria(id_convocatoria),
   foreign key (id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
-  foreign key (id_estudiante) references estudiante(id_estudiante)
+  foreign key (id_estudiante) references estudiante(id_estudiante),
+  unique(id_convocatoria, id_estudiante)
 );
+
 
 
 create table historico_solicitud(
