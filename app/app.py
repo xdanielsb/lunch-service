@@ -12,6 +12,7 @@ from control.dao.estado_convocatoria import EstadoConvocatoria
 from control.dao.facultad import Facultad
 from control.dao.periodo import Periodo
 from control.dao.tipo_subsidio import TipoSubsidio
+from control.dao.tipo_documento import TipoDocumento
 from control.dao.user import User
 
 app = Flask(__name__)
@@ -78,41 +79,16 @@ def login():
     return render_template("home.html")
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
 @app.route("/home")
 @login_required
 def home():
     return render_template("home.html")
-
-
-@app.route("/solicitud", methods=["GET", "POST"])
-@login_required
-def solicitud():
-    if request.method == "POST":
-        for name_file in request.files:
-            file = request.files[name_file]
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                print(
-                    "Saving file in "
-                    + os.path.join(app.config["UPLOAD_FOLDER"], filename)
-                )
-                # file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-        flash("File(s) successfully uploaded")
-        return redirect(url_for("home"))
-
-    convocatoria = Convocatoria()
-    today = date.today()
-    if convocatoria.is_active(fecha_actual=today.strftime("%Y-%m-%d")) is not True:
-        flash("No hay convocatoria activa.")
-        return redirect(url_for("home"))
-
-    return render_template("solicitud.html")
-
-
-@app.route("/revisar_solicitud")
-@login_required
-def revisar_solicitud():
-    return render_template("revisar-solicitud.html")
 
 
 @app.route("/convocotoria", methods=["POST", "GET"])
@@ -162,7 +138,6 @@ def convocatoria(id_convocatoria=None):
                     convocatoria_tipo_subsidio.create(data)
         return redirect(url_for("convocatoria_view"))
     else:
-        # TODO: make fecha_actual global
         today = date.today()
         periodo = Periodo()
         active_periodo = periodo.get_active_period(
@@ -224,10 +199,40 @@ def convocatoria_delete(id_convocatoria):
     return redirect(url_for("home"))
 
 
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
+@app.route("/solicitud", methods=["GET", "POST"])
+@login_required
+def solicitud():
+    if request.method == "POST":
+        for name_file in request.files:
+            file = request.files[name_file]
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                url = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(url)
+        flash("Archivos (exitosamente) guardada")
+        return redirect(url_for("home"))
+
+    convocatoria = Convocatoria()
+    today = date.today()
+    id_convocatoria = convocatoria.get_active_current(
+        fecha_actual=today.strftime("%Y-%m-%d")
+    )
+    if id_convocatoria is None:
+        flash("No hay convocatoria activa.")
+        return redirect(url_for("home"))
+
+    tipos_documento = TipoDocumento().get_all()
+    return render_template(
+        "solicitud.html",
+        id_convocatoria=id_convocatoria,
+        tipos_documento=tipos_documento,
+    )
+
+
+@app.route("/revisar_solicitud")
+@login_required
+def revisar_solicitud():
+    return render_template("revisar-solicitud.html")
 
 
 if __name__ == "__main__":

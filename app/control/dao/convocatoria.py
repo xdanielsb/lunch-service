@@ -2,12 +2,14 @@ from ..connection import execute, query
 
 
 class Convocatoria:
-    def is_active(self, fecha_actual):
-        q = "select count(*) from convocatoria where fecha_inicio<='{}' and fecha_fin>='{}'".format(
+    def get_active_current(self, fecha_actual):
+        q = "select id_convocatoria from convocatoria where fecha_inicio<='{}' and fecha_fin>='{}'".format(
             fecha_actual, fecha_actual
         )
-        ans = query(q)[0]
-        return ans[0] != 0
+        ans = query(q)
+        if len(ans) == 0:
+            return None
+        return ans[0]
 
     def exist(self, id_convocatoria):
         q = "select count(*) from convocatoria where id_convocatoria = {}".format(

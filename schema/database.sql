@@ -19,8 +19,8 @@ drop table if exists convocatoria;
 drop table if exists historico_convocatoria;
 drop table if exists estado_documento;
 drop table if exists tipo_documento;
-drop table if exists documento;
-drop table if exists solicitud_documento;
+drop table if exists puntaje_tipo_documento;
+drop table if exists documento_solicitud;
 drop table if exists facultad;
 drop table if exists proyecto_curricular;
 drop table if exists estudiante;
@@ -121,32 +121,26 @@ insert into estado_documento(id_estado_documento, nombre) values (4, 'Rechazado'
 
 create table tipo_documento(
   id_tipo_documento serial primary key,
+  obligatorio numeric(1,0) check(obligatorio in(0, 1)),
   nombre varchar(200)
 );
-insert into tipo_documento(id_tipo_documento, nombre) values(1, 'Formulario de solicitud');
-insert into tipo_documento(id_tipo_documento, nombre) values(2, 'Carta dirigida a bienestar');
-insert into tipo_documento(id_tipo_documento, nombre) values(3, 'Certificado estratificacion');
-insert into tipo_documento(id_tipo_documento, nombre) values(4, 'Recibo publico');
-insert into tipo_documento(id_tipo_documento, nombre) values(5, 'Recibo universidad');
-insert into tipo_documento(id_tipo_documento, nombre) values(6, 'Desplazamiento forzoso');
+insert into tipo_documento(nombre, obligatorio) values('Formulario de Solicitud de ingreso al Programa Apoyo Alimentario', 1);
+insert into tipo_documento(nombre, obligatorio) values('Carta dirigida al director del Centro de Bienestar Institucional', 1);
+insert into tipo_documento(nombre, obligatorio) values('Certificado de estratificación del lugar de residencia del estudiante', 1);
+insert into tipo_documento(nombre, obligatorio) values('Fotocopia de la factura de un recibo de servicio público de su domicilio', 1);
+insert into tipo_documento(nombre, obligatorio) values('Certificado de desplazamiento forzoso por violencia del Departamento', 0);
+insert into tipo_documento(nombre, obligatorio) values('Si es padre/madre, certificado Civil de nacimiento de los o las hijas', 0);
+insert into tipo_documento(nombre, obligatorio) values('Certificado de Discapacidad Medica, avalado por Bienestar Institucional', 0);
+insert into tipo_documento(nombre, obligatorio) values('Examen y Diagnostico Médico, Enfermedades presentes del estudiante', 0);
 
-create table documento(
-  id_documento serial primary key,
+create table puntaje_tipo_documento(
+  id_puntaje_tipo_documento serial primary key,
   nombre varchar(200),
   id_tipo_documento integer not null,
   puntaje smallint constraint chk_documento_puntaje_greater_than_zero check(puntaje>=0 and puntaje <=100),
   foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
 );
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (1, 1, 'Formulario de Solicitud Completo', 100);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (2, 2, 'Carta dirigida a bienestar Completa', 100);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (3, 3, 'Estrato 1', 100);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (4, 3, 'Estrato 2', 90);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (5, 3, 'Estrato 3', 80);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (6, 3, 'Estrato 4', 70);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (7, 3, 'Estrato 5', 60);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (8, 4, 'Recibo publico actual', 100);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (9, 3, 'Recibo universidad completo', 100);
-insert into documento(id_documento, id_tipo_documento, nombre, puntaje) values (10, 3, 'Desplazamiento Forzoso', 100);
+
 
 
 create table facultad(
@@ -206,7 +200,7 @@ create table solicitud(
   puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100),
   ultima_actualizacion timestamp not null default current_timestamp,
   id_estado_solicitud integer not null,
-  id_convocatoria integer not null, 
+  id_convocatoria integer not null,
   foreign key (id_convocatoria) references convocatoria(id_convocatoria),
   foreign key (id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
   foreign key (id_estudiante) references estudiante(id_estudiante),
@@ -225,15 +219,17 @@ create table historico_solicitud(
 );
 
 
-create table solicitud_documento(
+create table documento_solicitud(
   id_solicitud integer not null,
-  id_documento integer not null,
+  id_puntaje_tipo_documento integer,
   id_estado_documento integer,
+  id_tipo_documento integer not null,
   revision varchar(300),
   url varchar(200) not null,
   foreign key(id_estado_documento) references estado_documento(id_estado_documento),
   foreign key(id_solicitud) references solicitud(id_solicitud),
-  foreign key(id_documento) references documento(id_documento)
+  foreign key(id_puntaje_tipo_documento) references puntaje_tipo_documento(id_puntaje_tipo_documento),
+  foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)  
 );
 
 /**************** PUNTAJES Y SUBSIDIOS ************************/
