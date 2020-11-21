@@ -2,6 +2,10 @@ import functools
 import os
 from datetime import date
 
+from flask import (Flask, flash, g, redirect, render_template, request,
+                   session, url_for)
+from werkzeug.utils import secure_filename
+
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
@@ -13,9 +17,6 @@ from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
 from control.dao.user import User
-from flask import (Flask, flash, g, redirect, render_template, request,
-                   session, url_for)
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -23,7 +24,7 @@ app.config.from_object("config.Config")
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
 path = os.getcwd()
-UPLOAD_FOLDER = os.path.join(path, "uploads")
+UPLOAD_FOLDER = os.path.join(path, "static/uploads")
 if not os.path.isdir(UPLOAD_FOLDER):
     os.mkdir(UPLOAD_FOLDER)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -225,7 +226,7 @@ def solicitud():
                 data = {
                     "id_solicitud": id_solicitud,
                     "id_tipo_documento": name_file,
-                    "url": url,
+                    "url": filename,
                 }
                 documento_s.create(data)
         flash("Archivos exitosamente guardados")
@@ -249,9 +250,20 @@ def solicitud():
 
 
 @app.route("/revisar_solicitud")
+@app.route("/revisar_solicitud/<id_solicitud>")
 @login_required
-def revisar_solicitud():
-    return render_template("revisar-solicitud.html")
+def revisar_solicitud(id_solicitud=None):
+    if id_solicitud is not None:
+        documentos_solicitud = DocumentoSolicitud().get(id_solicitud)
+        puntajes = {}
+        return render_template(
+            "revisar-solicitud.html",
+            documentos_solicitud=documentos_solicitud,
+            puntajes=puntajes,
+        )
+    solicitudes = Solicitud().get_all()
+    print(solicitudes)
+    return render_template("listar-solicitudes.html", solicitudes=solicitudes)
 
 
 if __name__ == "__main__":

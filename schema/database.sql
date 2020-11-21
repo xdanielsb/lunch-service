@@ -208,7 +208,6 @@ create table solicitud(
 );
 
 
-
 create table historico_solicitud(
   id_historico_solicitud serial primary key,
   id_solicitud integer not null,

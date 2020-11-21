@@ -1,27 +1,26 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="row">
-  <div class="col md-6">
-    <div class="card mb-4">
-      <object data="test.pdf" type="application/pdf" width="600" height="400">
-        alt : <a href="/Users/daniel/Documents/LunchApplications/app/uploads/doc1_formato_apoyo.pdf">test.pdf</a>
-      </object>
-      <iframe src="/Users/daniel/Documents/LunchApplications/app/uploads/doc1_formato_apoyo.pdf" style="width:100%;height:700px;"></iframe>
+<form class="text-center" action="{{ url_for('login') }}" method="POST">
+  {% for  id_tipo_documento, url in documentos_solicitud %}
+  <div class="row">
+    <div class="col md-6">
+      <div class="card mb-4">
+        <input type="hidden" value="{{id_tipo_documento}}">
+        <iframe src="{{ url_for('static', filename='uploads/{}'.format(url))}}" style="width:100%;height:700px;"></iframe>
+      </div>
+    </div>
+    <div class="col md-6">
+      <div class="card mb-4">
+        <label for="sel1">Documento Situación Social</label>
+        <select class="form-control" id="sel1">
+          <!-- {% for puntaje in puntajes[id_tipo_documentos] %} <option> puntaje </option>{% endfor %} -->
+        </select>
+        <label for="notas">Comentarios</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <a href="#" class="btn btn-primary"> Guardar </a>
+      </div>
     </div>
   </div>
-  <div class="col md-6">
-    <div class="card mb-4">
-      <label for="sel1">Documento Situación Social</label>
-      <select class="form-control" id="sel1">
-        <option>Estrato 1</option>
-        <option>Estrato 2</option>
-        <option>Estrato 3</option>
-      </select>
-      <label for="notas">Notas</label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-      <a href="#" class="btn btn-primary"> Guardar </a>
-    </div>
-  </div>
-</div>
+  {% endfor %}
+</form>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">id_solicitud</th>
+      <th scope="col">id_estudiante</th>
+      <th scope="col">ultima_actualizacion</th>
+      <th scope="col">id_estado_solicitud</th>
+      <th scope="col">id_convocatoria </th>
+      <th scope="col"> Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for solicitud in solicitudes %}
+    <tr>
+      {% for field in solicitud %}
+      <td> {{field}}</td>
+      {% endfor %}
+      <td> <a href="{{ url_for('revisar_solicitud', id_solicitud=solicitud[0]) }}" class="btn btn-primary"> Revisar </a>  </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
