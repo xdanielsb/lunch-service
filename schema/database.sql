@@ -199,7 +199,7 @@ create table solicitud(
   id_estudiante integer not null,
   puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100),
   ultima_actualizacion timestamp not null default current_timestamp,
-  id_estado_solicitud integer not null,
+  id_estado_solicitud integer not null default 1,
   id_convocatoria integer not null,
   foreign key (id_convocatoria) references convocatoria(id_convocatoria),
   foreign key (id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
@@ -227,7 +227,7 @@ create table documento_solicitud(
   revision varchar(300),
   url varchar(200) not null,
   foreign key(id_estado_documento) references estado_documento(id_estado_documento),
-  foreign key(id_solicitud) references solicitud(id_solicitud),
+  foreign key(id_solicitud) references solicitud(id_solicitud) on delete cascade,
   foreign key(id_puntaje_tipo_documento) references puntaje_tipo_documento(id_puntaje_tipo_documento),
   foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)  
 );

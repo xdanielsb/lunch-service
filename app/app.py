@@ -2,18 +2,20 @@ import functools
 import os
 from datetime import date
 
-from flask import Flask, flash, g, redirect, render_template, request, session, url_for
-from werkzeug.utils import secure_filename
-
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
+from control.dao.documento_solicitud import DocumentoSolicitud
 from control.dao.estado_convocatoria import EstadoConvocatoria
 from control.dao.facultad import Facultad
 from control.dao.periodo import Periodo
-from control.dao.tipo_subsidio import TipoSubsidio
+from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
+from control.dao.tipo_subsidio import TipoSubsidio
 from control.dao.user import User
+from flask import (Flask, flash, g, redirect, render_template, request,
+                   session, url_for)
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -42,6 +44,7 @@ def load_logged_in_user():
         # TODO: query from db this data
         g.user = {
             "name": "postgres",
+            "id_estudiante": "1",
             "password": "",
             "rol": "Estudiante",
             "email": "matilda@udistrital.co",
@@ -203,12 +206,28 @@ def convocatoria_delete(id_convocatoria):
 @login_required
 def solicitud():
     if request.method == "POST":
+        documento_s = DocumentoSolicitud()
+        solicitud = Solicitud()
+        id_solicitud = solicitud.get_next_id()
+        data = {
+            "id_solicitud": id_solicitud,
+            "id_estudiante": g.user["id_estudiante"],
+            "id_convocatoria": request.form["id_convocatoria"],
+        }
+        solicitud.create(data)
+
         for name_file in request.files:
             file = request.files[name_file]
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 url = os.path.join(app.config["UPLOAD_FOLDER"], filename)
                 file.save(url)
+                data = {
+                    "id_solicitud": id_solicitud,
+                    "id_tipo_documento": name_file,
+                    "url": url,
+                }
+                documento_s.create(data)
         flash("Archivos (exitosamente) guardada")
         return redirect(url_for("home"))
 
