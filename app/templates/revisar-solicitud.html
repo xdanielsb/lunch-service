@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+  
 <form class="text-center" action="{{ url_for('login') }}" method="POST">
-  {% for  id_tipo_documento, url in documentos_solicitud %}
+  {% for  id_tipo_documento, nombre, url in documentos_solicitud %}
   <div class="row">
     <div class="col md-6">
       <div class="card mb-4">
@@ -11,13 +12,18 @@
     </div>
     <div class="col md-6">
       <div class="card mb-4">
-        <label for="sel1">Documento Situación Social</label>
-        <select class="form-control" id="sel1">
-          <!-- {% for puntaje in puntajes[id_tipo_documentos] %} <option> puntaje </option>{% endfor %} -->
+        <label class="mt-2 mb-2" for="sel1"><b>{{nombre}}</b></label>
+        <select class="form-control " id="sel1">
+          {% for puntaje in puntajes[id_tipo_documento] %}
+            <option> {{puntaje[0]}}</option>
+        {% endfor %}
         </select>
         <label for="notas">Comentarios</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        <a href="#" class="btn btn-primary"> Guardar </a>
+        <textarea class="form-control" name="comentario{{id_tipo_documento}}" rows="3"></textarea>
+        <div class="form-check mt-2">
+          <input type="checkbox" id="revisado{{id_tipo_documento}}" class="form-check-input big-checkbox " name="revisado{{id_tipo_documento}}">
+          <label for="revisado{{id_tipo_documento}}" class="form-check-label">Revisado</label>
+        </div>
       </div>
     </div>
   </div>

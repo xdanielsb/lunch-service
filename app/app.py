@@ -2,8 +2,7 @@ import functools
 import os
 from datetime import date
 
-from flask import (Flask, flash, g, redirect, render_template, request,
-                   session, url_for)
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
 from control.dao.convocatoria import Convocatoria
@@ -17,6 +16,7 @@ from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
 from control.dao.user import User
+from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -255,14 +255,13 @@ def solicitud():
 def revisar_solicitud(id_solicitud=None):
     if id_solicitud is not None:
         documentos_solicitud = DocumentoSolicitud().get(id_solicitud)
-        puntajes = {}
+        puntajes = PuntajeTipoDocumento().get_all()
         return render_template(
             "revisar-solicitud.html",
             documentos_solicitud=documentos_solicitud,
             puntajes=puntajes,
         )
     solicitudes = Solicitud().get_all()
-    print(solicitudes)
     return render_template("listar-solicitudes.html", solicitudes=solicitudes)
 
 

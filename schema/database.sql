@@ -124,23 +124,42 @@ create table tipo_documento(
   obligatorio numeric(1,0) check(obligatorio in(0, 1)) not null,
   nombre varchar(200)
 );
-insert into tipo_documento(nombre, obligatorio) values('Formulario de Solicitud de ingreso al Programa Apoyo Alimentario', 1);
-insert into tipo_documento(nombre, obligatorio) values('Carta dirigida al director del Centro de Bienestar Institucional', 1);
-insert into tipo_documento(nombre, obligatorio) values('Certificado de estratificación del lugar de residencia del estudiante', 1);
-insert into tipo_documento(nombre, obligatorio) values('Fotocopia de la factura de un recibo de servicio público de su domicilio', 1);
-insert into tipo_documento(nombre, obligatorio) values('Certificado de desplazamiento forzoso por violencia del Departamento', 0);
-insert into tipo_documento(nombre, obligatorio) values('Si es padre/madre, certificado Civil de nacimiento de los o las hijas', 0);
-insert into tipo_documento(nombre, obligatorio) values('Certificado de Discapacidad Medica, avalado por Bienestar Institucional', 0);
-insert into tipo_documento(nombre, obligatorio) values('Examen y Diagnostico Médico, Enfermedades presentes del estudiante', 0);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(1, 'Formulario de Solicitud de ingreso al Programa Apoyo Alimentario', 1);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(2, 'Carta dirigida al director del Centro de Bienestar Institucional', 1);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(3, 'Certificado de estratificación del lugar de residencia del estudiante', 1);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(4, 'Fotocopia de la factura de un recibo de servicio público de su domicilio', 1);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(5, 'Certificado de desplazamiento forzoso por violencia del Departamento', 0);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(6, 'Si es padre/madre, certificado Civil de nacimiento de los o las hijas', 0);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(7, 'Certificado de Discapacidad Medica, avalado por Bienestar Institucional', 0);
+insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(8, 'Examen y Diagnostico Médico, Enfermedades presentes del estudiante', 0);
 
 create table puntaje_tipo_documento(
   id_puntaje_tipo_documento serial primary key,
   nombre varchar(200) not null,
   id_tipo_documento integer not null,
-  puntaje smallint constraint chk_documento_puntaje_greater_than_zero check(puntaje>=0 and puntaje <=100),
+  puntaje smallint not null constraint chk_documento_puntaje_greater_than_zero check(puntaje>=0 and puntaje <=100),
   foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
 );
 
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Formulario solicitud bien diligenciado', 1,  100);
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Formulario solicitud mal diligenciado', 1,  0);
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director bien escrita', 2,100);
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director mal escrita', 2,100);
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 1', 3,100  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 2', 3,90  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 3', 3,70  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 4', 3,50  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 5', 3,10  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Actual', 4, 100 );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Desactualizado', 4,20  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado desplazamiento forzoso correcto', 5, 100 );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado desplazamiento forzoso invalido', 5, 0 );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Registro civil nacimento hijos valido', 6, 100  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Registro civil nacimento hijos invalido', 6, 0  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado discapacidad medica valido', 7, 100 );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado discapacidad medica invalido', 7, 0  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes valido ', 8, 100 );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes valido ', 8,  0);
 
 
 create table facultad(
@@ -228,7 +247,7 @@ create table documento_solicitud(
   foreign key(id_estado_documento) references estado_documento(id_estado_documento),
   foreign key(id_solicitud) references solicitud(id_solicitud) on delete cascade,
   foreign key(id_puntaje_tipo_documento) references puntaje_tipo_documento(id_puntaje_tipo_documento),
-  foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)  
+  foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
 );
 
 /**************** PUNTAJES Y SUBSIDIOS ************************/

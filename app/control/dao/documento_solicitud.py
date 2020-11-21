@@ -9,7 +9,7 @@ class DocumentoSolicitud:
         return execute(q)
 
     def get(self, id_solicitud):
-        q = "select id_tipo_documento, url from documento_solicitud where id_solicitud={}".format(
+        q = "select ds.id_tipo_documento, td.nombre, url from documento_solicitud as ds, tipo_documento as  td  where ds.id_tipo_documento = td.id_tipo_documento and id_solicitud={}".format(
             id_solicitud
         )
         return query(q)
