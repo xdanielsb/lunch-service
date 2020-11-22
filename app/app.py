@@ -80,7 +80,7 @@ def login():
         flash(error)
     if g.user is None:
         return render_template("login.html")
-    return render_template("home.html")
+    return redirect(url_for("home"))
 
 
 @app.route("/logout")
@@ -92,7 +92,7 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("base2.html")
 
 
 @app.route("/convocotoria", methods=["POST", "GET"])

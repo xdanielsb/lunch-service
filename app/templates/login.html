@@ -4,50 +4,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login Template</title>
+  <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
-<div class="login">
-  <section class="p-5 text-center">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-primary" role="alert"> {{ message }}</div>
-    {% endfor %}
-    <div class="row">
-      <div class="col-md-4 mx-auto">
-        <div class="card">
-          <div class="card-body">
-            <form class="text-center" action="{{ url_for('login') }}" method="POST" style="color: #757575;">
-              <img src="{{ url_for('static', filename='img/fork-spoon.png') }}" class=" rounded-circle " width="120em" height="120em" />
-              <h3 class="font-weight-bold my-4 pb-2 text-center dark-grey-text">Sistema de Apoyo Alimentario</h3>
-              <hr>
-              <div class="col-md-10 mx-auto">
-                <input type="text" name="username" class="form-control mb-3" placeholder="Correo Institucional">
-                <input type="password" name="password" class="form-control" placeholder="Contraseña"><br>
+
+<body>
+  <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+    <div class="container">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-primary" role="alert"> {{ message }}</div>
+      {% endfor %}
+      <div class="card login-card">
+        <div class="row no-gutters">
+          <div class="col-md-5">
+            <img src="https://agencia.udistrital.edu.co/sites/agencia/files/imagen-noticias/2019-01/estudiantes.jpg" alt="login" class="login-card-img">
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <div class="brand-wrapper">
+                <img src="https://logopond.com/logos/d40f3fe7edb84c30eaafb46505c58ead.png" alt="logo" class="logo">
               </div>
-              <small id="passwordHelpBlock" class="form-text text-center blue-text">
-                <a href="#">Registrarse</a>
-              </small>
-              <hr>
-              <div class="text-center">
-                <input type="submit">
-              </div>
-            </form>
+              <p class="login-card-description">Entra a tu cuenta</p>
+              <form autocomplete="off" class="text-center" action="{{ url_for('login') }}" method="POST" style="color: #757575;">
+                <div class="form-group">
+                  <label for="username" class="sr-only">Username</label>
+                  <input type="number" name="username" id="username" class="form-control" placeholder="Username">
+                </div>
+                <div class="form-group mb-4">
+                  <label for="password" class="sr-only">Password</label>
+                  <input type="password" name="password" id="password" class="form-control" placeholder="***********">
+                </div>
+                <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Login">
+              </form>
+              <a href="#!" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+              <p class="login-card-footer-text">¿No tienes cuenta? <a href="#!" class="text-reset">Registrate acá</a></p>
+              <nav class="login-card-footer-nav">
+                <a href="#!">¡Esto es un prototipo!</a>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-</div>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 
 </html>
