@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% block content %}
 
 <form class="text-center" action="{{ url_for('revisar_solicitud') }}" method="POST">
-  <input type="number" name="id_solicitud" value="{{id_solicitud}}">
+  <input type="hidden" name="id_solicitud" value="{{id_solicitud}}">
   {% for  id_tipo_documento, nombre, url,necesita_cambios, revisado in documentos_solicitud %}
   <div class="row">
     <div class="col md-6">
