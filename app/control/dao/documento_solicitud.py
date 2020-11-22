@@ -15,7 +15,7 @@ class DocumentoSolicitud:
         return query(q)
 
     def update(self, data):
-        q = " update documento_solicitud set  comentarios='{}', id_puntaje_tipo_documento={}, revisado={} where id_solicitud={} and id_tipo_documento={}".format(
+        q = "update documento_solicitud set  comentarios='{}', id_puntaje_tipo_documento={}, revisado={} where id_solicitud={} and id_tipo_documento={}".format(
             data["comentarios"],
             data["id_puntaje_tipo_documento"],
             data["revisado"],
