@@ -12,7 +12,6 @@ grants, so we avoid students creates in tables she/he is not allowed.
 
 /**************** USERS AUTHENTICATION ************************/
 drop table if exists rol;
-drop table if exists usuario;
 drop table if exists periodo;
 drop table if exists estado_convocatoria;
 drop table if exists convocatoria;
@@ -34,27 +33,9 @@ drop table if exists beneficiario;
 drop table if exists ticket;
 drop table if exists estado_actividad;
 drop table if exists actividad;
-drop table if exists responsable_actividad;
 drop table if exists actividad_beneficiario;
 drop table if exists parametro;
 
-
-create table rol(
-  id_rol integer primary key,
-  nombre varchar (30) unique not null
-);
-insert into rol(id_rol, nombre) values(1, 'estudiante');
-insert into rol(id_rol, nombre) values(2, 'administrador');
-
-create table usuario(
-  id_usuario serial primary key,
-  password varchar( 256 ) not null,
-  fecha_creacion timestamp not null,
-  ultimo_accesso timestamp default current_timestamp,
-  id_rol integer not null
-);
-insert into usuario(id_usuario, password, fecha_creacion, id_rol) values (1, 'pass', current_timestamp, 1);
-insert into usuario(id_usuario, password, fecha_creacion, id_rol) values (2, 'pass', current_timestamp, 2);
 
 
 /**************** CONVOCATORIA ************************/
@@ -188,14 +169,12 @@ create table estudiante(
   promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0),
   matriculas_restantes smallint default 10,
   email varchar(100),
-  id_usuario integer not null,
   id_proyecto_curricular integer not null,
-  foreign key(id_proyecto_curricular) references proyecto_curricular(id_proyecto_curricular),
-  foreign key(id_usuario) references usuario(id_usuario)
+  foreign key(id_proyecto_curricular) references proyecto_curricular(id_proyecto_curricular)
 );
 
-insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular, id_usuario)
-values (1, '20131020001', 'jhon', 'doe', 4.5, 8, 'jhon@email.com', 2, 1);
+insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular)
+values (1, '20131020001', 'jhon', 'doe', 4.5, 8, 'jhon@email.com', 2);
 
 
 /**************** SOLICITUD APOYO ALIMENTARIO ************************/
@@ -324,14 +303,6 @@ create table actividad(
   horas_equivalentes smallint not null constraint chk_actividad_horas_positive check(horas_equivalentes >=0)
 );
 
-create table responsable_actividad(
-  id_responsable serial primary key,
-  id_usuario integer not null,
-  nombre varchar(30) not null,
-  email varchar(100),
-  foreign key (id_usuario) references usuario(id_usuario)
-);
-
 create table actividad_beneficiario(
   id_actividad_beneficiario serial primary key,
   id_beneficiario integer,
@@ -348,5 +319,7 @@ create table parametro(
   clave varchar(100),
   valor varchar(100)
 );
-/* costo almuerzo, costo refrigerio, verificado(SI, NO)*/
+/* costo almuerzo */
+
+/**************** Create User ************************/
 
