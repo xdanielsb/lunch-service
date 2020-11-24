@@ -1,6 +1,7 @@
 import functools
 import os
 from datetime import date
+
 from control.connection import get_db
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
@@ -13,8 +14,7 @@ from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
-from flask import (Flask, flash, g, redirect, render_template, request,
-                   session, url_for)
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -47,7 +47,7 @@ def load_logged_in_user():
             "password": password,
             "rol": user_id,
         }
-        if(g.user["rol"] == "estudiante"):
+        if g.user["rol"] == "estudiante":
             g.user["id_estudiante"] = 1
         g.user["id_estudiante"] = 1
 

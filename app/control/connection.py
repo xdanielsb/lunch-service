@@ -1,6 +1,6 @@
 import psycopg2
-from psycopg2 import OperationalError
 from flask import g
+from psycopg2 import OperationalError
 
 
 def get_db(username=None, password=None):
