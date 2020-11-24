@@ -3,7 +3,7 @@ from ..connection import execute, query
 
 class Convocatoria:
     def get_active_current(self, fecha_actual):
-        q = "select id_convocatoria from convocatoria where fecha_inicio<='{}' and fecha_fin>='{}'".format(
+        q = "select c.id_convocatoria  from convocatoria as c, estado_convocatoria ec where c.id_estado_convocatoria = ec.id_estado_convocatoria  and ec.estado='activa' and fecha_inicio<='{}' and fecha_fin>='{}'".format(
             fecha_actual, fecha_actual
         )
         ans = query(q)
@@ -49,7 +49,7 @@ class Convocatoria:
         execute(q)
 
     def get_all(self):
-        q = "select id_convocatoria, fecha_inicio, fecha_fin, id_periodo, id_estado_convocatoria from convocatoria"
+        q = "select c.id_convocatoria, c.fecha_inicio, c.fecha_fin, p.nombre, ec.estado from convocatoria as c, periodo as p, estado_convocatoria as ec where p.id_periodo = c.id_periodo and ec.id_estado_convocatoria = c.id_estado_convocatoria"
         return query(q)
 
     def get_next_id(self):

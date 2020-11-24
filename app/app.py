@@ -12,6 +12,7 @@ from control.dao.facultad import Facultad
 from control.dao.periodo import Periodo
 from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
+from control.dao.estudiante import Estudiante
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
 from flask import Flask, flash, g, redirect, render_template, request, session, url_for
@@ -47,9 +48,12 @@ def load_logged_in_user():
             "password": password,
             "rol": user_id,
         }
-        if g.user["rol"] == "estudiante":
-            g.user["id_estudiante"] = 1
-        g.user["id_estudiante"] = 1
+        if g.user["rol"].startswith("e"):
+            id_estudiante, nombre, apellido, email = Estudiante().get(g.user["rol"][1:])
+            g.user["id_estudiante"] = id_estudiante
+            g.user["nombre"] = nombre
+            g.user["apellido"] = apellido
+            g.user["email"] = email
 
 
 def login_required(view):

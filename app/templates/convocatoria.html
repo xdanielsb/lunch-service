@@ -1,9 +1,12 @@
 {% extends 'base2.html' %}
 
+{% block title %} Convocatoria{% endblock %}
+{% block header %} Convocatoria{% endblock %}
+{% block subheader %} Crear {% endblock %}
+
 {% block content %}
-<div class="content">
+  <div class="content">
   <form class="text-center" action="{{ url_for('convocatoria') }}" method="POST">
-    <h2>Convocatoria</h2>
     <div class="card mb-4">
       <div class="card-body">
         <h5 class="card-title">Información General</h5>
@@ -21,9 +24,10 @@
           <label for="fecha_fin">Fecha Fin</label>
           <input type="date" placeholder="Fecha de fin" name="fecha_fin" value="{{data["fecha_fin"]}}" class="form-control ">
           <label for="sel2">Estado Convocatoria</label>
+                                    
           <select name="id_estado_convocatoria" class="form-control" id="sel2" value="{{data["id_estado_convocatoria"]}}">
-            {% for estadocon in data['estados_convocatoria'] %}
-            <option value="{{estadocon[0]}}">{{ estadocon[1] }} </option>
+            {% for estadocon in data['estados_convocatoria'] %}                               
+              <option value="{{estadocon[0]}}" {% if estadocon[0] ==data["id_estado_convocatoria"] %} selected {%endif%} >{{ estadocon[1] }} </option>
             {% endfor %}
           </select>
 

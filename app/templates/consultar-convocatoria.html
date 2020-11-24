@@ -1,4 +1,9 @@
 {% extends 'base2.html' %}
+
+{% block title %} Convocatoria{% endblock %}
+{% block header %} Convocatoria{% endblock %}
+{% block subheader %} Consultar {% endblock %}
+
 {% block content %}
 <table class="table table-striped">
   <thead>
@@ -6,8 +11,8 @@
       <th scope="col">id_convocatoria</th>
       <th scope="col">fecha_inicio</th>
       <th scope="col">fecha_fin</th>
-      <th scope="col">id_periodo</th>
-      <th scope="col">id_estado_convocatoria </th>
+      <th scope="col">periodo</th>
+      <th scope="col">estado_convocatoria </th>
       <th scope="col"> Acciones</th>
     </tr>
   </thead>
