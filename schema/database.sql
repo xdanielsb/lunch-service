@@ -43,7 +43,7 @@ drop table if exists parametro;
 
 create table periodo(
   id_periodo serial primary key,
-  nombre varchar(10) not null,
+  nombre varchar(10) not null unique,
   descripcion varchar(200) ,
   fecha_inicio timestamp not null,
   fecha_fin timestamp not null constraint chk_periodo_feacha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
@@ -173,8 +173,10 @@ create table estudiante(
   foreign key(id_proyecto_curricular) references proyecto_curricular(id_proyecto_curricular)
 );
 
+insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular) 
+ values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
 insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular)
-values (1, '20131020001', 'jhon', 'doe', 4.5, 8, 'jhon@email.com', 2);
+ values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
 
 
 /**************** SOLICITUD APOYO ALIMENTARIO ************************/
@@ -281,7 +283,7 @@ create table ticket(
   id_beneficiario integer not null,
   fecha_creacion timestamp default current_timestamp,
   fecha_uso timestamp,
-  id_tipo_ticket varchar(15) constraint chk_ticket_tipo_in_defined_types check(id_tipo_ticket in('refrigerio', 'almuerzo')),
+  tipo_ticket varchar(15) constraint chk_ticket_tipo_in_defined_types check(tipo_ticket in('refrigerio', 'almuerzo')),
   foreign key (id_beneficiario) references beneficiario(id_beneficiario)
 );
 
@@ -308,7 +310,9 @@ create table actividad_beneficiario(
   id_beneficiario integer,
   id_actividad integer,
   id_estado_actividad integer,
-  id_responsable integer
+  foreign key (id_estado_actividad) references estado_actividad(id_estado_actividad),
+  foreign key (id_actividad) references actividad(id_actividad),
+  foreign key (id_beneficiario) references beneficiario(id_beneficiario)
 );
 
 /**************** PARAMETROS ************************/
@@ -319,7 +323,6 @@ create table parametro(
   clave varchar(100),
   valor varchar(100)
 );
-/* costo almuerzo */
 
 /**************** Create User ************************/
 
