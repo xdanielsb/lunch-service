@@ -17,7 +17,7 @@
         <select class="form-control " name="tipo_puntaje{{id_tipo_documento}}">
           {% if puntajes %}
           {% for nombre, id_tipo_documento, puntaje, id_puntaje_tipo_documento in puntajes[id_tipo_documento] %}
-            <option value="{{id_puntaje_tipo_documento}}"> {{nombre}}</option>
+          <option value="{{id_puntaje_tipo_documento}}"> {{nombre}}</option>
           {% endfor %}
           {% endif %}
         </select>
