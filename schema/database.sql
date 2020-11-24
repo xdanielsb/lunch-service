@@ -221,12 +221,10 @@ create table historico_solicitud(
 create table documento_solicitud(
   id_solicitud integer not null,
   id_puntaje_tipo_documento integer,
-  id_estado_documento integer,
+  id_estado_documento integer default 1,
   id_tipo_documento integer not null,
   comentarios varchar(300),
   url varchar(200) not null,
-  necesita_cambios numeric(1,0) default 0,
-  revisado numeric(1,0) default 0,
   foreign key(id_estado_documento) references estado_documento(id_estado_documento),
   foreign key(id_solicitud) references solicitud(id_solicitud) on delete cascade,
   foreign key(id_puntaje_tipo_documento) references puntaje_tipo_documento(id_puntaje_tipo_documento),
