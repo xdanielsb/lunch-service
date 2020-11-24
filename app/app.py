@@ -2,21 +2,24 @@ import functools
 import os
 from datetime import date
 
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
+from werkzeug.utils import secure_filename
+
 from control.connection import get_db
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
 from control.dao.documento_solicitud import DocumentoSolicitud
 from control.dao.estado_convocatoria import EstadoConvocatoria
+from control.dao.estado_documento import EstadoDocumento
+from control.dao.estado_solicitud import EstadoSolicitud
+from control.dao.estudiante import Estudiante
 from control.dao.facultad import Facultad
 from control.dao.periodo import Periodo
 from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
-from control.dao.estudiante import Estudiante
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
-from flask import Flask, flash, g, redirect, render_template, request, session, url_for
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -255,6 +258,18 @@ def solicitud():
     )
 
 
+@login_required
+@app.route("/consultar_solicitud")
+def consultar_solicitud():
+    if g.user.get("id_estudiante") is not None:
+        solicitudes = Solicitud().get_all()
+        for solicitud in solicitudes:
+            if solicitud[1] == g.user["id_estudiante"]:
+                return redirect(url_for("revisar_solicitud", id_solicitud=solicitud[0]))
+    flash("Su usuario no tiene solicitudes activas")
+    return redirect(url_for("home"))
+
+
 @app.route("/revisar_solicitud", methods=["GET", "POST"])
 @app.route("/revisar_solicitud/<id_solicitud>", methods=["GET", "POST"])
 @login_required
@@ -262,13 +277,19 @@ def revisar_solicitud(id_solicitud=None):
     if request.method == "POST":
         tipos_documento = TipoDocumento().get_all()
         documento_solicitud = DocumentoSolicitud()
+        Solicitud().update_estado(
+            request.form["id_solicitud"], request.form["id_estado_solicitud"]
+        )
+        print(request.form)
         for idt, _, nombre_tipo in tipos_documento:
-            if "revisado{}".format(idt) in request.form:
+            if "doc{}".format(idt) in request.form:
                 data = {
                     "comentarios": request.form["comentario{}".format(idt)],
                     "id_solicitud": request.form["id_solicitud"],
                     "id_tipo_documento": idt,
-                    "revisado": 1 if "revisado{}".format(idt) in request.form else 0,
+                    "id_estado_documento": request.form[
+                        "estado_documento{}".format(idt)
+                    ],
                     "id_puntaje_tipo_documento": request.form[
                         "tipo_puntaje{}".format(idt)
                     ],
@@ -279,11 +300,16 @@ def revisar_solicitud(id_solicitud=None):
     if id_solicitud is not None:
         documentos_solicitud = DocumentoSolicitud().get(id_solicitud)
         puntajes = PuntajeTipoDocumento().get_all()
+        estados_solicitud = EstadoSolicitud().get_all()
+        estados_documento = EstadoDocumento().get_all()
         return render_template(
             "revisar-solicitud.html",
             documentos_solicitud=documentos_solicitud,
+            estados_solicitud=estados_solicitud,
             puntajes=puntajes,
+            estados_documento=estados_documento,
             id_solicitud=id_solicitud,
+            id_estado_solicitud=Solicitud().get_estado(id_solicitud),
         )
     solicitudes = Solicitud().get_all()
     return render_template("listar-solicitudes.html", solicitudes=solicitudes)

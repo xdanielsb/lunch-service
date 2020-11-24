@@ -3,40 +3,51 @@
 
 <form class="text-center" action="{{ url_for('revisar_solicitud') }}" method="POST">
   <input type="hidden" name="id_solicitud" value="{{id_solicitud}}">
-  {% for  id_tipo_documento, nombre, url,necesita_cambios, revisado in documentos_solicitud %}
+  <label for="sel2">Estado Solicitud</label>
+  <select name="id_estado_solicitud" class="form-control" id="sel2" value="{{id_estado_solicitud}}">
+    {% for estadocon in estados_solicitud %}
+    <option value="{{estadocon[0]}}" {% if estadocon[0] == id_estado_solicitud %} selected {%endif%}>{{ estadocon[1] }} </option>
+    {% endfor %}
+  </select>
+
+  {% for  id_tipo_documento, nombre, url, id_estado_documento, comentarios, current_id_puntaje_tipo_doc in documentos_solicitud %}
   <div class="row">
     <div class="col md-6">
       <div class="card mb-4">
-        <input type="hidden" value="{{id_tipo_documento}}">
+        {% set doc_checked = 'doc{}'.format(id_tipo_documento)%}
+        <input type="hidden" name="{{doc_checked}}" value="{{id_tipo_documento}}">
         <iframe src="{{ url_for('static', filename='uploads/{}'.format(url))}}" style="width:100%;height:700px;"></iframe>
       </div>
     </div>
     <div class="col md-6">
       <div class="card mb-4">
+        {% if puntajes and g.user["rol"][0] != "e" %}
         <label class="mt-2 mb-2" for="sel1"><b>{{nombre}}</b></label>
-        <select class="form-control " name="tipo_puntaje{{id_tipo_documento}}">
-          {% if puntajes %}
-          {% for nombre, id_tipo_documento, puntaje, id_puntaje_tipo_documento in puntajes[id_tipo_documento] %}
-          <option value="{{id_puntaje_tipo_documento}}"> {{nombre}}</option>
+        {% set id_tipo_doc = 'tipo_puntaje{}'.format(id_tipo_documento)%}
+        <select class="form-control " name="{{id_tipo_doc}}">
+          {% for nombre_tipo, id_tipo_documento, puntaje, id_puntaje_tipo_documento in puntajes[id_tipo_documento] %}
+          <option value="{{id_puntaje_tipo_documento}}" {% if current_id_puntaje_tipo_doc==id_puntaje_tipo_documento %} selected {% endif %}> {{nombre_tipo}}</option>
           {% endfor %}
-          {% endif %}
+        </select>
+        {% endif %}
+        <label class="mt-2 mb-2" for="sel2"><b>{{nombre}}</b></label>
+        {% set id_estado_doc = 'estado_documento{}'.format(id_tipo_documento)%}
+        <select class="form-control " name="{{id_estado_doc}}">
+          {% for id_estado, nombre_estado in estados_documento %}
+          <option value="{{id_estado}}" {% if id_estado == id_estado_documento %} selected {% endif %}> {{nombre_estado}}</option>
+          {% endfor %}
         </select>
         <label for="notas">Comentarios</label>
-        <textarea class="form-control" name="comentario{{id_tipo_documento}}" rows="3"></textarea>
-        <div class="form-check mt-2">
-          <input type="checkbox" id="necesita_cambios{{id_tipo_documento}}" class="form-check-input big-checkbox " name="revisado{{id_tipo_documento}}" {% if necesita_cambios == 1 %} checked {% endif %}>
-          <label for="necesita_cambios{{id_tipo_documento}}" class="form-check-label">Necesita Cambios</label>
-        </div>
-        <div class="form-check mt-2">
-          <input type="checkbox" id="revisado{{id_tipo_documento}}" class="form-check-input big-checkbox " name="revisado{{id_tipo_documento}}" {% if revisado == 1 %} checked {% endif %}>
-          <label for="revisado{{id_tipo_documento}}" class="form-check-label">Revisado</label>
-        </div>
+        {% set id_comment = 'comentario{}'.format(id_tipo_documento)%}
+        <textarea class="form-control" name="comentario{{id_tipo_documento}}" rows="3">{{comentarios}}</textarea>
       </div>
     </div>
   </div>
   {% endfor %}
+  {% if g.user["username"][0] != "e" %}
   <div class="text-center">
     <input type="submit" class="btn btn-primary" value="Guardar">
   </div>
+  {% endif %}
 </form>
 {% endblock %}

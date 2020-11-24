@@ -8,6 +8,18 @@ class Solicitud:
         )
         execute(q)
 
+    def get_estado(self, id_solicitud):
+        q = "select id_estado_solicitud from solicitud where id_solicitud = {}".format(
+            id_solicitud
+        )
+        return query(q)[0][0]
+
+    def update_estado(self, id_solicitud, id_new_estado):
+        q = "update solicitud set id_estado_solicitud ={} where id_solicitud ={}".format(
+            id_new_estado, id_solicitud
+        )
+        execute(q)
+
     def get_all(self):
         q = "select id_solicitud, id_estudiante, ultima_actualizacion, id_estado_solicitud, id_convocatoria from solicitud"
         return query(q)
