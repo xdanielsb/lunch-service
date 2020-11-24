@@ -37,3 +37,12 @@ def execute(statement):
     cur.execute(statement)
     conn.commit()
     cur.close()
+
+
+if __name__ == "__main__":
+    conn = psycopg2.connect(
+        host="localhost",
+        database="apoyo_alimentario",
+        user="",
+        password="",
+    )

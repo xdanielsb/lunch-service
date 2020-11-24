@@ -48,7 +48,7 @@ def load_logged_in_user():
             "password": password,
             "rol": user_id,
         }
-        if g.user["rol"].startswith("e"):
+        if g.user["rol"].startswith("e") and g.user["rol"] != "estudiante":
             id_estudiante, nombre, apellido, email = Estudiante().get(g.user["rol"][1:])
             g.user["id_estudiante"] = id_estudiante
             g.user["nombre"] = nombre
