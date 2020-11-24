@@ -1,7 +1,7 @@
 import functools
 import os
 from datetime import date
-
+from control.connection import get_db
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
 from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
@@ -13,7 +13,6 @@ from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
-from control.dao.user import User
 from flask import (Flask, flash, g, redirect, render_template, request,
                    session, url_for)
 from werkzeug.utils import secure_filename
@@ -38,18 +37,19 @@ def allowed_file(filename):
 
 @app.before_request
 def load_logged_in_user():
-    user_id = session.get("user_id")
+    user_id = session.get("username")
     if user_id is None:
         g.user = None
     else:
-        # TODO: query from db this data
+        password = session.get("password")
         g.user = {
-            "name": "postgres",
-            "id_estudiante": "1",
-            "password": "",
-            "rol": "Estudiante",
-            "email": "matilda@udistrital.co",
+            "username": user_id,
+            "password": password,
+            "rol": user_id,
         }
+        if(g.user["rol"] == "estudiante"):
+            g.user["id_estudiante"] = 1
+        g.user["id_estudiante"] = 1
 
 
 def login_required(view):
@@ -65,7 +65,6 @@ def login_required(view):
 @app.route("/", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        userDao = User()
         username = request.form["username"]
         password = request.form["password"]
         error = None
@@ -73,10 +72,13 @@ def login():
             error = "Username is required."
         elif not password:
             error = "Password is required."
-        elif userDao.exist(username, password):
+        elif get_db(username, password) is not None:
             session.clear()
-            session["user_id"] = username
+            session["username"] = username
+            session["password"] = password
             return redirect(url_for("home"))
+        else:
+            error = "Invalid Credentials"
         flash(error)
     if g.user is None:
         return render_template("login.html")
@@ -92,7 +94,7 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    return render_template("base2.html")
+    return render_template("home.html")
 
 
 @app.route("/convocotoria", methods=["POST", "GET"])
