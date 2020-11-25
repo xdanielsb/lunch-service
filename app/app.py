@@ -8,7 +8,7 @@ from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
 from control.dao.documento_solicitud import DocumentoSolicitud
 from control.dao.estado_convocatoria import EstadoConvocatoria
 from control.dao.facultad import Facultad
-from control.dao.periodo import Periodo
+from control.dao.periodoDao import PeriodoDao
 from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
@@ -40,7 +40,13 @@ def allowed_file(filename):
 def load_logged_in_user():
     user_id = session.get("user_id")
     if user_id is None:
-        g.user = None
+        g.user = {
+            "name": "postgres",
+            "id_estudiante": "1",
+            "password": "",
+            "rol": "Estudiante",
+            "email": "matilda@udistrital.co",
+        }
     else:
         # TODO: query from db this data
         g.user = {
@@ -143,7 +149,7 @@ def convocatoria(id_convocatoria=None):
         return redirect(url_for("convocatoria_view"))
     else:
         today = date.today()
-        periodo = Periodo()
+        periodo = PeriodoDao()
         active_periodo = periodo.get_active_period(
             fecha_actual=today.strftime("%Y-%m-%d")
         )

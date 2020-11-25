@@ -295,7 +295,6 @@ create table estado_actividad(
   descripcion varchar(2000)
 );
 
-
 create table actividad(
   id_actividad serial primary key,
   nombre varchar(200) not null,

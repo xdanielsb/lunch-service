@@ -1,7 +1,7 @@
 class Connection:
     def __init__(self):
         self.conn = psycopg2.connect(
-            host="localhost", database="apoyo_alimentario", user="postgres", password=""
+            host="localhost", database="apoyo_alimentario", user="postgres", password="admin"
         )
 
     def query(self, query):

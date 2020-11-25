@@ -1,7 +1,8 @@
 from ..connection import execute, query
 
 
-class Periodo:
+class PeriodoDao:
+    
     def get_all(self):
         q = "select id_periodo, nombre from periodo"
         return query(q)

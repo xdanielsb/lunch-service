@@ -1,0 +1,28 @@
+ Crearemos un simple espacio de tablas en nuestro optimizado sistema de archivos ext4 para contener nuestra base de datos:
+
+    cambiamos el propietario a la carpeta /srv/postgresql
+
+    chown postgres.postgres /srv/postgresql
+
+    cambiamos al usuario “postgres” y abrimos la consola ‘psql’:
+
+    su postgres
+    psql
+
+    En la consola, ejecutamos el comando para crear un espacio de tablas:
+
+    postgres=# CREATE TABLESPACE db_sistema OWNER jesuslara LOCATION '/srv/postgresql';
+
+Y listo!, ya tenemos un espacio de tablas disponible para crear bases de datos y optimizado!
+
+
+CREATE TABLESPACE db_prueba OWNER saglara LOCATION '/srv/postgresql';
+
+
+
+
+GRANT CONNECT ON DATABASE TO estudiante;
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO estudiante;
+
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO estudiante;
