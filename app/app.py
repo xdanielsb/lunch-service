@@ -2,9 +2,6 @@ import functools
 import os
 from datetime import date
 
-from flask import Flask, flash, g, redirect, render_template, request, session, url_for
-from werkzeug.utils import secure_filename
-
 from control.connection import get_db
 from control.dao.convocatoria import Convocatoria
 from control.dao.convocatoria_facultad import ConvocatoriaFacultad
@@ -20,6 +17,9 @@ from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from control.dao.solicitud import Solicitud
 from control.dao.tipo_documento import TipoDocumento
 from control.dao.tipo_subsidio import TipoSubsidio
+from flask import (Flask, flash, g, redirect, render_template, request,
+                   session, url_for)
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -262,9 +262,9 @@ def solicitud():
 @app.route("/consultar_solicitud")
 def consultar_solicitud():
     if g.user.get("id_estudiante") is not None:
-        solicitudes = Solicitud().get_all()
+        solicitudes = Solicitud().get_all2()
         for solicitud in solicitudes:
-            if solicitud[1] == g.user["id_estudiante"]:
+            if solicitud[0] == g.user["id_estudiante"]:
                 return redirect(url_for("revisar_solicitud", id_solicitud=solicitud[0]))
     flash("Su usuario no tiene solicitudes activas")
     return redirect(url_for("home"))
@@ -316,4 +316,4 @@ def revisar_solicitud(id_solicitud=None):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", threaded=True)

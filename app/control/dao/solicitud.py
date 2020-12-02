@@ -20,6 +20,10 @@ class Solicitud:
         )
         execute(q)
 
+    def get_all2(self):
+        q = "select s.id_estudiante, id_solicitud, e.identificacion, ultima_actualizacion, estado, id_convocatoria from solicitud as s, estado_solicitud as es, estudiante as e where s.id_estado_solicitud = es.id_estado_solicitud and s.id_estudiante=e.id_estudiante"
+        return query(q)
+
     def get_all(self):
         q = "select id_solicitud, e.identificacion, ultima_actualizacion, estado, id_convocatoria from solicitud as s, estado_solicitud as es, estudiante as e where s.id_estado_solicitud = es.id_estado_solicitud and s.id_estudiante=e.id_estudiante"
         return query(q)
