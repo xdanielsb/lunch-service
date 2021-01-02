@@ -3,19 +3,12 @@
 /* \d table_tame */
 /* list tables \dt 8*/
 
-/*
-We should create two connections to the database depend on the user,
-each connection has associated an user, this user have different
-grants, so we avoid students creates in tables she/he is not allowed.
- */
-
 
 /**************** USERS AUTHENTICATION ************************/
 drop table if exists rol;
 drop table if exists periodo;
 drop table if exists estado_convocatoria;
 drop table if exists convocatoria;
-drop table if exists historico_convocatoria;
 drop table if exists estado_documento;
 drop table if exists tipo_documento;
 drop table if exists puntaje_tipo_documento;
@@ -36,10 +29,7 @@ drop table if exists actividad;
 drop table if exists actividad_beneficiario;
 drop table if exists parametro;
 
-
-
 /**************** CONVOCATORIA ************************/
-
 
 create table periodo(
   id_periodo serial primary key,
@@ -50,69 +40,38 @@ create table periodo(
   semanas_periodo integer  generated always as (trunc(date_part('day'::text,fecha_fin-fecha_inicio)/7)) stored
 );
 
-insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin)
-values (1, '2020-3','2020-10-27 00:00:00', '2020-12-27 23:59:59');
-
-insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin)
-values (2, '2020-1','2020-02-01 00:00:00', '2020-05-29 23:59:59');
-
 create table estado_convocatoria(
   id_estado_convocatoria serial primary key,
   estado varchar(30) not null,
   descripcion varchar(200)
 );
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(1, 'activa');
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(2, 'cerrada');
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(3, 'publicada');
 
 create table convocatoria(
   id_convocatoria serial primary key,
-  fecha_inicio date not null,
-  fecha_fin date not null constraint chk_convocatoria_fecha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
+  fecha_creacion date not null,
+  fecha_abierta date not null constraint chk_convocatoria_fecha_abierta_greater_fecha_creacion check(fecha_abierta>=fecha_creacion),
+  fecha_cerrada date not null constraint chk_convocatoria_fecha_cerrada_greater_fecha_abierta check(fecha_cerrada>fecha_abierta),
+  fecha_publicacion_resultados date not null constraint chk_convocatoria_publicacion_greater_fecha_cerrada check(fecha_publicacion_resultados>fecha_cerrada),
   id_periodo integer not null unique,
   id_estado_convocatoria integer not null,
   foreign key(id_periodo) references periodo(id_periodo),
   foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria)
 );
 
-create table historico_convocatoria(
-  id_historico_convocatoria serial primary key,
-  id_convocatoria integer,
-  id_estado_convocatoria integer not null,
-  fecha timestamp not null,
-  foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria),
-  foreign key(id_convocatoria) references convocatoria(id_convocatoria)
-);
-
 
 /**************** ESTUDIANTES ************************/
-
-
 
 create table estado_documento(
   id_estado_documento serial primary key,
   nombre varchar(30) not null,
   descripcion varchar(200)
 );
-insert into estado_documento(id_estado_documento, nombre) values (1, 'Sin Revisar');
-insert into estado_documento(id_estado_documento, nombre) values (2, 'Aprovado');
-insert into estado_documento(id_estado_documento, nombre) values (3, 'Requiere cambios');
-insert into estado_documento(id_estado_documento, nombre) values (4, 'Rechazado');
-
 
 create table tipo_documento(
   id_tipo_documento serial primary key,
   obligatorio numeric(1,0) check(obligatorio in(0, 1)) not null,
   nombre varchar(200)
 );
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(1, 'Formulario de Solicitud de ingreso al Programa Apoyo Alimentario', 1);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(2, 'Carta dirigida al director del Centro de Bienestar Institucional', 1);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(3, 'Certificado de estratificación del lugar de residencia del estudiante', 1);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(4, 'Fotocopia de la factura de un recibo de servicio público de su domicilio', 1);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(5, 'Certificado de desplazamiento forzoso por violencia del Departamento', 0);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(6, 'Si es padre/madre, certificado Civil de nacimiento de los o las hijas', 0);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(7, 'Certificado de Discapacidad Medica, avalado por Bienestar Institucional', 0);
-insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(8, 'Examen y Diagnostico Médico, Enfermedades presentes del estudiante', 0);
 
 create table puntaje_tipo_documento(
   id_puntaje_tipo_documento serial primary key,
@@ -122,34 +81,10 @@ create table puntaje_tipo_documento(
   foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
 );
 
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Formulario solicitud bien diligenciado', 1,  100);
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Formulario solicitud mal diligenciado', 1,  0);
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director bien escrita', 2,100);
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director mal escrita', 2,100);
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 1', 3,100  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 2', 3,90  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 3', 3,70  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 4', 3,50  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 5', 3,10  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Actual', 4, 100 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Desactualizado', 4,20  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado desplazamiento forzoso correcto', 5, 100 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado desplazamiento forzoso invalido', 5, 0 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Registro civil nacimento hijos valido', 6, 100  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Registro civil nacimento hijos invalido', 6, 0  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado discapacidad medica valido', 7, 100 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado discapacidad medica invalido', 7, 0  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes valido ', 8, 100 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes valido ', 8,  0);
-
-
 create table facultad(
   id_facultad serial primary key,
   nombre varchar(50) not null
 );
-insert into facultad( id_facultad, nombre) values (1,'artes');
-insert into facultad( id_facultad, nombre) values (2,'ingenieria');
-
 
 create table proyecto_curricular(
   id_proyecto_curricular serial primary key,
@@ -157,27 +92,20 @@ create table proyecto_curricular(
   nombre varchar(200) not null,
   foreign key(id_facultad) references facultad(id_facultad)
 );
-insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) values ( 1, 1, 'electronica');
-insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) values ( 2, 2, 'industrial');
-
 
 create table estudiante(
   id_estudiante serial primary key,
   identificacion varchar(30) unique not null,
-  nombre varchar(50) not null,
-  apellido varchar(50) not null,
+  nombre1 varchar(50) not null,
+  nombre2 varchar(50),
+  apellido1 varchar(50) not null,
+  apellido2 varchar(50),
   promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0),
   matriculas_restantes smallint default 10,
   email varchar(100),
   id_proyecto_curricular integer not null,
   foreign key(id_proyecto_curricular) references proyecto_curricular(id_proyecto_curricular)
 );
-
-insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular) 
- values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
-insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular)
- values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
-
 
 /**************** SOLICITUD APOYO ALIMENTARIO ************************/
 
@@ -193,7 +121,6 @@ insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 4
 insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 5, 'aprobada', '');
 insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6, 'requiere cambios', '');
 
-
 create table solicitud(
   id_solicitud serial primary key,
   id_estudiante integer not null,
@@ -207,7 +134,6 @@ create table solicitud(
   unique(id_convocatoria, id_estudiante)
 );
 
-
 create table historico_solicitud(
   id_historico_solicitud serial primary key,
   id_solicitud integer not null,
@@ -216,7 +142,6 @@ create table historico_solicitud(
   foreign key(id_solicitud) references solicitud(id_solicitud),
   fecha timestamp not null
 );
-
 
 create table documento_solicitud(
   id_solicitud integer not null,
@@ -234,8 +159,6 @@ create table documento_solicitud(
 
 /**************** PUNTAJES Y SUBSIDIOS ************************/
 
-
-
 create table tipo_subsidio(
   id_tipo_subsidio serial primary key,
   nombre varchar(30) not null,
@@ -244,9 +167,6 @@ create table tipo_subsidio(
   puntos_requeridos  smallint not null constraint chk_tipo_subsidiado_puntos_requeridos_greater_than_zero check( puntos_requeridos>=0),
   horas_semanales_a_cumplir smallint not null
 );
-insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(1, 'tipo A',100, 90, 30);
-insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(2, 'tipo B',70, 80, 40);
-
 
 create table convocatoria_facultad(
   id_facultad  integer not null,
@@ -256,7 +176,6 @@ create table convocatoria_facultad(
   foreign key( id_convocatoria) references convocatoria(id_convocatoria)  on delete cascade,
   foreign key( id_facultad) references facultad(id_facultad)
 );
-
 
 create table tipo_subsidio_convocatoria(
   id_convocatoria integer not null,
@@ -285,8 +204,6 @@ create table ticket(
   foreign key (id_beneficiario) references beneficiario(id_beneficiario)
 );
 
-
-
 /**************** ACTIVIDADES ************************/
 
 create table estado_actividad(
@@ -294,7 +211,6 @@ create table estado_actividad(
   nombre varchar(200) not null,
   descripcion varchar(2000)
 );
-
 
 create table actividad(
   id_actividad serial primary key,
@@ -322,5 +238,15 @@ create table parametro(
   valor varchar(100)
 );
 
-/**************** Create User ************************/
+/**************** FUNCIONARIOS ************************/
+
+create table funcionario(
+  id_funcionario serial primary key,
+  identificacion varchar(30) unique not null,
+  nombre1 varchar(50) not null,
+  nombre2 varchar(50),
+  apellido1 varchar(50) not null,
+  apellido2 varchar(50),
+  email varchar(100)
+);
 
