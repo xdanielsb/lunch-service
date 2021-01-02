@@ -103,8 +103,10 @@ create table proyecto_curricular(
 create table estudiante(
   id_estudiante serial primary key,
   identificacion varchar(30) unique not null,
-  nombre varchar(50) not null,
-  apellido varchar(50) not null,
+  nombre1 varchar(50) not null,
+  nombre2 varchar(50),
+  apellido1 varchar(50) not null,
+  apellido2 varchar(50),
   promedio numeric(3,2) constraint chk_estudiante_promedio_greater_in_zero_five_range check(promedio >=0 and promedio <=5.0),
   matriculas_restantes smallint default 10,
   email varchar(100),
@@ -241,5 +243,17 @@ create table parametro(
   nombre_tabla varchar(30),
   clave varchar(100),
   valor varchar(100)
+);
+
+/**************** FUNCIONARIOS ************************/
+
+create table funcionario(
+  id_funcionario serial primary key,
+  identificacion varchar(30) unique not null,
+  nombre1 varchar(50) not null,
+  nombre2 varchar(50),
+  apellido1 varchar(50) not null,
+  apellido2 varchar(50),
+  email varchar(100)
 );
 

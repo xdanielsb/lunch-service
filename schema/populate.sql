@@ -59,13 +59,15 @@ insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) val
 
 
 /** Estudiante **/
-insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular) values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
-insert into estudiante(id_estudiante, identificacion, nombre, apellido, promedio, matriculas_restantes, email, id_proyecto_curricular) values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
+insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
+insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
 
 
 /** Tipo Subsidio **/
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(1, 'tipo A',100, 90, 30);
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(2, 'tipo B',70, 80, 40);
 
-
+/** Funcionario **/
+insert into funcionario(id_funcionario, identificacion, nombre1, apellido1) values(1, '1020142578', 'Kevin', 'Ayala');
+insert into funcionario(id_funcionario, identificacion, nombre1, apellido1) values(2, '1010142528', 'Juana', 'Dominga');
 
