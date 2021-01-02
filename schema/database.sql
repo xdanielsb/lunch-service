@@ -9,7 +9,6 @@ drop table if exists rol;
 drop table if exists periodo;
 drop table if exists estado_convocatoria;
 drop table if exists convocatoria;
-drop table if exists historico_convocatoria;
 drop table if exists estado_documento;
 drop table if exists tipo_documento;
 drop table if exists puntaje_tipo_documento;
@@ -57,14 +56,6 @@ create table convocatoria(
   foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria)
 );
 
-create table historico_convocatoria(
-  id_historico_convocatoria serial primary key,
-  id_convocatoria integer,
-  id_estado_convocatoria integer not null,
-  fecha timestamp not null,
-  foreign key(id_estado_convocatoria) references estado_convocatoria(id_estado_convocatoria),
-  foreign key(id_convocatoria) references convocatoria(id_convocatoria)
-);
 
 /**************** ESTUDIANTES ************************/
 
