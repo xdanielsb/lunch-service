@@ -48,8 +48,10 @@ create table estado_convocatoria(
 
 create table convocatoria(
   id_convocatoria serial primary key,
-  fecha_inicio date not null,
-  fecha_fin date not null constraint chk_convocatoria_fecha_fin_greater_fecha_inicio check(fecha_fin>fecha_inicio),
+  fecha_creacion date not null,
+  fecha_abierta date not null constraint chk_convocatoria_fecha_abierta_greater_fecha_creacion check(fecha_abierta>=fecha_creacion),
+  fecha_cerrada date not null constraint chk_convocatoria_fecha_cerrada_greater_fecha_abierta check(fecha_cerrada>fecha_abierta),
+  fecha_publicacion_resultados date not null constraint chk_convocatoria_publicacion_greater_fecha_cerrada check(fecha_publicacion_resultados>fecha_cerrada),
   id_periodo integer not null unique,
   id_estado_convocatoria integer not null,
   foreign key(id_periodo) references periodo(id_periodo),
