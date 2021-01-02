@@ -2,37 +2,36 @@ import functools
 import os
 from datetime import date
 
-from control.connection import get_db
-from control.dao.convocatoria import Convocatoria
-from control.dao.convocatoria_facultad import ConvocatoriaFacultad
-from control.dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
-from control.dao.documento_solicitud import DocumentoSolicitud
-from control.dao.estado_convocatoria import EstadoConvocatoria
-from control.dao.estado_documento import EstadoDocumento
-from control.dao.estado_solicitud import EstadoSolicitud
-from control.dao.estudiante import Estudiante
-from control.dao.facultad import Facultad
-from control.dao.periodo import Periodo
-from control.dao.puntaje_tipo_documento import PuntajeTipoDocumento
-from control.dao.solicitud import Solicitud
-from control.dao.tipo_documento import TipoDocumento
-from control.dao.tipo_subsidio import TipoSubsidio
-from flask import (Flask, flash, g, redirect, render_template, request,
-                   session, url_for)
+import psycopg2
+from control import (
+    Convocatoria,
+    ConvocatoriaFacultad,
+    ConvocatoriaTipoSubsidio,
+    DocumentoSolicitud,
+    EstadoDocumento,
+    EstadoSolicitud,
+    Estudiante,
+    Facultad,
+    Periodo,
+    PuntajeTipoDocumento,
+    Solicitud,
+    TipoDocumento,
+    TipoSubsidio,
+    get_db,
+)
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
 # max file size 16MB
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
-
 path = os.getcwd()
 UPLOAD_FOLDER = os.path.join(path, "static/uploads")
+ALLOWED_EXTENSIONS = set(["pdf"])
 if not os.path.isdir(UPLOAD_FOLDER):
     os.mkdir(UPLOAD_FOLDER)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-ALLOWED_EXTENSIONS = set(["pdf"])
 
 
 def allowed_file(filename):
@@ -51,12 +50,8 @@ def load_logged_in_user():
             "password": password,
             "rol": user_id,
         }
-        if g.user["rol"].startswith("e") and g.user["rol"] != "estudiante":
-            id_estudiante, nombre, apellido, email = Estudiante().get(g.user["rol"][1:])
-            g.user["id_estudiante"] = id_estudiante
-            g.user["nombre"] = nombre
-            g.user["apellido"] = apellido
-            g.user["email"] = email
+        if g.user["rol"].startswith("e"):
+            g.user.update(Estudiante().get(g.user["rol"][1:]))
 
 
 def login_required(view):
@@ -111,8 +106,6 @@ def convocatoria(id_convocatoria=None):
     data = {}
     convocatoria = Convocatoria()
     if request.method == "POST":
-        convocatoria_facultad = ConvocatoriaFacultad()
-        convocatoria_tipo_subsidio = ConvocatoriaTipoSubsidio()
         isUpdate = (
             True if convocatoria.exist(request.form["id_convocatoria"]) else False
         )
@@ -124,6 +117,7 @@ def convocatoria(id_convocatoria=None):
             convocatoria.create(request.form)
             flash("Convocatoria creada exitosamente")
 
+        cf = ConvocatoriaFacultad()
         for field in request.form:
             if field.startswith("facultad"):
                 id_facultad = int(field.replace("facultad", ""))
@@ -133,10 +127,11 @@ def convocatoria(id_convocatoria=None):
                     "cantidad_de_almuerzos": request.form[field],
                 }
                 if isUpdate:
-                    convocatoria_facultad.update(data)
+                    cf.update(data)
                 else:
-                    convocatoria_facultad.create(data)
+                    cf.create(data)
 
+        cts = ConvocatoriaTipoSubsidio()
         for field in request.form:
             if field.startswith("tipo_subsidio"):
                 id_tipo_subsidio = int(field.replace("tipo_subsidio", ""))
@@ -146,46 +141,38 @@ def convocatoria(id_convocatoria=None):
                     "cantidad_de_almuerzos_ofertados": request.form[field],
                 }
                 if isUpdate:
-                    convocatoria_tipo_subsidio.update(data)
+                    cts.update(data)
                 else:
-                    convocatoria_tipo_subsidio.create(data)
+                    cts.create(data)
         return redirect(url_for("convocatoria_view"))
+
+    active_periodo = Periodo().get_active_period(
+        fecha_actual=date.today().strftime("%Y-%m-%d")
+    )
+    if len(active_periodo) == 0:
+        flash("No hay periodos activos.")
+        return redirect(url_for("home"))
+
+    data = {
+        "periodo": active_periodo,
+        "tipos_subsidio": TipoSubsidio().get_all(),
+        "facultades": Facultad().get_all(),
+    }
+
+    if id_convocatoria is not None:
+        if convocatoria.exist(id_convocatoria):
+            data.update(convocatoria.get(id_convocatoria=id_convocatoria)[0])
+            for id_fac, num in ConvocatoriaFacultad().get(
+                id_convocatoria=id_convocatoria
+            ):
+                data["facultad{}".format(id_fac)] = num
+            for id_tipo_sub, num in ConvocatoriaTipoSubsidio().get(
+                id_convocatoria=id_convocatoria
+            ):
+                data["tipo_subsidio{}".format(id_tipo_sub)] = num
     else:
-        today = date.today()
-        periodo = Periodo()
-        active_periodo = periodo.get_active_period(
-            fecha_actual=today.strftime("%Y-%m-%d")
-        )
-        if len(active_periodo) == 0:
-            flash("No hay periodos activos.")
-            return redirect(url_for("home"))
-
-        tipos_subsidio = TipoSubsidio().get_all()
-        facultades = Facultad().get_all()
-        estados_convoc = EstadoConvocatoria().get_all()
-        data = {
-            "periodo": active_periodo,
-            "tipos_subsidio": tipos_subsidio,
-            "facultades": facultades,
-            "estados_convocatoria": estados_convoc,
-        }
-
-        if id_convocatoria is not None:
-            data["id_convocatoria"] = id_convocatoria
-            if convocatoria.exist(id_convocatoria):
-                ans0 = convocatoria.get(id_convocatoria=id_convocatoria)[0]
-                data["fecha_inicio"] = ans0[0]
-                data["fecha_fin"] = ans0[1]
-                data["id_periodo"] = ans0[2]
-                data["id_estado_convocatoria"] = ans0[3]
-                ans1 = ConvocatoriaFacultad().get(id_convocatoria=id_convocatoria)
-                for id_fac, num in ans1:
-                    data["facultad{}".format(id_fac)] = num
-                ans2 = ConvocatoriaTipoSubsidio().get(id_convocatoria=id_convocatoria)
-                for id_tipo_sub, num in ans2:
-                    data["tipo_subsidio{}".format(id_tipo_sub)] = num
-        else:
-            data["id_convocatoria"] = convocatoria.get_next_id()
+        data["id_convocatoria"] = convocatoria.get_next_id()
+        data["fecha_creacion"] = date.today().strftime("%Y-%m-%d")
 
     return render_template("convocatoria.html", data=data)
 
@@ -212,11 +199,11 @@ def convocatoria_delete(id_convocatoria):
     return redirect(url_for("home"))
 
 
+# TODO: do update solicitud
 @app.route("/solicitud", methods=["GET", "POST"])
 @login_required
 def solicitud():
     if request.method == "POST":
-        documento_s = DocumentoSolicitud()
         solicitud = Solicitud()
         id_solicitud = solicitud.get_next_id()
         data = {
@@ -237,14 +224,13 @@ def solicitud():
                     "id_tipo_documento": name_file,
                     "url": filename,
                 }
-                documento_s.create(data)
+                DocumentoSolicitud().create(data)
         flash("Archivos exitosamente guardados")
         return redirect(url_for("home"))
 
     convocatoria = Convocatoria()
-    today = date.today()
     id_convocatoria = convocatoria.get_active_current(
-        fecha_actual=today.strftime("%Y-%m-%d")
+        fecha_actual=date.today().strftime("%Y-%m-%d")
     )
     if id_convocatoria is None:
         flash("No hay convocatoria activa.")
@@ -313,6 +299,16 @@ def revisar_solicitud(id_solicitud=None):
         )
     solicitudes = Solicitud().get_all()
     return render_template("listar-solicitudes.html", solicitudes=solicitudes)
+
+
+@app.errorhandler(psycopg2.Error)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    response = {
+        "code": e.pgcode,
+        "error": e.pgerror,
+    }
+    return response
 
 
 if __name__ == "__main__":

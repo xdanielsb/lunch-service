@@ -1,12 +1,7 @@
 /** Periodo **/
-insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (1, '2020-3','2020-10-27 00:00:00', '2020-12-27 23:59:59');
+insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (1, '2020-3','2020-10-27 00:00:00', '2021-4-27 23:59:59');
 insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (2, '2020-1','2020-02-01 00:00:00', '2020-05-29 23:59:59');
 
-/** Estado Convocatoria **/
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(1, 'creada');
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(2, 'activa');
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(3, 'cerrada');
-insert into estado_convocatoria(id_estado_convocatoria, estado) values(4, 'publicada');
 
 /** Estado Documento **/
 
