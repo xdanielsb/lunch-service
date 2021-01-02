@@ -19,18 +19,14 @@
             <option value="{{periodo[0]}}">{{ periodo[1] }} </option>
             {% endfor %}
           </select>
-          <label for="fecha_inicio">Fecha de Inicio</label>
-          <input type="date" placeholder="Fecha de inicio" name="fecha_inicio" value="{{data["fecha_inicio"]}}" class="form-control">
-          <label for="fecha_fin">Fecha Fin</label>
-          <input type="date" placeholder="Fecha de fin" name="fecha_fin" value="{{data["fecha_fin"]}}" class="form-control ">
-          <label for="sel2">Estado Convocatoria</label>
-                                    
-          <select name="id_estado_convocatoria" class="form-control" id="sel2" value="{{data["id_estado_convocatoria"]}}">
-            {% for estadocon in data['estados_convocatoria'] %}                               
-              <option value="{{estadocon[0]}}" {% if estadocon[0] ==data["id_estado_convocatoria"] %} selected {%endif%} >{{ estadocon[1] }} </option>
-            {% endfor %}
-          </select>
-
+          <label for="fecha1">Fecha de Creacion</label>
+          <input type="date" placeholder="Fecha de inicio" name="fecha_creacion" value="{{data["fecha_creacion"]}}" class="form-control" readonly>
+          <label for="fecha2">Fecha de Abertura</label>
+          <input type="date" placeholder="Fecha de inicio" name="fecha_abierta" value="{{data["fecha_abierta"]}}" class="form-control">
+          <label for="fecha3">Fecha de Cierre</label>
+          <input type="date" placeholder="Fecha de inicio" name="fecha_cerrada" value="{{data["fecha_cerrada"]}}" class="form-control">
+          <label for="fecha4">Fecha Publicación</label>
+          <input type="date" placeholder="Fecha de fin" name="fecha_publicacion_resultados" value="{{data["fecha_publicacion_resultados"]}}" class="form-control ">
         </div>
         </p>
       </div>

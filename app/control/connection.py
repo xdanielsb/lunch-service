@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.extras
 from flask import g
 from psycopg2 import OperationalError
 
@@ -24,7 +25,7 @@ def get_db(username=None, password=None):
 
 def query(query):
     conn = get_db()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(query)
     ans = [row for row in cur]
     cur.close()

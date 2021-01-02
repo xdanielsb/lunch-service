@@ -3,7 +3,7 @@ from ..connection import execute, query
 
 class Convocatoria:
     def get_active_current(self, fecha_actual):
-        q = "select c.id_convocatoria  from convocatoria as c, estado_convocatoria ec where c.id_estado_convocatoria = ec.id_estado_convocatoria  and ec.estado='activa' and fecha_inicio<='{}' and fecha_fin>='{}'".format(
+        q = "select * from convocatoria where fecha_abierta <= '{}' and fecha_cerrada >= '{}'".format(
             fecha_actual, fecha_actual
         )
         ans = query(q)
@@ -19,27 +19,28 @@ class Convocatoria:
         return ans[0] != 0
 
     def create(self, data):
-        q = "insert into convocatoria(id_convocatoria, fecha_inicio, fecha_fin, id_periodo, id_estado_convocatoria) values ({}, '{}', '{}', {}, {})".format(
+        q = "insert into convocatoria(id_convocatoria, fecha_creacion, fecha_abierta, fecha_cerrada, fecha_publicacion_resultados, id_periodo) values ({}, '{}', '{}', '{}', '{}', {})".format(
             data["id_convocatoria"],
-            data["fecha_inicio"],
-            data["fecha_fin"],
+            data["fecha_creacion"],
+            data["fecha_abierta"],
+            data["fecha_cerrada"],
+            data["fecha_publicacion_resultados"],
             data["id_periodo"],
-            data["id_estado_convocatoria"],
         )
         execute(q)
 
     def update(self, data):
-        q = "update convocatoria set fecha_inicio ='{}', fecha_fin='{}', id_periodo={}, id_estado_convocatoria={} where id_convocatoria={}".format(
-            data["fecha_inicio"],
-            data["fecha_fin"],
+        q = "update convocatoria set  fecha_abierta='{}' , fecha_cerrada='{}' , fecha_publicacion_resultados='{}', id_periodo={} where id_convocatoria={}".format(
+            data["fecha_abierta"],
+            data["fecha_cerrada"],
+            data["fecha_publicacion_resultados"],
             data["id_periodo"],
-            data["id_estado_convocatoria"],
             data["id_convocatoria"],
         )
         execute(q)
 
     def get(self, id_convocatoria):
-        q = "select fecha_inicio, fecha_fin, id_periodo, id_estado_convocatoria from convocatoria where id_convocatoria={}".format(
+        q = "select * from convocatoria where id_convocatoria={}".format(
             id_convocatoria
         )
         return query(q)
@@ -49,7 +50,7 @@ class Convocatoria:
         execute(q)
 
     def get_all(self):
-        q = "select c.id_convocatoria, c.fecha_inicio, c.fecha_fin, p.nombre, ec.estado from convocatoria as c, periodo as p, estado_convocatoria as ec where p.id_periodo = c.id_periodo and ec.id_estado_convocatoria = c.id_estado_convocatoria"
+        q = "select c.id_convocatoria,c.fecha_creacion, c.fecha_abierta, c.fecha_cerrada, c.fecha_publicacion_resultados, p.nombre from convocatoria as c, periodo as p  where p.id_periodo = c.id_periodo"
         return query(q)
 
     def get_next_id(self):
