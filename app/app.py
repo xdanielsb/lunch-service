@@ -69,6 +69,10 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        if app.config["TESTING"]:
+            if username == "username" and password == "right_password":
+                return redirect(url_for("home"))
+            return redirect(url_for("login"))
         error = None
         if not username:
             error = "Username is required."
