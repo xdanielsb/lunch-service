@@ -27,3 +27,9 @@ A simple prototype application to manage the logic behind restaurant tickets in 
  (env-lunch)$ pip3 install -r requirements.txt
  (env-lunch)$ flask run # export FLASK_APP=app
 ```
+
+#### Testing
+```sh
+ $ cd app/
+ $ python3 -m pytest tests
+```
