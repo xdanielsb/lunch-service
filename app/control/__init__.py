@@ -12,6 +12,7 @@ from .dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from .dao.solicitud import Solicitud
 from .dao.tipo_documento import TipoDocumento
 from .dao.tipo_subsidio import TipoSubsidio
+from .dao.user import User
 
 __all__ = [
     "get_db",
@@ -28,4 +29,5 @@ __all__ = [
     "Solicitud",
     "TipoDocumento",
     "TipoSubsidio",
+    "User",
 ]

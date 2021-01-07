@@ -12,7 +12,7 @@ from .control import (Convocatoria, ConvocatoriaFacultad,
                       ConvocatoriaTipoSubsidio, DocumentoSolicitud,
                       EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
                       Periodo, PuntajeTipoDocumento, Solicitud, TipoDocumento,
-                      TipoSubsidio, get_db)
+                      TipoSubsidio, User, get_db)
 
 
 def allowed_file(filename):
@@ -43,6 +43,23 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+@app.route("/registro", methods=["POST", "GET"])
+def signup():
+    if request.method == "POST":
+        email = request.form["email"]
+        g.user = {
+            "username": "conexion",
+            "password": "cpass",
+            "rol": "conexion",
+        }
+        ans = Estudiante().get_by_email(email)
+        if len(ans) == 0:
+            flash("Estudiante no existe en la base de datos")
+        if User.create(ans[0]):
+            flash("Hemos enviado a tu correo institucional las credenciales de accesso")
+    return render_template("create-user.html")
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -235,8 +252,10 @@ def consultar_solicitud():
     if g.user.get("id_estudiante") is not None:
         solicitudes = Solicitud().get_all2()
         for solicitud in solicitudes:
-            if solicitud[0] == g.user["id_estudiante"]:
-                return redirect(url_for("revisar_solicitud", id_solicitud=solicitud[0]))
+            if solicitud["id_estudiante"] == g.user["id_estudiante"]:
+                return redirect(
+                    url_for("revisar_solicitud", id_solicitud=solicitud["id_solicitud"])
+                )
     flash("Su usuario no tiene solicitudes activas")
     return redirect(url_for("home"))
 
@@ -246,13 +265,11 @@ def consultar_solicitud():
 @login_required
 def revisar_solicitud(id_solicitud=None):
     if request.method == "POST":
-        tipos_documento = TipoDocumento().get_all()
         documento_solicitud = DocumentoSolicitud()
         Solicitud().update_estado(
             request.form["id_solicitud"], request.form["id_estado_solicitud"]
         )
-        print(request.form)
-        for idt, _, nombre_tipo in tipos_documento:
+        for idt, _, nombre_tipo in TipoDocumento().get_all():
             if "doc{}".format(idt) in request.form:
                 data = {
                     "comentarios": request.form["comentario{}".format(idt)],
@@ -269,21 +286,16 @@ def revisar_solicitud(id_solicitud=None):
                 flash("Documento {} Revisado".format(nombre_tipo))
         return redirect(url_for("revisar_solicitud"))
     if id_solicitud is not None:
-        documentos_solicitud = DocumentoSolicitud().get(id_solicitud)
-        puntajes = PuntajeTipoDocumento().get_all()
-        estados_solicitud = EstadoSolicitud().get_all()
-        estados_documento = EstadoDocumento().get_all()
         return render_template(
             "revisar-solicitud.html",
-            documentos_solicitud=documentos_solicitud,
-            estados_solicitud=estados_solicitud,
-            puntajes=puntajes,
-            estados_documento=estados_documento,
+            documentos_solicitud=DocumentoSolicitud().get(id_solicitud),
+            estados_solicitud=EstadoSolicitud().get_all(),
+            puntajes=PuntajeTipoDocumento().get_all(),
+            estados_documento=EstadoDocumento().get_all(),
             id_solicitud=id_solicitud,
             id_estado_solicitud=Solicitud().get_estado(id_solicitud),
         )
-    solicitudes = Solicitud().get_all()
-    return render_template("listar-solicitudes.html", solicitudes=solicitudes)
+    return render_template("listar-solicitudes.html", solicitudes=Solicitud().get_all())
 
 
 @app.errorhandler(psycopg2.Error)
