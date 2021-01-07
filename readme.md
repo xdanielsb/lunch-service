@@ -12,20 +12,17 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 ```sh
   $ cd schema
   $ sh utils/init.sh
-  apoyo_alimentario=# \i database.sql
-  apoyo_alimentario=# \i populate.sql
-  apoyo_alimentario=# \i roles.sql
-  apoyo_alimentario=# \i grants.sql
+  apoyo_alimentario=# \i main.sql
   apoyo_alimentario=# \q
 ```
 
 #### App
 ```sh
- $ cd app/
  $ python3 -m venv env-lunch/
  $ source env-lunch/bin/activate
  (env-lunch)$ pip3 install -r requirements.txt
- (env-lunch)$ flask run # export FLASK_APP=app
+ (env-lunch)$ cd app/
+ (env-lunch)$ flask run # export FLASK_APP=app.py
 ```
 
 #### Testing

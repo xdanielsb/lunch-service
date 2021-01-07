@@ -3,39 +3,20 @@ import os
 from datetime import date
 
 import psycopg2
-from control import (
-    Convocatoria,
-    ConvocatoriaFacultad,
-    ConvocatoriaTipoSubsidio,
-    DocumentoSolicitud,
-    EstadoDocumento,
-    EstadoSolicitud,
-    Estudiante,
-    Facultad,
-    Periodo,
-    PuntajeTipoDocumento,
-    Solicitud,
-    TipoDocumento,
-    TipoSubsidio,
-    get_db,
-)
-from flask import Flask, flash, g, redirect, render_template, request, session, url_for
+from flask import (flash, g, redirect, render_template, request, session,
+                   url_for)
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
-app.config.from_object("config.Config")
-# max file size 16MB
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
-path = os.getcwd()
-UPLOAD_FOLDER = os.path.join(path, "static/uploads")
-ALLOWED_EXTENSIONS = set(["pdf"])
-if not os.path.isdir(UPLOAD_FOLDER):
-    os.mkdir(UPLOAD_FOLDER)
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+from . import app
+from .control import (Convocatoria, ConvocatoriaFacultad,
+                      ConvocatoriaTipoSubsidio, DocumentoSolicitud,
+                      EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
+                      Periodo, PuntajeTipoDocumento, Solicitud, TipoDocumento,
+                      TipoSubsidio, get_db)
 
 
 def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ["pdf"]
 
 
 @app.before_request
