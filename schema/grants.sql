@@ -12,7 +12,6 @@ GRANT ALL ON TABLE tipo_documento to admin;
 GRANT ALL ON TABLE solicitud to admin;
 GRANT ALL ON TABLE documento_solicitud to admin;
 GRANT ALL ON TABLE puntaje_tipo_documento to admin;
-GRANT ALL ON TABLE estado_convocatoria to admin;
 GRANT ALL ON SEQUENCE convocatoria_id_convocatoria_seq to admin;
 GRANT ALL ON SEQUENCE solicitud_id_solicitud_seq to admin;
 GRANT ALL ON TABLE estado_documento to admin;
@@ -36,7 +35,6 @@ GRANT SELECT ON TABLE estado_solicitud to asistente;
 GRANT ALL ON TABLE puntaje_tipo_documento to asistente;
 
 
-GRANT SELECT ON TABLE estado_convocatoria to asistente;
 GRANT ALL ON SEQUENCE convocatoria_id_convocatoria_seq to asistente;
 
 /*estudiante*/
@@ -47,7 +45,6 @@ GRANT SELECT ON TABLE tipo_documento to estudiante;
 GRANT SELECT ON TABLE estudiante to estudiante;
 GRANT SELECT ON TABLE tipo_subsidio to estudiante;
 GRANT SELECT ON TABLE facultad to estudiante;
-GRANT SELECT ON TABLE estado_convocatoria to estudiante;
 GRANT SELECT ON TABLE puntaje_tipo_documento to estudiante;
 GRANT SELECT ON TABLE estado_solicitud to estudiante;
 GRANT ALL ON TABLE solicitud to estudiante;

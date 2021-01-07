@@ -7,7 +7,6 @@
 /**************** USERS AUTHENTICATION ************************/
 drop table if exists rol;
 drop table if exists periodo;
-drop table if exists estado_convocatoria;
 drop table if exists convocatoria;
 drop table if exists estado_documento;
 drop table if exists tipo_documento;
