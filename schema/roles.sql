@@ -16,14 +16,25 @@
 /* psql apoyo_alimentario -U e20131020001 */
 
 /* Create role estudiante */
+DROP ROLE IF EXISTS estudiante;
 create ROLE estudiante LOGIN;
+DROP ROLE IF EXISTS admin;
 create ROLE admin LOGIN;
+DROP ROLE IF EXISTS asistente;
 create ROLE asistente LOGIN;
+DROP ROLE IF EXISTS conexion;
+create ROLE conexion LOGIN CREATEROLE;
+
 create ROLE e20131020001 LOGIN INHERIT;
 create ROLE e20132005002 LOGIN INHERIT;
-ALTER ROLE estudiante with PASSWORD 'estudiante_pass';
-ALTER ROLE admin with PASSWORD 'admin_pass';
-ALTER ROLE asistente with PASSWORD 'asistente_pass';
+
+/* TODO: Change these passwords */
+ALTER ROLE estudiante with PASSWORD 'epass'; 
+ALTER ROLE admin with PASSWORD 'apass';
+ALTER ROLE asistente with PASSWORD 'apass';
+ALTER ROLE conexion with PASSWORD 'cpass';
+
+
 ALTER ROLE e20131020001 with PASSWORD 'estudiante';
 ALTER ROLE e20132005002 with PASSWORD 'estudiante';
 

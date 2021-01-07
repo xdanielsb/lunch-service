@@ -7,7 +7,6 @@ GRANT ALL ON TABLE facultad to admin;
 GRANT ALL ON TABLE convocatoria to admin;
 GRANT ALL ON TABLE convocatoria_facultad to admin;
 GRANT ALL ON TABLE tipo_subsidio_convocatoria to admin;
-
 GRANT ALL ON TABLE tipo_documento to admin;
 GRANT ALL ON TABLE solicitud to admin;
 GRANT ALL ON TABLE documento_solicitud to admin;
@@ -16,9 +15,14 @@ GRANT ALL ON SEQUENCE convocatoria_id_convocatoria_seq to admin;
 GRANT ALL ON SEQUENCE solicitud_id_solicitud_seq to admin;
 GRANT ALL ON TABLE estado_documento to admin;
 GRANT ALL ON TABLE estado_solicitud to admin;
-GRANT ALL ON TABLE estudiante to asistente;
+GRANT ALL ON TABLE estudiante to admin;
 
-/*asistent*/
+
+/*conexion*/
+GRANT SELECT ON TABLE estudiante to conexion;
+
+
+/*asistente*/
 GRANT ALL ON TABLE convocatoria to asistente;
 GRANT ALL ON TABLE convocatoria_facultad to asistente;
 GRANT ALL ON TABLE tipo_subsidio_convocatoria to asistente;

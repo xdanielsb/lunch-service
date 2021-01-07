@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Login</title>
+  <title>Registro</title>
   <meta name="author" content="https://github.com/xdanielsb">
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
@@ -29,20 +29,15 @@
               <div class="brand-wrapper">
                 <img src="https://logopond.com/logos/d40f3fe7edb84c30eaafb46505c58ead.png" alt="logo" class="logo">
               </div>
-              <p class="login-card-description">Entra a tu cuenta</p>
+              <p class="login-card-description">Ingresa tu email institucional</p>
               <form autocomplete="off" class="text-center" action="{{ url_for('login') }}" method="POST" style="color: #757575;">
                 <div class="form-group">
-                  <label for="username" class="sr-only">Username</label>
-                  <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+                  <label for="username" class="sr-only">Email</label>
+                  <input type="text" name="email" id="email" class="form-control" placeholder="Email institucional">
                 </div>
-                <div class="form-group mb-4">
-                  <label for="password" class="sr-only">Password</label>
-                  <input type="password" name="password" id="password" class="form-control" placeholder="***********">
-                </div>
-                <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Login">
+                <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Registrarme">
               </form>
-              <!-- <a href="#!" class="forgot-password-link">¿Olvidaste tu contraseña?</a> -->
-              <p class="login-card-footer-text">¿No tienes cuenta? <a href="{{ url_for('signup') }}" class="text-reset">Registrate acá</a></p>
+              <a href="{{ url_for('login') }}" class="come-back-link"> Volver </a>
               <nav class="login-card-footer-nav">
                 <a href="#!">¡Esto es un prototipo!</a>
               </nav>
