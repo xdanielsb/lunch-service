@@ -22,21 +22,37 @@ DROP ROLE IF EXISTS admin;
 create ROLE admin LOGIN;
 DROP ROLE IF EXISTS asistente;
 create ROLE asistente LOGIN;
-DROP ROLE IF EXISTS conexion;
-create ROLE conexion LOGIN CREATEROLE;
+DROP ROLE IF EXISTS creadorUsuarios;
+create ROLE creadorUsuarios LOGIN CREATEROLE;
 
+
+
+/* Students of testing */
+/* Note: this two registers must already exist in the table 'student' */
+DROP ROLE IF EXISTS e20131020001 ;
 create ROLE e20131020001 LOGIN INHERIT;
+DROP ROLE IF EXISTS e20132005002 ;
 create ROLE e20132005002 LOGIN INHERIT;
+
+/* Funcionarios of testing */
+/* Note: this two registers must already exist in the table 'funcionario' */
+DROP ROLE IF EXISTS f1020141478;
+create ROLE f1020141478 LOGIN INHERIT;
+DROP ROLE IF EXISTS f1010121110;
+create ROLE f1010121110 LOGIN INHERIT;
+
 
 /* TODO: Change these passwords */
 ALTER ROLE estudiante with PASSWORD 'epass'; 
 ALTER ROLE admin with PASSWORD 'apass';
 ALTER ROLE asistente with PASSWORD 'apass';
-ALTER ROLE conexion with PASSWORD 'cpass';
+ALTER ROLE creadorUsuarios with PASSWORD 'cpass';
 
 
-ALTER ROLE e20131020001 with PASSWORD 'estudiante';
-ALTER ROLE e20132005002 with PASSWORD 'estudiante';
+ALTER ROLE e20131020001 with PASSWORD 'epass';
+ALTER ROLE e20132005002 with PASSWORD 'epass';
+ALTER ROLE f1020141478 with PASSWORD 'fpass';
+ALTER ROLE f1010121110 with PASSWORD 'fpass';
 
 
 

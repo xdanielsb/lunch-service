@@ -11,8 +11,8 @@ from . import app
 from .control import (Convocatoria, ConvocatoriaFacultad,
                       ConvocatoriaTipoSubsidio, DocumentoSolicitud,
                       EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
-                      Periodo, PuntajeTipoDocumento, Solicitud, TipoDocumento,
-                      TipoSubsidio, User, get_db)
+                      Funcionario, Periodo, PuntajeTipoDocumento, Solicitud,
+                      TipoDocumento, TipoSubsidio, User, get_db)
 
 
 def allowed_file(filename):
@@ -33,6 +33,8 @@ def load_logged_in_user():
         }
         if g.user["rol"].startswith("e"):
             g.user.update(Estudiante().get(g.user["rol"][1:]))
+        if g.user["rol"].startswith("f"):
+            g.user.update(Funcionario().get(g.user["rol"][1:]))
 
 
 def login_required(view):

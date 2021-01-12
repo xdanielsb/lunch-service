@@ -64,6 +64,6 @@ insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, punto
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(2, 'tipo B',70, 80, 40);
 
 /** Funcionario **/
-insert into funcionario(id_funcionario, identificacion, nombre1, apellido1) values(1, '1020142578', 'Kevin', 'Ayala');
-insert into funcionario(id_funcionario, identificacion, nombre1, apellido1) values(2, '1010142528', 'Juana', 'Dominga');
+insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(1, '1020141478', 'Kevin', 'Ayala', 'kevin@correo.udistrital.edu.co');
+insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(2, '1010121110', 'Juana', 'Dominga', 'juana@correo.udistrital.edu.co');
 

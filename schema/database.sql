@@ -84,6 +84,7 @@ create table proyecto_curricular(
   foreign key(id_facultad) references facultad(id_facultad)
 );
 
+/* TODO: implements inheritance with table 'funcionario' */
 create table estudiante(
   id_estudiante serial primary key,
   identificacion varchar(30) unique not null,

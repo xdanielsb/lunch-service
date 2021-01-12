@@ -48,11 +48,19 @@
       <div class="scroll-sidebar">
         <nav class="sidebar-nav">
           <ul id="sidebarnav">
+            {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('convocatoria', id_convocatoria=None) }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Crear Convocatoria</span></a></li>
+            {% endif %}
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('convocatoria_view') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Consultar Convocatoria</span></a></li>
+            {% if g.user['rol'][0] != 'f'  %}
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('solicitud') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Crear Solicitud</span></a></li>
+            {% endif %}
+            {% if g.user['rol'][0] == 'f'  %}
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('revisar_solicitud') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Revisar Solicitud</span></a></li>
+            {% endif %}
+            {% if g.user['rol'][0] =='e' %}
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('consultar_solicitud') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Consultar Solicitud</span></a></li>
+            {% endif %}
           </ul>
         </nav>
       </div>

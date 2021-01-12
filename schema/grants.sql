@@ -18,8 +18,8 @@ GRANT ALL ON TABLE estado_solicitud to admin;
 GRANT ALL ON TABLE estudiante to admin;
 
 
-/*conexion*/
-GRANT SELECT ON TABLE estudiante to conexion;
+/*creadorUsuarios*/
+GRANT SELECT ON TABLE estudiante to creadorUsuarios;
 
 
 /*asistente*/
@@ -36,6 +36,7 @@ GRANT SELECT ON TABLE estudiante to asistente;
 GRANT SELECT, UPDATE ON TABLE solicitud to asistente;
 GRANT SELECT ON TABLE estado_documento to asistente;
 GRANT SELECT ON TABLE estado_solicitud to asistente;
+GRANT SELECT ON TABLE funcionario to asistente;
 GRANT ALL ON TABLE puntaje_tipo_documento to asistente;
 
 
@@ -58,4 +59,5 @@ GRANT ALL ON SEQUENCE solicitud_id_solicitud_seq to estudiante;
 
 GRANT estudiante to e20131020001;
 GRANT estudiante to e20132005002;
-
+GRANT asistente to f1020141478;
+GRANT asistente to f1010121110;

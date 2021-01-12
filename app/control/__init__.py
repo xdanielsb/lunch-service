@@ -7,6 +7,7 @@ from .dao.estado_documento import EstadoDocumento
 from .dao.estado_solicitud import EstadoSolicitud
 from .dao.estudiante import Estudiante
 from .dao.facultad import Facultad
+from .dao.funcionario import Funcionario
 from .dao.periodo import Periodo
 from .dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from .dao.solicitud import Solicitud
