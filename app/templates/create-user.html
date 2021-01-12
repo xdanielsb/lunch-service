@@ -30,12 +30,12 @@
                 <img src="https://logopond.com/logos/d40f3fe7edb84c30eaafb46505c58ead.png" alt="logo" class="logo">
               </div>
               <p class="login-card-description">Ingresa tu email institucional</p>
-              <form autocomplete="off" class="text-center" action="{{ url_for('login') }}" method="POST" style="color: #757575;">
+              <form autocomplete="off" class="text-center" action="{{ url_for('signup') }}" method="POST" style="color: #757575;">
                 <div class="form-group">
                   <label for="username" class="sr-only">Email</label>
                   <input type="text" name="email" id="email" class="form-control" placeholder="Email institucional">
                 </div>
-                <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Registrarme">
+                <input name="registro" id="registro" class="btn btn-block login-btn mb-4" type="submit" value="Registrarme">
               </form>
               <a href="{{ url_for('login') }}" class="come-back-link"> Volver </a>
               <nav class="login-card-footer-nav">

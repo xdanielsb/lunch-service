@@ -52,14 +52,14 @@ def signup():
     if request.method == "POST":
         email = request.form["email"]
         g.user = {
-            "username": "conexion",
+            "username": "creadorusuarios",
             "password": "cpass",
-            "rol": "conexion",
+            "rol": "creadorusuarios",
         }
         ans = Estudiante().get_by_email(email)
         if len(ans) == 0:
             flash("Estudiante no existe en la base de datos")
-        if User.create(ans[0]):
+        elif User.create(ans[0]):
             flash("Hemos enviado a tu correo institucional las credenciales de accesso")
     return render_template("create-user.html")
 

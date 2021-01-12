@@ -8,6 +8,7 @@ def get_db(username=None, password=None):
     """Opens a new database connection if there is none yet for the
     current application context.
     """
+    print(g.user)
     try:
         if not hasattr(g, "dbconn"):
             g.dbconn = psycopg2.connect(
