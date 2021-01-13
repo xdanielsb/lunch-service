@@ -13,6 +13,11 @@
 {% endif %}
 <form class="" action="{{ url_for('solicitud') }}" method="POST" enctype="multipart/form-data">
   <input type="hidden" value="{{id_convocatoria[0]}}" name="id_convocatoria">
+  <label for ="fname">Nombre Estudiante </label>
+  <input type="text" id ="fname" value="{{ g.user["nombre1"] + " "+ g.user["apellido1"]}}" readonly>
+  <label for ="estrato">Estrato </label>
+  <input type="number" id ="estrato"  name="estrato">
+
   <div class="row">
     {% for id_tipo_documento,obligatorio, nombre  in tipos_documento %}
     <div class="col-md-6 mt-4">

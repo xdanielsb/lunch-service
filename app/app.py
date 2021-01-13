@@ -3,16 +3,28 @@ import os
 from datetime import date
 
 import psycopg2
-from flask import (flash, g, redirect, render_template, request, session,
-                   url_for)
+from flask import flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
 from . import app
-from .control import (Convocatoria, ConvocatoriaFacultad,
-                      ConvocatoriaTipoSubsidio, DocumentoSolicitud,
-                      EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
-                      Funcionario, Periodo, PuntajeTipoDocumento, Solicitud,
-                      TipoDocumento, TipoSubsidio, User, get_db)
+from .control import (
+    Convocatoria,
+    ConvocatoriaFacultad,
+    ConvocatoriaTipoSubsidio,
+    DocumentoSolicitud,
+    EstadoDocumento,
+    EstadoSolicitud,
+    Estudiante,
+    Facultad,
+    Funcionario,
+    Periodo,
+    PuntajeTipoDocumento,
+    Solicitud,
+    TipoDocumento,
+    TipoSubsidio,
+    User,
+    get_db,
+)
 
 
 def allowed_file(filename):
@@ -80,7 +92,7 @@ def login():
             error = "Username is required."
         elif not password:
             error = "Password is required."
-        elif False and get_db(username, password) is not None:
+        elif get_db(username, password) is not None:
             session.clear()
             session["username"] = username
             session["password"] = password
@@ -301,6 +313,20 @@ def revisar_solicitud(id_solicitud=None):
             id_estado_solicitud=Solicitud().get_estado(id_solicitud),
         )
     return render_template("listar-solicitudes.html", solicitudes=Solicitud().get_all())
+
+
+@app.route("/beneficiarios/<id_convocatoria>", methods=["POST", "GET"])
+@login_required
+def beneficiarios(id_convocatoria=None):
+    # TODO: here return the beneficiarios
+    return {"a": "b"}
+
+
+@app.route("/puntaje/<id_convocatoria>", methods=["POST", "GET"])
+@login_required
+def puntaje(id_convocatoria=None):
+    # TODO: here call stored procedure
+    return {"a": "b"}
 
 
 @app.errorhandler(psycopg2.Error)

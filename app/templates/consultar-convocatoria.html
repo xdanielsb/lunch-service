@@ -23,7 +23,11 @@
       {% for field in convocatoria %}
       <td> {{field}}</td>
       {% endfor %}
-      <td> <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
+      <td> 
+        <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> 
+        <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
+        <a href="{{ url_for('puntaje', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Generar Beneficiarios </a>
+        <a href="{{ url_for('beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Ver Beneficiarios </a>
       </td>
     </tr>
     {% endfor %}
