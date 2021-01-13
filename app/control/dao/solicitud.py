@@ -3,8 +3,11 @@ from ..connection import execute, query
 
 class Solicitud:
     def create(self, data):
-        q = "insert into solicitud(id_solicitud, id_estudiante, id_convocatoria) values ({}, {}, {})".format(
-            data["id_solicitud"], data["id_estudiante"], data["id_convocatoria"]
+        q = "insert into solicitud(id_solicitud, id_estudiante, id_convocatoria, estrato) values ({}, {}, {}, {})".format(
+            data["id_solicitud"],
+            data["id_estudiante"],
+            data["id_convocatoria"],
+            data["estrato"],
         )
         execute(q)
 

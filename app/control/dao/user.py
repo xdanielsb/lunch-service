@@ -3,20 +3,22 @@ from ..services import send_email
 
 
 class User:
-    def create(self, stu):
+    def create(self, stu, send_message=None):
         # TODO this code should be a transaction
         # if error rollback
 
+        # generate a sec-password
+        password = "epass"
         username = "e" + stu["identificacion"]
-        q = "create ROLE {} LOGIN".format(username)
-        execute(q)
-        password = "pass_change"
-        q = "ALTER ROLE {} with PASSWORD '{}'".format(username, password)
-        execute(q)
 
-        subject = "Bienvenido a apoyo alimentario"
-        sender = "admin_email"  # TODO: env variable
-        message = """
+        execute("create ROLE {} LOGIN".format(username))
+        execute("ALTER ROLE {} with PASSWORD '{}'".format(username, password))
+        execute("GRANT estudiante to {}".format(username))
+        ans = True
+        if send_message is not None:
+            subject = "Bienvenido a apoyo alimentario"
+            sender = "admin_email"  # TODO: env variable
+            message = """
                 Un saludo cordial,
                 {} {},
                 Para acceder al sistema de apoyo alimentario de la
@@ -28,7 +30,7 @@ class User:
                 Atentamente,
                 Equipo Apoyo alementario
                 """.format(
-            stu["nombre1"], stu["apellido1"], stu["identificacion"], password
-        )
-
-        return send_email(subject, sender, stu["email"], message)
+                stu["nombre1"], stu["apellido1"], stu["identificacion"], password
+            )
+            ans = send_email(subject, sender, stu["email"], message)
+        return ans

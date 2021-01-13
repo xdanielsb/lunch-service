@@ -54,16 +54,19 @@ insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) val
 insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) values ( 2, 2, 'industrial');
 
 
-/** Estudiante **/
-insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
-insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
-
-
 /** Tipo Subsidio **/
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(1, 'tipo A',100, 90, 30);
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(2, 'tipo B',70, 80, 40);
 
+
+/** Estudiante **/
+/* It is supposed that the students and officers already exist */
+insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
+insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
+insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (3, '20131002001', 'Bill', 'Ribont', 3.9, 2, 'bill@correo.udistrital.edu.co', 1);
+
 /** Funcionario **/
 insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(1, '1020141478', 'Kevin', 'Ayala', 'kevin@correo.udistrital.edu.co');
 insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(2, '1010121110', 'Juana', 'Dominga', 'juana@correo.udistrital.edu.co');
+insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(3, '1019742929', 'Juan', 'De Maria', 'juan@correo.udistrital.edu.co');
 

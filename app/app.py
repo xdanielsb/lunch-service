@@ -58,9 +58,11 @@ def signup():
         }
         ans = Estudiante().get_by_email(email)
         if len(ans) == 0:
-            flash("Estudiante no existe en la base de datos")
-        elif User.create(ans[0]):
-            flash("Hemos enviado a tu correo institucional las credenciales de accesso")
+            flash("Estudiante no existe en la base de datos.")
+        elif User().create(ans):
+            flash(
+                "Hemos enviado a tu correo institucional las credenciales de accesso."
+            )
     return render_template("create-user.html")
 
 
@@ -78,7 +80,7 @@ def login():
             error = "Username is required."
         elif not password:
             error = "Password is required."
-        elif get_db(username, password) is not None:
+        elif False and get_db(username, password) is not None:
             session.clear()
             session["username"] = username
             session["password"] = password
@@ -214,6 +216,7 @@ def solicitud():
             "id_solicitud": id_solicitud,
             "id_estudiante": g.user["id_estudiante"],
             "id_convocatoria": request.form["id_convocatoria"],
+            "estrato": request.form["estrato"],
         }
         solicitud.create(data)
 

@@ -118,6 +118,7 @@ create table solicitud(
   id_estudiante integer not null,
   puntaje smallint constraint chk_puntaje_in_zero_hundred_range check(puntaje >=0 and puntaje <=100),
   ultima_actualizacion timestamp not null default current_timestamp,
+  estrato integer constraint chk_estrato_grt_zero_leq_six check(estrato>=0 and estrato<=6),
   id_estado_solicitud integer default 1,
   id_convocatoria integer not null,
   foreign key (id_convocatoria) references convocatoria(id_convocatoria),
