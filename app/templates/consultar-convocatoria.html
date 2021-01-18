@@ -24,10 +24,12 @@
       <td> {{field}}</td>
       {% endfor %}
       <td> 
-        <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> 
-        <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
-        <a href="{{ url_for('puntaje', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Generar Beneficiarios </a>
-        <a href="{{ url_for('beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Ver Beneficiarios </a>
+          {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
+            <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> 
+            <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
+            <a href="{{ url_for('puntaje', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Calcular puntajes </a>
+          {% endif %}
+        <a href="{{ url_for('beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Consultar Resultados </a>
       </td>
     </tr>
     {% endfor %}

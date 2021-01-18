@@ -1,4 +1,5 @@
 
+/* List stored produces \df */
 /* Function which computes the sums of the documnts the students sent */
 create or replace function compute_score_solicitud(_id_solicitud integer)
 returns dec
@@ -36,7 +37,8 @@ create or replace function get_cursor_solicitud(_id_convocatoria integer)
     open cur for 
       select * 
       from solicitud 
-      where id_convocatoria = _id_convocatoria;
+      where id_convocatoria = _id_convocatoria
+      order by puntaje;
     return cur;
 end; $$ 
 language plpgsql;
@@ -67,13 +69,17 @@ begin
                 rec.id_solicitud,
                 rec.id_estudiante,
                 score;
-    
-    /* update puntaje solicitud */
 
+    /* update puntaje solicitud */
+    update solicitud 
+    set puntaje=score
+    where id_solicitud=rec.id_solicitud;
 
   end loop;
-  commit;
 end; $$;
+
+
+/* TODO: create beneficiarios */
 
 /* debug:
 select compute_score_solicitud(2);

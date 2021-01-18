@@ -6,7 +6,7 @@ insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (2, '202
 /** Estado Documento **/
 
 insert into estado_documento(id_estado_documento, nombre) values (1, 'Sin Revisar');
-insert into estado_documento(id_estado_documento, nombre) values (2, 'Aprovado');
+insert into estado_documento(id_estado_documento, nombre) values (2, 'Aprobado');
 insert into estado_documento(id_estado_documento, nombre) values (3, 'Requiere cambios');
 insert into estado_documento(id_estado_documento, nombre) values (4, 'Rechazado');
 
@@ -25,14 +25,15 @@ insert into tipo_documento(id_tipo_documento, nombre, obligatorio) values(8, 'Ex
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Formulario solicitud bien diligenciado', 1,  100);
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Formulario solicitud mal diligenciado', 1,  0);
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director bien escrita', 2,100);
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director mal escrita', 2,100);
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Carta al director mal escrita', 2,0);
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 1', 3,100  );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 2', 3,90  );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 3', 3,70  );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 4', 3,50  );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 5', 3,10  );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Actual', 4, 100 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Desactualizado', 4,20  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Estrato 6', 3,0  );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Valido', 4, 100 );
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Recibo Desactualizado', 4,0  );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado desplazamiento forzoso correcto', 5, 100 );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado desplazamiento forzoso invalido', 5, 0 );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Registro civil nacimento hijos valido', 6, 100  );
@@ -40,7 +41,7 @@ insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado discapacidad medica valido', 7, 100 );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado discapacidad medica invalido', 7, 0  );
 insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes valido ', 8, 100 );
-insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes valido ', 8,  0);
+insert into puntaje_tipo_documento(nombre, id_tipo_documento, puntaje) values ('Certificado enfermedades presentes invalido ', 8,  0);
 
 /** Facultad **/
 

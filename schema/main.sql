@@ -2,3 +2,4 @@
 \i populate.sql
 \i roles.sql
 \i grants.sql
+\i sproc_puntaje.sql

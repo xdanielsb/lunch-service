@@ -3,28 +3,16 @@ import os
 from datetime import date
 
 import psycopg2
-from flask import flash, g, redirect, render_template, request, session, url_for
+from flask import (flash, g, redirect, render_template, request, session,
+                   url_for)
 from werkzeug.utils import secure_filename
 
 from . import app
-from .control import (
-    Convocatoria,
-    ConvocatoriaFacultad,
-    ConvocatoriaTipoSubsidio,
-    DocumentoSolicitud,
-    EstadoDocumento,
-    EstadoSolicitud,
-    Estudiante,
-    Facultad,
-    Funcionario,
-    Periodo,
-    PuntajeTipoDocumento,
-    Solicitud,
-    TipoDocumento,
-    TipoSubsidio,
-    User,
-    get_db,
-)
+from .control import (Convocatoria, ConvocatoriaFacultad,
+                      ConvocatoriaTipoSubsidio, DocumentoSolicitud,
+                      EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
+                      Funcionario, Periodo, PuntajeTipoDocumento, Solicitud,
+                      TipoDocumento, TipoSubsidio, User, get_db)
 
 
 def allowed_file(filename):
@@ -83,22 +71,12 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if app.config["TESTING"]:
-            if username == "username" and password == "right_password":
-                return redirect(url_for("home"))
-            return redirect(url_for("login"))
-        error = None
-        if not username:
-            error = "Username is required."
-        elif not password:
-            error = "Password is required."
-        elif get_db(username, password) is not None:
+        error = get_db(username, password)
+        if error is None:
             session.clear()
             session["username"] = username
             session["password"] = password
             return redirect(url_for("home"))
-        else:
-            error = "Invalid Credentials"
         flash(error)
     if g.user is None:
         return render_template("login.html")
@@ -247,18 +225,27 @@ def solicitud():
         flash("Archivos exitosamente guardados")
         return redirect(url_for("home"))
 
-    convocatoria = Convocatoria()
-    id_convocatoria = convocatoria.get_active_current(
+    convocatoria = Convocatoria().get_current_active(
         fecha_actual=date.today().strftime("%Y-%m-%d")
     )
-    if id_convocatoria is None:
+    if convocatoria is None:
         flash("No hay convocatoria activa.")
         return redirect(url_for("home"))
+
+    solicitud = Solicitud().get_current(
+        data={
+            "id_convocatoria": convocatoria["id_convocatoria"],
+            "id_estudiante": g.user["id_estudiante"],
+        }
+    )
+    if solicitud is not None:
+        flash("Ya tienes una solicitud activa.")
+        return redirect(url_for("consultar_solicitud"))
 
     tipos_documento = TipoDocumento().get_all()
     return render_template(
         "solicitud.html",
-        id_convocatoria=id_convocatoria,
+        convocatoria=convocatoria,
         tipos_documento=tipos_documento,
     )
 
@@ -318,15 +305,15 @@ def revisar_solicitud(id_solicitud=None):
 @app.route("/beneficiarios/<id_convocatoria>", methods=["POST", "GET"])
 @login_required
 def beneficiarios(id_convocatoria=None):
-    # TODO: here return the beneficiarios
-    return {"a": "b"}
+    return {"results": Convocatoria().get_results(id_convocatoria)}
 
 
 @app.route("/puntaje/<id_convocatoria>", methods=["POST", "GET"])
 @login_required
 def puntaje(id_convocatoria=None):
-    # TODO: here call stored procedure
-    return {"a": "b"}
+    Convocatoria().compute_results(id_convocatoria)
+    flash("Los puntajes han sido calculados")
+    return redirect(url_for("convocatoria_view"))
 
 
 @app.errorhandler(psycopg2.Error)

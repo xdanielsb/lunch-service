@@ -23,6 +23,15 @@ class Solicitud:
         )
         execute(q)
 
+    def get_current(self, data):
+        q = "select * from solicitud where id_convocatoria={} and id_estudiante={}".format(
+            data["id_convocatoria"], data["id_estudiante"]
+        )
+        ans = query(q)
+        if len(ans) == 0:
+            return None
+        return ans[0]
+
     def get_all2(self):
         # also return the student id
         q = "select s.id_estudiante as id_estudiante, id_solicitud, e.identificacion, ultima_actualizacion, estado, id_convocatoria from solicitud as s, estado_solicitud as es, estudiante as e where s.id_estado_solicitud = es.id_estado_solicitud and s.id_estudiante=e.id_estudiante"

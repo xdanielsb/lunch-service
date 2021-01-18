@@ -116,7 +116,7 @@ insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6
 create table solicitud(
   id_solicitud serial primary key,
   id_estudiante integer not null,
-  puntaje smallint,
+  puntaje smallint default 0,
   ultima_actualizacion timestamp not null default current_timestamp,
   estrato integer constraint chk_estrato_grt_zero_leq_six check(estrato>=0 and estrato<=6),
   id_estado_solicitud integer default 1,

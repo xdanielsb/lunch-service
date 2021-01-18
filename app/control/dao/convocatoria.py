@@ -2,7 +2,7 @@ from ..connection import execute, query
 
 
 class Convocatoria:
-    def get_active_current(self, fecha_actual):
+    def get_current_active(self, fecha_actual):
         q = "select * from convocatoria where fecha_abierta <= '{}' and fecha_cerrada >= '{}'".format(
             fecha_actual, fecha_actual
         )
@@ -41,6 +41,15 @@ class Convocatoria:
 
     def get(self, id_convocatoria):
         q = "select * from convocatoria where id_convocatoria={}".format(
+            id_convocatoria
+        )
+        return query(q)
+
+    def compute_results(self, id_convocatoria):
+        execute("call compute_scores_in_convocatory({})".format(id_convocatoria))
+
+    def get_results(self, id_convocatoria):
+        q = "select puntaje, id_solicitud, e.identificacion, ultima_actualizacion, estado, id_convocatoria from solicitud as s, estado_solicitud as es, estudiante as e where s.id_estado_solicitud = es.id_estado_solicitud and s.id_estudiante=e.id_estudiante and id_convocatoria={}".format(
             id_convocatoria
         )
         return query(q)

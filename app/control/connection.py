@@ -1,13 +1,13 @@
 import psycopg2
 import psycopg2.extras
 from flask import g
-from psycopg2 import OperationalError
 
 
 def get_db(username=None, password=None):
     """Opens a new database connection if there is none yet for the
     current application context.
     """
+    err = None
     try:
         if not hasattr(g, "dbconn"):
             g.dbconn = psycopg2.connect(
@@ -16,17 +16,16 @@ def get_db(username=None, password=None):
                 user=username if (username is not None) else g.user["username"],
                 password=password if (password is not None) else g.user["password"],
             )
-        return g.dbconn
-    except OperationalError as err:
+    except Exception as ex:
+        err = str(ex)
         print(err)
-        return None
-    return None
+    return err
 
 
 def query(query):
-    conn = get_db()
-    if conn is None:
-        raise Exception("Connection with DB unavailable.")
+    if not hasattr(g, "dbconn"):
+        get_db()
+    conn = g.dbconn
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(query)
     ans = [row for row in cur]
@@ -35,9 +34,9 @@ def query(query):
 
 
 def execute(statement):
-    conn = get_db()
-    if conn is None:
-        raise Exception("Connection with DB unavailable.")
+    if not hasattr(g, "dbconn"):
+        get_db()
+    conn = g.dbconn
     cur = conn.cursor()
     cur.execute(statement)
     conn.commit()
@@ -46,8 +45,5 @@ def execute(statement):
 
 if __name__ == "__main__":
     conn = psycopg2.connect(
-        host="localhost",
-        database="apoyo_alimentario",
-        user="",
-        password="",
+        host="localhost", database="apoyo_alimentario", user="", password=""
     )
