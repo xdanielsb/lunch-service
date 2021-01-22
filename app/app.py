@@ -3,16 +3,28 @@ import os
 from datetime import date
 
 import psycopg2
-from flask import (flash, g, redirect, render_template, request, session,
-                   url_for)
+from flask import flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
 from . import app
-from .control import (Convocatoria, ConvocatoriaFacultad,
-                      ConvocatoriaTipoSubsidio, DocumentoSolicitud,
-                      EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
-                      Funcionario, Periodo, PuntajeTipoDocumento, Solicitud,
-                      TipoDocumento, TipoSubsidio, User, get_db)
+from .control import (
+    Convocatoria,
+    ConvocatoriaFacultad,
+    ConvocatoriaTipoSubsidio,
+    DocumentoSolicitud,
+    EstadoDocumento,
+    EstadoSolicitud,
+    Estudiante,
+    Facultad,
+    Funcionario,
+    Periodo,
+    PuntajeTipoDocumento,
+    Solicitud,
+    TipoDocumento,
+    TipoSubsidio,
+    User,
+    get_db,
+)
 
 
 def allowed_file(filename):
@@ -101,10 +113,10 @@ def home():
 def convocatoria(id_convocatoria=None):
     data = {}
     convocatoria = Convocatoria()
+
+
     if request.method == "POST":
-        isUpdate = (
-            True if convocatoria.exist(request.form["id_convocatoria"]) else False
-        )
+        isUpdate = convocatoria.exist(request.form["id_convocatoria"])
 
         if isUpdate:
             convocatoria.update(request.form)
@@ -140,6 +152,11 @@ def convocatoria(id_convocatoria=None):
                     cts.update(data)
                 else:
                     cts.create(data)
+
+        if convocatoria.lunch_facs_equal_lunch_types(request.form["id_convocatoria"]) is False:
+            flash("La suma de almuerzos asignados por facultad no es el misma que los asignados por tipo", "danger")
+            return redirect(url_for("convocatoria", id_convocatoria=request.form["id_convocatoria"]))
+
         return redirect(url_for("convocatoria_view"))
 
     active_periodo = Periodo().get_active_period(
@@ -313,6 +330,16 @@ def beneficiarios(id_convocatoria=None):
 def puntaje(id_convocatoria=None):
     Convocatoria().compute_results(id_convocatoria)
     flash("Los puntajes han sido calculados")
+    return redirect(url_for("convocatoria_view"))
+
+
+@app.route("/generar_beneficiarios/<id_convocatoria>", methods=["POST", "GET"])
+@login_required
+def generar_beneficiarios(id_convocatoria=None):
+    # Convocatoria().compute_results(id_convocatoria)
+    # flash("Los puntajes han sido calculados")
+    Convocatoria().generar_beneficiarios(id_convocatoria)
+    flash("Los beneficiarios han sido generados")
     return redirect(url_for("convocatoria_view"))
 
 

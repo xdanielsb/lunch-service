@@ -8,13 +8,13 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">id_convocatoria</th>
-      <th scope="col">fecha_creacion</th>
-      <th scope="col">fecha_abierta</th>
-      <th scope="col">fecha_cerrada</th>
-      <th scope="col">fecha_publicacion_resultados</th>
-      <th scope="col">periodo</th>
-      <th scope="col"> Acciones</th>
+      <th scope="col">id</th>
+      <th scope="col">Creación</th>
+      <th scope="col">Abertura</th>
+      <th scope="col">Cierre</th>
+      <th scope="col">Publicación</th>
+      <th scope="col">Periodo</th>
+      <th scope="col">Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -28,6 +28,7 @@
             <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> 
             <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
             <a href="{{ url_for('puntaje', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Calcular puntajes </a>
+            <a href="{{ url_for('generar_beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Generar Beneficiarios </a>
           {% endif %}
         <a href="{{ url_for('beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Consultar Resultados </a>
       </td>
