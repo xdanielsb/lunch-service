@@ -3,6 +3,8 @@
 *.swo
 __pycache__/
 env-lunch/
+.env
+.flaskenv
 
 venv/
 uploads/

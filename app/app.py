@@ -5,6 +5,9 @@ from datetime import date
 import psycopg2
 from flask import flash, g, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
+from flask_mail import Message
+from . import mail
+
 
 from . import app
 from .control import (
@@ -114,7 +117,6 @@ def convocatoria(id_convocatoria=None):
     data = {}
     convocatoria = Convocatoria()
 
-
     if request.method == "POST":
         isUpdate = convocatoria.exist(request.form["id_convocatoria"])
 
@@ -153,9 +155,17 @@ def convocatoria(id_convocatoria=None):
                 else:
                     cts.create(data)
 
-        if convocatoria.lunch_facs_equal_lunch_types(request.form["id_convocatoria"]) is False:
-            flash("La suma de almuerzos asignados por facultad no es el misma que los asignados por tipo", "danger")
-            return redirect(url_for("convocatoria", id_convocatoria=request.form["id_convocatoria"]))
+        if (
+            convocatoria.lunch_facs_equal_lunch_types(request.form["id_convocatoria"])
+            is False
+        ):
+            flash(
+                "La suma de almuerzos asignados por facultad no es el misma que los asignados por tipo",
+                "danger",
+            )
+            return redirect(
+                url_for("convocatoria", id_convocatoria=request.form["id_convocatoria"])
+            )
 
         return redirect(url_for("convocatoria_view"))
 
@@ -351,6 +361,18 @@ def handle_exception(e):
         "error": e.pgerror,
     }
     return response
+
+
+@app.route("/send_test_message")
+def send_test_message():
+    msg = Message(
+        "Hello",
+        sender=os.environ.get("MAIL_USERNAME"),
+        recipients=[os.environ.get("MAIL_USERNAME2")],
+    )
+    msg.body = "Hello Flask message sent from Flask-Mail"
+    mail.send(msg)
+    return "Sent"
 
 
 if __name__ == "__main__":
