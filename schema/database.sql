@@ -131,6 +131,7 @@ create table historico_solicitud(
   id_historico_solicitud serial primary key,
   id_solicitud integer not null,
   id_estado_solicitud integer not null,
+  modificado_por VARCHAR(32),
   foreign key(id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
   foreign key(id_solicitud) references solicitud(id_solicitud),
   fecha timestamp not null

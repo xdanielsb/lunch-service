@@ -19,6 +19,9 @@ GRANT ALL ON TABLE estudiante to admin;
 GRANT ALL ON TABLE proyecto_curricular to admin;
 GRANT ALL ON TABLE beneficiario to admin;
 GRANT ALL ON SEQUENCE beneficiario_id_beneficiario_seq to admin;
+GRANT ALL ON TABLE historico_solicitud to admin;
+GRANT ALL ON SEQUENCE historico_solicitud_id_historico_solicitud_seq to admin;
+
 
 /*creadorUsuarios*/
 GRANT SELECT ON TABLE estudiante to creadorUsuarios;
@@ -43,6 +46,9 @@ GRANT SELECT ON TABLE proyecto_curricular to asistente;
 GRANT ALL ON TABLE puntaje_tipo_documento to asistente;
 GRANT ALL ON TABLE beneficiario to asistente;
 GRANT ALL ON SEQUENCE beneficiario_id_beneficiario_seq to asistente;
+GRANT ALL ON SEQUENCE historico_solicitud_id_historico_solicitud_seq to asistente;
+
+GRANT INSERT,UPDATE, SELECT ON TABLE historico_solicitud to asistente;
 
 
 GRANT ALL ON SEQUENCE convocatoria_id_convocatoria_seq to asistente;
@@ -62,6 +68,8 @@ GRANT SELECT ON TABLE beneficiario to estudiante;
 GRANT ALL ON TABLE solicitud to estudiante;
 GRANT ALL ON TABLE documento_solicitud to estudiante;
 GRANT ALL ON SEQUENCE solicitud_id_solicitud_seq to estudiante;
+GRANT INSERT,UPDATE, SELECT ON TABLE historico_solicitud to estudiante;
+GRANT ALL ON SEQUENCE historico_solicitud_id_historico_solicitud_seq to estudiante;
 
 
 GRANT estudiante to e20131020001;
