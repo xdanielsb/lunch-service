@@ -79,8 +79,6 @@ begin
 end; $$;
 
 
-/* TODO: create beneficiarios */
-
 /* debug:
 select compute_score_solicitud(2);
 select get_cursor_solicitud(1);

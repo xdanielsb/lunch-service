@@ -183,7 +183,7 @@ create table tipo_subsidio_convocatoria(
 create table beneficiario(
   id_beneficiario serial primary key,
   id_tipo_subsidio integer not null,
-  id_solicitud integer not null,
+  id_solicitud integer unique not null,
   foreign key (id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
   foreign key (id_solicitud) references solicitud(id_solicitud)
 );
