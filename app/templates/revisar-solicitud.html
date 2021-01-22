@@ -39,7 +39,7 @@
         </select>
         <label for="notas">Comentarios</label>
         {% set id_comment = 'comentario{}'.format(id_tipo_documento)%}
-        <textarea class="form-control" name="comentario{{id_tipo_documento}}" rows="3">{{comentarios}}</textarea>
+        <textarea class="form-control" name="comentario{{id_tipo_documento}}" rows="3">{% if comentarios %}{{comentarios}}{% endif%}</textarea>
       </div>
     </div>
   </div>
