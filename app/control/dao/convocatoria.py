@@ -125,7 +125,7 @@ class Convocatoria:
                         q2.pop(0)  # remove the first
 
     def get_results(self, id_convocatoria):
-        q = "select * from solicitud as s left join beneficiario as b on b.id_solicitud=s.id_solicitud where id_convocatoria = {}".format(
+        q = "select * from (select id_tipo_subsidio, identificacion, nombre1,  apellido1  puntaje, id_proyecto_curricular  from (select id_estudiante,puntaje,id_tipo_subsidio from solicitud as s left join beneficiario as b on b.id_solicitud=s.id_solicitud where id_convocatoria = {}) as res, estudiante as e where res.id_estudiante = e.id_estudiante) as res2 left join tipo_subsidio as ts2 on res2.id_tipo_subsidio= ts2.id_tipo_subsidio".format(
             id_convocatoria
         )
         return query(q)
