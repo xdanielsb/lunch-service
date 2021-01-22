@@ -12,6 +12,7 @@
   <title>{% block title %}{% endblock %}</title>
 </head>
 <!-- This Template is based in https://www.wrappixel.com/templates/ample-admin-lite/ licensed MIT, adapted y modified by @xdanielsb to the current project-->
+
 <body>
   <div class="preloader">
     <div class="lds-ripple">
@@ -81,11 +82,22 @@
         </div>
       </div>
       <div class="container-fluid">
-        {% for message in get_flashed_messages() %}
-        <div class="alert alert-primary" role="alert"> {{ message }}</div>
-        {% endfor %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="container-fluid">
+              {% for category, message in messages %}
+                {% if category!='message' %}
+                  <div class="alert alert-{{category}}" role="alert"> {{ message }}</div>
+                {% else %}
+                  <div class="alert alert-primary" role="alert"> {{ message }}</div>
+                {%endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
       </div>
+
     </div>
   </div>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
