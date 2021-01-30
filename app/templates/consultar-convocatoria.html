@@ -27,10 +27,10 @@
           {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
             <a href="{{ url_for('convocatoria_delete', id_convocatoria=convocatoria[0]) }}" class="btn btn-danger"> Eliminar </a> 
             <a href="{{ url_for('convocatoria', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Actualizar </a>
-            <a href="{{ url_for('puntaje', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Calcular puntajes </a>
+            <a href="{{ url_for('computar_puntajes', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Calcular puntajes </a>
             <a href="{{ url_for('generar_beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Generar Beneficiarios </a>
           {% endif %}
-        <a href="{{ url_for('beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Consultar Resultados </a>
+        <a href="{{ url_for('consultar_beneficiarios', id_convocatoria=convocatoria[0]) }}" class="btn btn-primary"> Consultar Resultados </a>
       </td>
     </tr>
     {% endfor %}

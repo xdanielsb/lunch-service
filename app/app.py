@@ -3,10 +3,20 @@ import os
 from datetime import date
 
 import psycopg2
-from flask import flash, g, redirect, render_template, request, session, url_for
+from flask import (
+    flash,
+    g,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+    make_response,
+)
 from werkzeug.utils import secure_filename
 from flask_mail import Message
 from . import mail
+import pdfkit
 
 
 from . import app
@@ -20,6 +30,7 @@ from .control import (
     Estudiante,
     Facultad,
     Funcionario,
+    HistoricoSolicitud,
     Periodo,
     PuntajeTipoDocumento,
     Solicitud,
@@ -324,6 +335,7 @@ def revisar_solicitud(id_solicitud=None):
             puntajes=PuntajeTipoDocumento().get_all(),
             estados_documento=EstadoDocumento().get_all(),
             id_solicitud=id_solicitud,
+            historico=HistoricoSolicitud().get(id_solicitud),
             id_estado_solicitud=Solicitud().get_estado(id_solicitud),
         )
     return render_template("listar-solicitudes.html", solicitudes=Solicitud().get_all())
@@ -331,13 +343,22 @@ def revisar_solicitud(id_solicitud=None):
 
 @app.route("/beneficiarios/<id_convocatoria>", methods=["POST", "GET"])
 @login_required
-def beneficiarios(id_convocatoria=None):
-    return {"results": Convocatoria().get_results(id_convocatoria)}
+def consultar_beneficiarios(id_convocatoria=None):
+    res = Convocatoria().get_results(id_convocatoria)
+    try:
+        html = render_template("res_beneficiarios.html",res=res)
+        pdf = pdfkit.from_string(html, False)
+        response = make_response(pdf)
+        response.headers["Content-Type"] = "application/pdf"
+        response.headers["Content-Disposition"] = "inline; filename=res_convocatoria{}.pdf".format(id_convocatoria)
+        return response
+    except OSError:
+        return {"results": res}
 
 
 @app.route("/puntaje/<id_convocatoria>", methods=["POST", "GET"])
 @login_required
-def puntaje(id_convocatoria=None):
+def computar_puntajes(id_convocatoria=None):
     Convocatoria().compute_results(id_convocatoria)
     flash("Los puntajes han sido calculados")
     return redirect(url_for("convocatoria_view"))
@@ -349,7 +370,9 @@ def generar_beneficiarios(id_convocatoria=None):
     # Convocatoria().compute_results(id_convocatoria)
     # flash("Los puntajes han sido calculados")
     Convocatoria().generar_beneficiarios(id_convocatoria)
-    flash("Los beneficiarios han sido generados")
+    flash("Los beneficiarios han sido generados.")
+    Convocatoria().asignar_tickets(id_convocatoria)
+    flash("Se han asignado los tickets de almuerzo y refrigerio.")
     return redirect(url_for("convocatoria_view"))
 
 
@@ -361,6 +384,12 @@ def handle_exception(e):
         "error": e.pgerror,
     }
     return response
+
+
+@app.route("/tickets")
+@login_required
+def mis_tickets():
+    return render_template("tickets.html")
 
 
 @app.route("/send_test_message")

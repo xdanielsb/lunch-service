@@ -14,6 +14,7 @@ from .dao.solicitud import Solicitud
 from .dao.tipo_documento import TipoDocumento
 from .dao.tipo_subsidio import TipoSubsidio
 from .dao.user import User
+from .dao.historico_solicitud import HistoricoSolicitud
 
 __all__ = [
     "get_db",
@@ -31,4 +32,5 @@ __all__ = [
     "TipoDocumento",
     "TipoSubsidio",
     "User",
+    "HistoricoSolicitud",
 ]

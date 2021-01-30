@@ -3,6 +3,32 @@
 
 <form class="text-center" action="{{ url_for('revisar_solicitud') }}" method="POST">
   <input type="hidden" name="id_solicitud" value="{{id_solicitud}}">
+  <h3>Historico Solicitud</h3>
+  {% if historico %}
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Modificado por</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Fecha</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for reg in historico %}
+    <tr>
+      <td>{{reg.modificado_por}}</td>
+      <td>{{reg.estado}}</td>
+      <td>{{reg.fecha}} </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+{% endif%}
+
+
+
+  <h3>Solicitud</h3>
+
   <label for="sel2">Estado Solicitud</label>
   <select name="id_estado_solicitud" class="form-control" id="sel2" value="{{id_estado_solicitud}}">
     {% for estadocon in estados_solicitud %}
