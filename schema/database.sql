@@ -193,9 +193,10 @@ create table ticket(
   id_ticket serial primary key,
   id_beneficiario integer not null,
   fecha_creacion timestamp default current_timestamp,
-  fecha_uso timestamp,
+  fecha_uso date,
   tipo_ticket varchar(15) constraint chk_ticket_tipo_in_defined_types check(tipo_ticket in('refrigerio', 'almuerzo')),
-  foreign key (id_beneficiario) references beneficiario(id_beneficiario)
+  foreign key (id_beneficiario) references beneficiario(id_beneficiario),
+  unique(fecha_uso, tipo_ticket) /* prevent to have lunch two times in one day */
 );
 
 /**************** ACTIVIDADES ************************/

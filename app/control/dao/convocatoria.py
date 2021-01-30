@@ -130,6 +130,9 @@ class Convocatoria:
         )
         return query(q)
 
+    def asignar_tickets(self, id_convocatoria):
+        execute("call assign_tickets({})".format(id_convocatoria))
+
     def delete(self, id_convocatoria):
         q = "delete from convocatoria where id_convocatoria={}".format(id_convocatoria)
         execute(q)
