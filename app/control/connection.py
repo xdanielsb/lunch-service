@@ -2,6 +2,7 @@ import psycopg2
 import psycopg2.extras
 from flask import g
 import os
+import cx_Oracle
 
 
 def get_db(username=None, password=None):
@@ -20,7 +21,10 @@ def get_db(username=None, password=None):
                     password=password if (password is not None) else g.user["password"],
                 )
             if src == "ORACLE":
-                pass
+                g.dbconn = cx_Oracle.connect(
+                    username if (username is not None) else g.user["username"],
+                    password if (password is not None) else g.user["password"],
+                    'localhost/xe')
     except Exception as ex:
         err = str(ex)
         print(err)
