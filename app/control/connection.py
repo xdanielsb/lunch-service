@@ -1,6 +1,7 @@
 import psycopg2
 import psycopg2.extras
 from flask import g
+import os
 
 
 def get_db(username=None, password=None):
@@ -10,12 +11,16 @@ def get_db(username=None, password=None):
     err = None
     try:
         if not hasattr(g, "dbconn"):
-            g.dbconn = psycopg2.connect(
-                host="localhost",
-                database="apoyo_alimentario",
-                user=username if (username is not None) else g.user["username"],
-                password=password if (password is not None) else g.user["password"],
-            )
+            src = os.environ.get("DB_SOURCE")
+            if src is None or src == "POSTGRES":
+                g.dbconn = psycopg2.connect(
+                    host="localhost",
+                    database="apoyo_alimentario",
+                    user=username if (username is not None) else g.user["username"],
+                    password=password if (password is not None) else g.user["password"],
+                )
+            if src == "ORACLE":
+                pass
     except Exception as ex:
         err = str(ex)
         print(err)
