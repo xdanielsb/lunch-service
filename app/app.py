@@ -2,43 +2,20 @@ import functools
 import os
 from datetime import date
 
-import psycopg2
-from flask import (
-    flash,
-    g,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-    make_response,
-)
-from werkzeug.utils import secure_filename
-from flask_mail import Message
-from . import mail
 import pdfkit
+import psycopg2
+from flask import (flash, g, make_response, redirect, render_template, request,
+                   session, url_for)
+from flask_mail import Message
+from werkzeug.utils import secure_filename
 
-
-from . import app
-from .control import (
-    Convocatoria,
-    ConvocatoriaFacultad,
-    ConvocatoriaTipoSubsidio,
-    DocumentoSolicitud,
-    EstadoDocumento,
-    EstadoSolicitud,
-    Estudiante,
-    Facultad,
-    Funcionario,
-    HistoricoSolicitud,
-    Periodo,
-    PuntajeTipoDocumento,
-    Solicitud,
-    TipoDocumento,
-    TipoSubsidio,
-    User,
-    get_db,
-)
+from . import app, mail
+from .control import (Convocatoria, ConvocatoriaFacultad,
+                      ConvocatoriaTipoSubsidio, DocumentoSolicitud,
+                      EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
+                      Funcionario, HistoricoSolicitud, Periodo,
+                      PuntajeTipoDocumento, Solicitud, TipoDocumento,
+                      TipoSubsidio, User, get_db)
 
 
 def allowed_file(filename):
@@ -346,11 +323,13 @@ def revisar_solicitud(id_solicitud=None):
 def consultar_beneficiarios(id_convocatoria=None):
     res = Convocatoria().get_results(id_convocatoria)
     try:
-        html = render_template("res_beneficiarios.html",res=res)
+        html = render_template("res_beneficiarios.html", res=res)
         pdf = pdfkit.from_string(html, False)
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
-        response.headers["Content-Disposition"] = "inline; filename=res_convocatoria{}.pdf".format(id_convocatoria)
+        response.headers[
+            "Content-Disposition"
+        ] = "inline; filename=res_convocatoria{}.pdf".format(id_convocatoria)
         return response
     except OSError:
         return {"results": res}

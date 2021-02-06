@@ -1,8 +1,9 @@
+import os
+
+import cx_Oracle
 import psycopg2
 import psycopg2.extras
 from flask import g
-import os
-import cx_Oracle
 
 
 def get_db(username=None, password=None):
@@ -24,13 +25,25 @@ def get_db(username=None, password=None):
                 g.dbconn = cx_Oracle.connect(
                     username if (username is not None) else g.user["username"],
                     password if (password is not None) else g.user["password"],
-                    'localhost/xe')
+                    "localhost/xe",
+                )
     except Exception as ex:
         err = str(ex)
         print(err)
     return err
 
 
+def adapt_db(func):
+    def inner(q):
+        src = os.environ.get("DB_SOURCE")
+        if src == "ORACLE":
+            q = q.replace(" as ", " ")
+        return func(q)
+
+    return inner
+
+
+@adapt_db
 def query(query):
     if not hasattr(g, "dbconn"):
         get_db()
@@ -42,6 +55,7 @@ def query(query):
     return ans
 
 
+@adapt_db
 def execute(statement):
     if not hasattr(g, "dbconn"):
         get_db()

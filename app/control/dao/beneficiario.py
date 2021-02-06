@@ -1,4 +1,4 @@
-from ..connection import query, execute
+from ..connection import execute, query
 
 
 class Beneficiario:

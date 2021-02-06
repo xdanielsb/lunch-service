@@ -8,13 +8,13 @@ from .dao.estado_solicitud import EstadoSolicitud
 from .dao.estudiante import Estudiante
 from .dao.facultad import Facultad
 from .dao.funcionario import Funcionario
+from .dao.historico_solicitud import HistoricoSolicitud
 from .dao.periodo import Periodo
 from .dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from .dao.solicitud import Solicitud
 from .dao.tipo_documento import TipoDocumento
 from .dao.tipo_subsidio import TipoSubsidio
 from .dao.user import User
-from .dao.historico_solicitud import HistoricoSolicitud
 
 __all__ = [
     "get_db",
