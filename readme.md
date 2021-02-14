@@ -11,8 +11,11 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 #### Database
 ```sh
   $ cd schema
+  # creates the db apoyo_alimentario and connect to the schema using psql
   $ sh utils/init.sh
+  # execute the script to load the db, roles, grants, stored procedures, triggers
   apoyo_alimentario=# \i main.sql
+  # exit of psql
   apoyo_alimentario=# \q
 ```
 
