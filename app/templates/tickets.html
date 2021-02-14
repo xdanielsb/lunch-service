@@ -5,13 +5,63 @@
 {% block subheader %} utilizar {% endblock %}
 
 {% block content %}
-<div class="content">
-  <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-    <div class="card-header">Mi ticket</div>
-    <div class="card-body">
-      <h5 class="card-title">Click para utilizarme</h5>
-      <p class="card-text"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Qrcode_wikipedia_fr_v2clean.png" width="100px" height="100px" /></p>
+  <div class="content">
+    {% if g.user['rol'][0] =='e'  %}
+    
+  <div>
+    <h4> Tickets</h4>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col card text-white text-center bg-primary mb-3 mr-3" style="max-width: 18rem;">
+      <div class="card-header">Almuerzo</div>
+      <div class="card-body">
+        <h5 class="card-title">Ticket disponible</h5>
+        <p class="card-text"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Qrcode_wikipedia_fr_v2clean.png" width="100px" height="100px" /></p>
+        <a href="#" class="btn btn-light">Utilizarme</a>
+      </div>
     </div>
+
+    <div class="col card text-white text-center bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-header">Refrigerio</div>
+      <div class="card-body">
+        <h5 class="card-title">Ticket disponible</h5>
+        <p class="card-text"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Qrcode_wikipedia_fr_v2clean.png" width="100px" height="100px" /></p>
+        <a href="#" class="btn btn-light">Utilizarme</a>
+      </div>
+    </div>
+  </div>
+        {%endif%}
+  
+
+  <div>
+    <div>
+      <h4> Actividades</h4>
+    </div>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Actividad</th>
+          <th scope="col">Duración (horas)</th>
+          <th scope="col">Estado</th>
+          {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
+          <th scope="col">Acción</th>
+          {%endif%}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Ejemplo Actividad</td>
+          <td>2 </td>
+          <td>Completada</td>
+          {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
+          <td><button class="btn btn-primary">Verificar realización</button></td>
+          {%endif%}
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 {% endblock %}

@@ -22,7 +22,7 @@
     {% for id_tipo_documento,obligatorio, nombre  in tipos_documento %}
     <div class="col-md-6 mt-4">
       <label for="{{id_tipo_documento}}"> {{nombre}}{% if obligatorio==1 %} (requerido) {% endif %} </label>
-      <input type="file" name="{{id_tipo_documento}}" id="{{id_tipo_documento}}" placeholder="Seleccionar Archivo">
+      <input type="file" name="{{id_tipo_documento}}" id="{{id_tipo_documento}}" placeholder="Seleccionar Archivo" {% if obligatorio==1 %} required {% endif %}>
     </div>
     {% endfor %}
   </div>

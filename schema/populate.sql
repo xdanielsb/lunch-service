@@ -54,6 +54,15 @@ insert into facultad( id_facultad, nombre) values (2,'ingenieria');
 insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) values ( 1, 1, 'electronica');
 insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) values ( 2, 2, 'industrial');
 
+/** Estado Solicitud **/
+
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 1, 'en progreso', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 2, 'completada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 3, 'rechazada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 4, 'cancelada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 5, 'aprobada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6, 'requiere cambios', '');
+
 
 /** Tipo Subsidio **/
 insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, puntos_requeridos, horas_semanales_a_cumplir) values(1, 'tipo A',100, 90, 30);
@@ -70,4 +79,15 @@ insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promed
 insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(1, '1020141478', 'Kevin', 'Ayala', 'kevin@correo.udistrital.edu.co');
 insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(2, '1010121110', 'Juana', 'Dominga', 'juana@correo.udistrital.edu.co');
 insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(3, '1019742929', 'Juan', 'De Maria', 'juan@correo.udistrital.edu.co');
+
+
+/** Estado Actividad **/
+insert into  estado_actividad(id_estado_actividad, nombre) values(1, 'Por completar');
+insert into  estado_actividad(id_estado_actividad, nombre) values(2, 'Completada');
+
+
+/**  Actividad **/
+insert into actividad(nombre, horas_equivalentes) values ('Servicio social bienestar social', 2);
+insert into actividad(nombre, horas_equivalentes) values ('Servicio social coordinación de ingeniería', 1);
+insert into actividad(nombre, horas_equivalentes) values ('Servicio social decanatura', 3);
 

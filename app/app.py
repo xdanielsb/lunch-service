@@ -10,12 +10,12 @@ from flask_mail import Message
 from werkzeug.utils import secure_filename
 
 from . import app, mail
-from .control import (Convocatoria, ConvocatoriaFacultad,
-                      ConvocatoriaTipoSubsidio, DocumentoSolicitud,
-                      EstadoDocumento, EstadoSolicitud, Estudiante, Facultad,
-                      Funcionario, HistoricoSolicitud, Periodo,
-                      PuntajeTipoDocumento, Solicitud, TipoDocumento,
-                      TipoSubsidio, User, get_db)
+from .control import (ActividadBeneficiario, Beneficiario, Convocatoria,
+                      ConvocatoriaFacultad, ConvocatoriaTipoSubsidio,
+                      DocumentoSolicitud, EstadoDocumento, EstadoSolicitud,
+                      Estudiante, Facultad, Funcionario, HistoricoSolicitud,
+                      Periodo, PuntajeTipoDocumento, Solicitud, Ticket,
+                      TipoDocumento, TipoSubsidio, User, get_db)
 
 
 def allowed_file(filename):
@@ -34,8 +34,29 @@ def load_logged_in_user():
             "password": password,
             "rol": user_id,
         }
+        convocatoria = Convocatoria().get_current_active(
+            fecha_actual=date.today().strftime("%Y-%m-%d")
+        )
+        if convocatoria is not None:
+            g.user["current_convocatoria"] = convocatoria["id_convocatoria"]
+            g.user["current_periodo"] = convocatoria["id_periodo"]
+
         if g.user["rol"].startswith("e"):
             g.user.update(Estudiante().get(g.user["rol"][1:]))
+            if convocatoria is not None:
+                solicitud = Solicitud().get_current(
+                    data={
+                        "id_convocatoria": convocatoria["id_convocatoria"],
+                        "id_estudiante": g.user["id_estudiante"],
+                    }
+                )
+                if solicitud is not None:
+                    g.user["current_solicitud"] = solicitud["id_solicitud"]
+
+                beneficiario = Beneficiario().get(solicitud["id_solicitud"])
+                if beneficiario is not None:
+                    g.user["current_beneficiario"] = beneficiario["id_beneficiario"]
+
         if g.user["rol"].startswith("f"):
             g.user.update(Funcionario().get(g.user["rol"][1:]))
 
@@ -268,14 +289,11 @@ def solicitud():
 @login_required
 @app.route("/consultar_solicitud")
 def consultar_solicitud():
-    if g.user.get("id_estudiante") is not None:
-        solicitudes = Solicitud().get_all2()
-        for solicitud in solicitudes:
-            if solicitud["id_estudiante"] == g.user["id_estudiante"]:
-                return redirect(
-                    url_for("revisar_solicitud", id_solicitud=solicitud["id_solicitud"])
-                )
-    flash("Su usuario no tiene solicitudes activas")
+    if g.user.get("current_solicitud") is not None:
+        return redirect(
+            url_for("revisar_solicitud", id_solicitud=g.user["current_solicitud"])
+        )
+    flash("Su usuario no tiene solicitudes creadas")
     return redirect(url_for("home"))
 
 
@@ -368,6 +386,16 @@ def handle_exception(e):
 @app.route("/tickets")
 @login_required
 def mis_tickets():
+    ctx = {}
+    if g.user.get("current_beneficiario") is not None:
+        id_beneficiario = g.user.get("current_beneficiario")
+        ActividadBeneficiario().get(id_beneficiario)
+        t_almuerzo = Ticket().get_ticket_almuerzo(g.user.get("current_beneficiario"))
+        t_refrigerio = Ticket().get_ticket_refrigerio(
+            g.user.get("current_beneficiario")
+        )
+        return render_template("tickets.html")
+    flash("No tienes asignado un beneficiario")
     return render_template("tickets.html")
 
 

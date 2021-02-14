@@ -63,7 +63,12 @@
             {% if g.user['rol'][0] =='e' %}
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('consultar_solicitud') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Consultar Solicitud</span></a></li>
             {% endif %}
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('mis_tickets') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Mis Tickets</span></a></li>
+            {% if g.user['rol'][0] =='e' %}
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('mis_tickets') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Tickets & Actividades</span></a></li>
+            {% endif %}
+            {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url_for('mis_tickets') }}" aria-expanded="false"><i class="fa fa-columns" aria-hidden="true"></i><span class="hide-menu">Validar Actividades</span></a></li>
+            {% endif %}
           </ul>
         </nav>
       </div>

@@ -94,10 +94,6 @@ class Convocatoria:
             )
         )
 
-        print(q1, type(q1[0]))
-        print(q2)
-        print(q3)
-        print(q4)
         # here we go!, gimme luck !
         for id_solicitud, id_facultad in q1:
             if len(q2) > 0:  # is there any lunches left to assign?

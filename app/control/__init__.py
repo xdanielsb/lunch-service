@@ -1,4 +1,6 @@
 from .connection import get_db
+from .dao.actividad_beneficiario import ActividadBeneficiario
+from .dao.beneficiario import Beneficiario
 from .dao.convocatoria import Convocatoria
 from .dao.convocatoria_facultad import ConvocatoriaFacultad
 from .dao.convocatoria_tipo_subsidio import ConvocatoriaTipoSubsidio
@@ -12,11 +14,13 @@ from .dao.historico_solicitud import HistoricoSolicitud
 from .dao.periodo import Periodo
 from .dao.puntaje_tipo_documento import PuntajeTipoDocumento
 from .dao.solicitud import Solicitud
+from .dao.ticket import Ticket
 from .dao.tipo_documento import TipoDocumento
 from .dao.tipo_subsidio import TipoSubsidio
 from .dao.user import User
 
 __all__ = [
+    "ActividadBeneficiario",
     "get_db",
     "Convocatoria",
     "ConvocatoriaFacultad",
@@ -26,9 +30,11 @@ __all__ = [
     "EstadoSolicitud",
     "Estudiante",
     "Facultad",
+    "Funcionario",
     "Periodo",
     "PuntajeTipoDocumento",
     "Solicitud",
+    "Ticket",
     "TipoDocumento",
     "TipoSubsidio",
     "User",

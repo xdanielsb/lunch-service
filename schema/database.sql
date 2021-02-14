@@ -5,7 +5,6 @@
 
 
 /**************** USERS AUTHENTICATION ************************/
-drop table if exists rol;
 drop table if exists periodo;
 drop table if exists convocatoria;
 drop table if exists estado_documento;
@@ -106,12 +105,7 @@ create table estado_solicitud(
   estado varchar(30) not null,
   descripcion varchar(200)
 );
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 1, 'en progreso', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 2, 'completada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 3, 'rechazada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 4, 'cancelada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 5, 'aprobada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6, 'requiere cambios', '');
+
 
 create table solicitud(
   id_solicitud serial primary key,
@@ -184,6 +178,7 @@ create table tipo_subsidio_convocatoria(
 create table beneficiario(
   id_beneficiario serial primary key,
   id_tipo_subsidio integer not null,
+  cantidad_tickets_asignados integer default 0,
   id_solicitud integer unique not null,
   foreign key (id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
   foreign key (id_solicitud) references solicitud(id_solicitud)
@@ -203,16 +198,19 @@ create table ticket(
 
 create table estado_actividad(
   id_estado_actividad serial primary key,
-  nombre varchar(200) not null,
+  nombre varchar(20) not null,
   descripcion varchar(2000)
 );
 
+
+
 create table actividad(
   id_actividad serial primary key,
-  nombre varchar(200) not null,
-  descripcion varchar(1000),
-  horas_equivalentes smallint not null constraint chk_actividad_horas_positive check(horas_equivalentes >=0)
+  nombre varchar(50) not null,
+  horas_equivalentes smallint not null constraint chk_actividad_horas_positive check(horas_equivalentes >=0),
+  descripcion varchar(1000)
 );
+
 
 create table actividad_beneficiario(
   id_actividad_beneficiario serial primary key,
@@ -224,17 +222,7 @@ create table actividad_beneficiario(
   foreign key (id_beneficiario) references beneficiario(id_beneficiario)
 );
 
-/**************** PARAMETROS ************************/
-
-create table parametro(
-  id_parametro serial primary key,
-  nombre_tabla varchar(30),
-  clave varchar(100),
-  valor varchar(100)
-);
-
 /**************** FUNCIONARIOS ************************/
-
 create table funcionario(
   id_funcionario serial primary key,
   identificacion varchar(30) unique not null,
