@@ -74,6 +74,7 @@ insert into tipo_subsidio(id_tipo_subsidio, nombre, porcentaje_subsidiado, punto
 insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (1, '20131020001', 'Alberto', 'Sanyas', 4.5, 8, 'alberto@correo.udistrital.edu.co', 2);
 insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (2, '20132005002', 'Gabriela', 'Harris', 5, 8, 'gabriela@correo.udistrital.edu.co', 2);
 insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (3, '20131002001', 'Bill', 'Ribont', 3.9, 2, 'bill@correo.udistrital.edu.co', 1);
+insert into estudiante(id_estudiante, identificacion, nombre1, apellido1, promedio, matriculas_restantes, email, id_proyecto_curricular) values (4, '20131020016', 'Daniel', 'Santos', 4.6, 2, 'dfsantosb@correo.udistrital.edu.co', 1);
 
 /** Funcionario **/
 insert into funcionario(id_funcionario, identificacion, nombre1, apellido1, email) values(1, '1020141478', 'Kevin', 'Ayala', 'kevin@correo.udistrital.edu.co');

@@ -18,12 +18,17 @@ GRANT ALL ON TABLE estado_solicitud to admin;
 GRANT ALL ON TABLE estudiante to admin;
 GRANT ALL ON TABLE proyecto_curricular to admin;
 GRANT ALL ON TABLE actividad_beneficiario to admin;
+GRANT ALL ON TABLE ticket to admin;
+GRANT ALL ON TABLE actividad to admin; 
+GRANT ALL ON TABLE estado_actividad to admin; 
 
 
+GRANT ALL ON SEQUENCE ticket_id_ticket_seq to admin;
 GRANT ALL ON TABLE beneficiario to admin;
 GRANT ALL ON SEQUENCE beneficiario_id_beneficiario_seq to admin;
 GRANT ALL ON TABLE historico_solicitud to admin;
 GRANT ALL ON SEQUENCE historico_solicitud_id_historico_solicitud_seq to admin;
+GRANT ALL ON SEQUENCE actividad_beneficiario_id_actividad_beneficiario_seq to admin;
 
 
 /*creadorUsuarios*/
@@ -52,10 +57,15 @@ GRANT ALL ON SEQUENCE beneficiario_id_beneficiario_seq to asistente;
 GRANT ALL ON SEQUENCE historico_solicitud_id_historico_solicitud_seq to asistente;
 GRANT ALL ON TABLE actividad_beneficiario to asistente;
 GRANT INSERT,UPDATE, SELECT ON TABLE historico_solicitud to asistente;
+GRANT ALL ON TABLE ticket to asistente;
 
+GRANT ALL ON SEQUENCE ticket_id_ticket_seq to asistente;
+GRANT ALL ON TABLE actividad to asistente
+GRANT SELECT ON TABLE estado_actividad to asistente
 
 GRANT ALL ON SEQUENCE convocatoria_id_convocatoria_seq to asistente;
 
+GRANT ALL ON SEQUENCE actividad_beneficiario_id_actividad_beneficiario_seq to asistente;
 /*estudiante*/
 GRANT SELECT ON TABLE periodo to estudiante;
 GRANT SELECT ON TABLE estado_documento to estudiante;
@@ -74,9 +84,17 @@ GRANT ALL ON TABLE documento_solicitud to estudiante;
 GRANT ALL ON SEQUENCE solicitud_id_solicitud_seq to estudiante;
 GRANT INSERT,UPDATE, SELECT ON TABLE historico_solicitud to estudiante;
 GRANT ALL ON SEQUENCE historico_solicitud_id_historico_solicitud_seq to estudiante;
+GRANT ALL ON SEQUENCE actividad_beneficiario_id_actividad_beneficiario_seq to asistente;
+
+GRANT ALL ON TABLE ticket to estudiante;
+GRANT SELECT ON TABLE actividad to estudiante;
+GRANT SELECT ON TABLE estado_actividad to estudiante;
+
 
 
 GRANT estudiante to e20131020001;
 GRANT estudiante to e20132005002;
 GRANT asistente to f1020141478;
 GRANT asistente to f1010121110;
+
+

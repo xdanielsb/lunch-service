@@ -33,3 +33,9 @@ A simple prototype application to manage the logic behind restaurant tickets in 
  $ cd app/
  $ python3 -m pytest tests
 ```
+
+
+#### Email
+
+Configure  env variable MAIL_USERNAME & MAIL_PASSWORD to be able to send 
+emails.

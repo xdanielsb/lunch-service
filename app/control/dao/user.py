@@ -17,20 +17,22 @@ class User:
         ans = True
         if send_message is not None:
             subject = "Bienvenido a apoyo alimentario"
-            sender = "admin_email"  # TODO: env variable
             message = """
                 Un saludo cordial,
                 {} {},
+
                 Para acceder al sistema de apoyo alimentario de la
-                Universidad Distrital FJC, sus credenciales son las
+                Universidad Distrital, sus credenciales son las
                 siguientes:
-                 - Nombre de usuario = {}
+                 - Nombre de usuario = e{}
                  - Contraseña = {}
                 ¡No olvides cambiar tu contraseña!
+
+
                 Atentamente,
-                Equipo Apoyo alementario
+                Equipo Apoyo alimentario
                 """.format(
                 stu["nombre1"], stu["apellido1"], stu["identificacion"], password
             )
-            ans = send_email(subject, sender, stu["email"], message)
+            ans = send_email(subject, stu["email"], message)
         return ans

@@ -25,7 +25,7 @@
       <div class="card-header">Refrigerio</div>
       <div class="card-body">
         <h5 class="card-title">Ticket disponible</h5>
-        <p class="card-text"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Qrcode_wikipedia_fr_v2clean.png" width="100px" height="100px" /></p>
+        <p class="card-text"><img style="transform: rotate(90deg);" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Qrcode_wikipedia_fr_v2clean.png" width="100px" height="100px" /></p>
         <a href="#" class="btn btn-light">Utilizarme</a>
       </div>
     </div>
@@ -51,15 +51,19 @@
         </tr>
       </thead>
       <tbody>
+        {% if actividades %}
+        {% for act in actividades %}
         <tr>
-          <th scope="row">1</th>
-          <td>Ejemplo Actividad</td>
-          <td>2 </td>
-          <td>Completada</td>
+          <th scope="row"> - </th>
+          <td>{{act.nombre}}</td>
+          <td>{{act.horas_equivalentes}} </td>
+          <td>{{act.estado}}</td>
           {% if g.user['rol'][0] =='f' or g.user['rol']=='admin' %}
           <td><button class="btn btn-primary">Verificar realización</button></td>
           {%endif%}
         </tr>
+        {% endfor %}
+      {% endif %}
       </tbody>
     </table>
   </div>

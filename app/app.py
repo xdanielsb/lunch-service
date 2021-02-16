@@ -52,10 +52,9 @@ def load_logged_in_user():
                 )
                 if solicitud is not None:
                     g.user["current_solicitud"] = solicitud["id_solicitud"]
-
-                beneficiario = Beneficiario().get(solicitud["id_solicitud"])
-                if beneficiario is not None:
-                    g.user["current_beneficiario"] = beneficiario["id_beneficiario"]
+                    beneficiario = Beneficiario().get(solicitud["id_solicitud"])
+                    if beneficiario is not None:
+                        g.user["current_beneficiario"] = beneficiario["id_beneficiario"]
 
         if g.user["rol"].startswith("f"):
             g.user.update(Funcionario().get(g.user["rol"][1:]))
@@ -83,7 +82,7 @@ def signup():
         ans = Estudiante().get_by_email(email)
         if len(ans) == 0:
             flash("Estudiante no existe en la base de datos.")
-        elif User().create(ans):
+        elif User().create(ans, send_message=True):
             flash(
                 "Hemos enviado a tu correo institucional las credenciales de accesso."
             )
@@ -386,29 +385,19 @@ def handle_exception(e):
 @app.route("/tickets")
 @login_required
 def mis_tickets():
-    ctx = {}
     if g.user.get("current_beneficiario") is not None:
+        ctx = {}
         id_beneficiario = g.user.get("current_beneficiario")
-        ActividadBeneficiario().get(id_beneficiario)
+        actividades = ActividadBeneficiario().get(id_beneficiario)
         t_almuerzo = Ticket().get_ticket_almuerzo(g.user.get("current_beneficiario"))
         t_refrigerio = Ticket().get_ticket_refrigerio(
             g.user.get("current_beneficiario")
         )
-        return render_template("tickets.html")
+        ctx["talmuerzo"] = t_almuerzo
+        ctx["trefrigerio"] = t_refrigerio
+        return render_template("tickets.html", actividades=actividades)
     flash("No tienes asignado un beneficiario")
     return render_template("tickets.html")
-
-
-@app.route("/send_test_message")
-def send_test_message():
-    msg = Message(
-        "Hello",
-        sender=os.environ.get("MAIL_USERNAME"),
-        recipients=[os.environ.get("MAIL_USERNAME2")],
-    )
-    msg.body = "Hello Flask message sent from Flask-Mail"
-    mail.send(msg)
-    return "Sent"
 
 
 if __name__ == "__main__":
