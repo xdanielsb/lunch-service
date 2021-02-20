@@ -1,21 +1,60 @@
+"""
+    Copyright (C) 2021  Daniel Santos
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
+"""
+
 import functools
 import os
 from datetime import date
 
 import pdfkit
 import psycopg2
-from flask import (flash, g, make_response, redirect, render_template, request,
-                   session, url_for)
+from flask import (
+    flash,
+    g,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from flask_mail import Message
 from werkzeug.utils import secure_filename
 
 from . import app, mail
-from .control import (ActividadBeneficiario, Beneficiario, Convocatoria,
-                      ConvocatoriaFacultad, ConvocatoriaTipoSubsidio,
-                      DocumentoSolicitud, EstadoDocumento, EstadoSolicitud,
-                      Estudiante, Facultad, Funcionario, HistoricoSolicitud,
-                      Periodo, PuntajeTipoDocumento, Solicitud, Ticket,
-                      TipoDocumento, TipoSubsidio, User, get_db)
+from .control import (
+    ActividadBeneficiario,
+    Beneficiario,
+    Convocatoria,
+    ConvocatoriaFacultad,
+    ConvocatoriaTipoSubsidio,
+    DocumentoSolicitud,
+    EstadoDocumento,
+    EstadoSolicitud,
+    Estudiante,
+    Facultad,
+    Funcionario,
+    HistoricoSolicitud,
+    Periodo,
+    PuntajeTipoDocumento,
+    Solicitud,
+    Ticket,
+    TipoDocumento,
+    TipoSubsidio,
+    User,
+    get_db,
+)
 
 
 def allowed_file(filename):
