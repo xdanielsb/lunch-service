@@ -39,3 +39,8 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 
 Configure  env variable MAIL_USERNAME & MAIL_PASSWORD to be able to send 
 emails.
+
+
+#### Domain Model
+
+<a href="schema/DomainModel.png"><img src="schema/DomainModel.png"></a>
