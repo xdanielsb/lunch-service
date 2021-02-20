@@ -60,8 +60,8 @@ GRANT INSERT,UPDATE, SELECT ON TABLE historico_solicitud to asistente;
 GRANT ALL ON TABLE ticket to asistente;
 
 GRANT ALL ON SEQUENCE ticket_id_ticket_seq to asistente;
-GRANT ALL ON TABLE actividad to asistente
-GRANT SELECT ON TABLE estado_actividad to asistente
+GRANT ALL ON TABLE actividad to asistente;
+GRANT SELECT ON TABLE estado_actividad to asistente;
 
 GRANT ALL ON SEQUENCE convocatoria_id_convocatoria_seq to asistente;
 

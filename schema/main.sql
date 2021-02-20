@@ -1,7 +1,10 @@
-\i database.sql
-\i populate.sql
-\i roles.sql
-\i grants.sql
+ -- warning: this drop all data.
+\i drop_database.sql
+ -- create elements
+\i create_database.sql
+\i populate_database.sql
+\i create_roles.sql
+\i configure_grants.sql
 \i sproc_puntaje.sql
-\i triggers.sql
+\i create_triggers.sql
 \i sproc_tickets.sql
