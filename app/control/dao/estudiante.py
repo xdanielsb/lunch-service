@@ -8,7 +8,6 @@ class Estudiante:
 
     def get_by_email(self, email):
         q = "select * from estudiante where email = '{}'".format(email)
-        print(q)
         ans = query(q)
         if len(ans) > 0:
             return ans[0]

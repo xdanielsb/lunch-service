@@ -6,36 +6,41 @@
   <h3>Historico Solicitud</h3>
   {% if historico %}
   <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Modificado por</th>
-      <th scope="col">Estado</th>
-      <th scope="col">Fecha</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for reg in historico %}
-    <tr>
-      <td>{{reg.modificado_por}}</td>
-      <td>{{reg.estado}}</td>
-      <td>{{reg.fecha}} </td>
-    </tr>
-  {% endfor %}
-  </tbody>
+    <thead>
+      <tr>
+        <th scope="col">Modificado por</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for reg in historico %}
+      <tr>
+        <td>{{reg.modificado_por}}</td>
+        <td>{{reg.estado}}</td>
+        <td>{{reg.fecha | formatdatetime}} </td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
-{% endif%}
+  {% endif%}
 
 
 
   <h3>Solicitud</h3>
 
   <label for="sel2">Estado Solicitud</label>
-  <select name="id_estado_solicitud" class="form-control" id="sel2" value="{{id_estado_solicitud}}">
-    {% for estadocon in estados_solicitud %}
-    <option value="{{estadocon[0]}}" {% if estadocon[0] == id_estado_solicitud %} selected {%endif%}>{{ estadocon[1] }} </option>
-    {% endfor %}
-  </select>
+  <div class="form-group row justify-content-md-center">
+    <div class="col-xs-6">
+      <select name="id_estado_solicitud" class="form-control input-sm mb-4" id="sel2" value="{{id_estado_solicitud}}">
+        {% for estadocon in estados_solicitud %}
+        <option value="{{estadocon[0]}}" {% if estadocon[0] == id_estado_solicitud %} selected {%endif%}>{{ estadocon[1] }} </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
 
+  <h5>Documentos solicitud</h5>
   {% for  id_tipo_documento, nombre, url, id_estado_documento, comentarios, current_id_puntaje_tipo_doc in documentos_solicitud %}
   <div class="row">
     <div class="col md-6">

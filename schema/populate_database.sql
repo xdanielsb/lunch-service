@@ -57,11 +57,10 @@ insert into proyecto_curricular(id_proyecto_curricular, id_facultad, nombre) val
 /** Estado Solicitud **/
 
 insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 1, 'en progreso', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 2, 'completada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 3, 'rechazada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 4, 'cancelada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 5, 'aprobada', '');
-insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 6, 'requiere cambios', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 2, 'rechazada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 3, 'cancelada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 4, 'aprobada', '');
+insert into estado_solicitud(id_estado_solicitud, estado, descripcion) values( 5, 'requiere cambios', '');
 
 
 /** Tipo Subsidio **/

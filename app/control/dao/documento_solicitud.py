@@ -22,5 +22,4 @@ class DocumentoSolicitud:
             data["id_solicitud"],
             data["id_tipo_documento"],
         )
-        print(q)
         execute(q)

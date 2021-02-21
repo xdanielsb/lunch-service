@@ -11,5 +11,4 @@ class PuntajeTipoDocumento:
             res[id_tipo_documento].append(
                 [nombre, id_tipo_documento, puntaje, id_puntaje_tipo_documento]
             )
-        print(res)
         return res
