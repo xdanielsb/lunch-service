@@ -18,10 +18,12 @@ from .dao.ticket import Ticket
 from .dao.tipo_documento import TipoDocumento
 from .dao.tipo_subsidio import TipoSubsidio
 from .dao.user import User
+from .services import generate_qr_image, send_email
 
 __all__ = [
     "ActividadBeneficiario",
     "get_db",
+    "generate_qr_image",
     "Convocatoria",
     "ConvocatoriaFacultad",
     "ConvocatoriaTipoSubsidio",

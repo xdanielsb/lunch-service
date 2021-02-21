@@ -19,42 +19,18 @@ from datetime import date
 
 import pdfkit
 import psycopg2
-from flask import (
-    flash,
-    g,
-    make_response,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
-from flask_mail import Message
+from flask import (flash, g, make_response, redirect, render_template, request,
+                   session, url_for)
 from werkzeug.utils import secure_filename
 
-from . import app, mail
-from .control import (
-    ActividadBeneficiario,
-    Beneficiario,
-    Convocatoria,
-    ConvocatoriaFacultad,
-    ConvocatoriaTipoSubsidio,
-    DocumentoSolicitud,
-    EstadoDocumento,
-    EstadoSolicitud,
-    Estudiante,
-    Facultad,
-    Funcionario,
-    HistoricoSolicitud,
-    Periodo,
-    PuntajeTipoDocumento,
-    Solicitud,
-    Ticket,
-    TipoDocumento,
-    TipoSubsidio,
-    User,
-    get_db,
-)
+from . import app
+from .control import (ActividadBeneficiario, Beneficiario, Convocatoria,
+                      ConvocatoriaFacultad, ConvocatoriaTipoSubsidio,
+                      DocumentoSolicitud, EstadoDocumento, EstadoSolicitud,
+                      Estudiante, Facultad, Funcionario, HistoricoSolicitud,
+                      Periodo, PuntajeTipoDocumento, Solicitud, Ticket,
+                      TipoDocumento, TipoSubsidio, User, generate_qr_image,
+                      get_db)
 
 
 def allowed_file(filename):
@@ -424,8 +400,8 @@ def handle_exception(e):
 @app.route("/tickets")
 @login_required
 def mis_tickets():
+    ctx = {}
     if g.user.get("current_beneficiario") is not None:
-        ctx = {}
         id_beneficiario = g.user.get("current_beneficiario")
         actividades = ActividadBeneficiario().get(id_beneficiario)
         t_almuerzo = Ticket().get_ticket_almuerzo(g.user.get("current_beneficiario"))
@@ -434,9 +410,15 @@ def mis_tickets():
         )
         ctx["talmuerzo"] = t_almuerzo
         ctx["trefrigerio"] = t_refrigerio
-        return render_template("tickets.html", actividades=actividades)
+        ctx["qr_talmuerzo"] = generate_qr_image(
+            t_almuerzo["id_ticket"], id_beneficiario
+        )
+        ctx["qr_refrigerio"] = generate_qr_image(
+            t_refrigerio["id_ticket"], id_beneficiario
+        )
+        return render_template("tickets.html", actividades=actividades, ctx=ctx)
     flash("No tienes asignado un beneficiario")
-    return render_template("tickets.html")
+    return render_template("tickets.html", ctx=ctx)
 
 
 if __name__ == "__main__":
