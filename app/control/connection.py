@@ -13,7 +13,8 @@ def get_db(username=None, password=None):
     err = None
     try:
         if not hasattr(g, "dbconn"):
-            src = os.environ.get("DB_SOURCE")
+            #src = os.environ.get("DB_SOURCE")
+            src = "ORACLE"
             if src is None or src == "POSTGRES":
                 g.dbconn = psycopg2.connect(
                     host="localhost",
@@ -26,6 +27,7 @@ def get_db(username=None, password=None):
                     username if (username is not None) else g.user["username"],
                     password if (password is not None) else g.user["password"],
                     "localhost/xe",
+                    #"52.206.143.56/xe",
                 )
     except Exception as ex:
         err = str(ex)
@@ -35,7 +37,8 @@ def get_db(username=None, password=None):
 
 def adapt_db(func):
     def inner(q):
-        src = os.environ.get("DB_SOURCE")
+        #src = os.environ.get("DB_SOURCE")
+        src = "ORACLE"
         if src == "ORACLE":
             q = q.replace(" as ", " ")
         return func(q)
@@ -48,7 +51,8 @@ def query(query):
     if not hasattr(g, "dbconn"):
         get_db()
     conn = g.dbconn
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur = conn.cursor()
     cur.execute(query)
     ans = [row for row in cur]
     cur.close()

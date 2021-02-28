@@ -1,0 +1,1 @@
+CREATE PUBLIC SYNONYM CONVOCATORIA FOR admin.convocatoria;
