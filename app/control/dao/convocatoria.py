@@ -1,4 +1,9 @@
+import os
+
+from flask import render_template
+
 from ..connection import execute, query
+from ..services import send_email
 from .beneficiario import Beneficiario
 
 
@@ -66,8 +71,9 @@ class Convocatoria:
     def generar_beneficiarios(self, id_convocatoria):
         self.compute_results(id_convocatoria)
         # get the best solicitudes(id_solicitud, id_facultad) from best to worst for a given convocatoria (order by puntaje desc)
+        # id_estado_solicitud = 4, hacer un join para decir estado=aprobado
         q1 = query(
-            "select id_solicitud, id_facultad from solicitud as s, estudiante as e, proyecto_curricular as p  where id_convocatoria = {} and s.id_estudiante=e.id_estudiante and p.id_proyecto_curricular=e.id_proyecto_curricular order by puntaje desc".format(
+            "select id_solicitud, id_facultad, e.email, e.nombre1, e.apellido1 as email_aprob from solicitud as s, estudiante as e, proyecto_curricular as p  where id_estado_solicitud=4 and id_convocatoria = {} and s.id_estudiante=e.id_estudiante and p.id_proyecto_curricular=e.id_proyecto_curricular order by puntaje desc".format(
                 id_convocatoria
             )
         )
@@ -95,7 +101,12 @@ class Convocatoria:
         )
 
         # here we go!, gimme luck !
-        for id_solicitud, id_facultad in q1:
+        for id_solicitud, id_facultad, email, nombre1, apellido1 in q1:
+            data_email = {
+                "nombre1": nombre1,
+                "apellido1": apellido1,
+                "email": email,
+            }
             if len(q2) > 0:  # is there any lunches left to assign?
                 # find the tipo subsidio to assign, from best to worst
                 tipo_subsidio_to_assign = q2[0]["id_tipo_subsidio"]
@@ -113,6 +124,8 @@ class Convocatoria:
                         "id_solicitud": id_solicitud,
                     }
                     Beneficiario().create(data)
+
+                    self.send_email_new_beneficiario(data_email)
                     q4[id_facultad] = (
                         q4[id_facultad] - 1
                     )  # decrease the places in that fact
@@ -120,8 +133,14 @@ class Convocatoria:
                     if q3[tipo_subsidio_to_assign] == 0:
                         q2.pop(0)  # remove the first
 
+    def send_email_new_beneficiario(self, data):
+        if os.environ.get("MAIL_USERNAME") is not None:
+            subject = "Tu solicitud ha sido aprobada - Apoyo alimentario"
+            message = render_template("emailbeneficiario.html", user=data)
+            send_email(subject, data["email"], message)
+
     def get_results(self, id_convocatoria):
-        q = "select * from (select id_tipo_subsidio, identificacion, nombre1,  apellido1  puntaje, id_proyecto_curricular  from (select id_estudiante,puntaje,id_tipo_subsidio from solicitud as s left join beneficiario as b on b.id_solicitud=s.id_solicitud where id_convocatoria = {}) as res, estudiante as e where res.id_estudiante = e.id_estudiante) as res2 left join tipo_subsidio as ts2 on res2.id_tipo_subsidio= ts2.id_tipo_subsidio".format(
+        q = "select * from (select nombre1, apellido1, puntaje, pc.nombre as proyecto_curricular, identificacion, s.id_solicitud  from estudiante as e, solicitud as s, convocatoria as c, proyecto_curricular as pc where e.id_proyecto_curricular = pc.id_proyecto_curricular and  e.id_estudiante=s.id_estudiante and c.id_convocatoria=s.id_convocatoria and c.id_convocatoria={}) as r1 left join (select b1.id_solicitud, b2.nombre as ntipo_subsidio  from beneficiario as b1, tipo_subsidio as b2 where b1.id_tipo_subsidio=b2.id_tipo_subsidio ) as  r2 on r1.id_solicitud=r2.id_solicitud".format(
             id_convocatoria
         )
         return query(q)

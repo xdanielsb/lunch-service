@@ -13,20 +13,30 @@
   </div>
   <div class="row d-flex justify-content-center">
     <div class="col card text-white text-center bg-primary mb-3 mr-3" style="max-width: 18rem;">
-      <div class="card-header">Almuerzo</div>
+      <div class="card-header">Ticket almuerzo</div>
       <div class="card-body">
-        <h5 class="card-title">Ticket disponible</h5>
-        <p class="card-text"><img src="data:image/jpg;base64,{{ctx['qr_talmuerzo']}}" width="100px" height="100px" /></p>
-        <a href="#" class="btn btn-light">Utilizarme</a>
+        <p class="card-text"><img src="data:image/jpg;base64,{{ctx['qr_talmuerzo']}}" width="150px" height="150px" /></p>
+        {%if ctx['talmuerzo']['fecha_uso'] %}
+          Fecha uso: <p> {{ctx['talmuerzo']['fecha_uso']}} </p>
+        {% else %}
+          <br>
+          Ticket disponible
+        {% endif %}
+        <!-- <a onclick="window.location.href='{{ url_for( 'utilizar_ticket',  id_ticket=ctx['id_almuerzo']) }}';" class="btn btn-light">Utilizar</a> -->
       </div>
     </div>
 
-    <div class="col card text-white text-center bg-primary mb-3" style="max-width: 18rem;">
-      <div class="card-header">Refrigerio</div>
+    <div class="col card text-white text-center bg-secondary mb-3" style="max-width: 18rem;">
+      <div class="card-header">Ticket refrigerio</div>
       <div class="card-body">
-        <h5 class="card-title">Ticket disponible</h5>
-        <p class="card-text"><img  src="data:image/jpg;base64,{{ctx['qr_refrigerio']}}" width="100px" height="100px" /></p>
-        <a href="#" class="btn btn-light">Utilizarme</a>
+        <p class="card-text"><img  src="data:image/jpg;base64,{{ctx['qr_refrigerio']}}" width="150px" height="150px" /></p>
+        {%if ctx['trefrigerio']['fecha_uso'] %}
+          Fecha uso: <p> {{ctx['trefrigerio']['fecha_uso']}} </p>
+        {% else %}
+          <br>
+          Ticket disponible
+        {% endif %}
+        <!-- <a onclick="window.location.href='{{ url_for( 'utilizar_ticket',  id_ticket=ctx['id_refrigerio']) }}';" class="btn btn-light">Utilizar</a> -->
       </div>
     </div>
   </div>

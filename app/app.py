@@ -48,6 +48,7 @@ def load_logged_in_user():
             "username": user_id,
             "password": password,
             "rol": user_id,
+            "access_app": True,
         }
         convocatoria = Convocatoria().get_current_active(
             fecha_actual=date.today().strftime("%Y-%m-%d")
@@ -97,7 +98,7 @@ def signup():
         ans = Estudiante().get_by_email(email)
         if len(ans) == 0:
             flash("Estudiante no existe en la base de datos.")
-        elif User().create(ans, send_message=True):
+        elif User().create(ans):
             flash(
                 "Hemos enviado a tu correo institucional las credenciales de accesso."
             )
@@ -387,14 +388,27 @@ def generar_beneficiarios(id_convocatoria=None):
     return redirect(url_for("convocatoria_view"))
 
 
+@app.route("/registerticket/<id_ticket>")
+@login_required
+def utilizar_ticket(id_ticket):
+    Ticket().usar_ticket(id_ticket)
+    tick = Ticket().get(id_ticket)[0]
+    tick["nombre1"] = g.user["nombre1"]
+    return render_template("utilizar_ticket.html", data=tick)
+
+
 @app.errorhandler(psycopg2.Error)
 def handle_exception(e):
     """Return JSON instead of HTML for HTTP errors."""
+
     response = {
         "code": e.pgcode,
         "error": e.pgerror,
     }
-    return response
+    if e.pgcode == "42710":
+        response["code"] = "E001"
+        response["error"] = "Ya existe un usuario asociado a ese correo"
+    return render_template("error.html", response=response)
 
 
 @app.route("/tickets")
@@ -408,13 +422,15 @@ def mis_tickets():
         t_refrigerio = Ticket().get_ticket_refrigerio(
             g.user.get("current_beneficiario")
         )
-        ctx["talmuerzo"] = t_almuerzo
-        ctx["trefrigerio"] = t_refrigerio
+        ctx["talmuerzo"] = t_almuerzo[0]
+        ctx["id_almuerzo"] = t_almuerzo[0]["id_ticket"]
+        ctx["trefrigerio"] = t_refrigerio[0]
+        ctx["id_refrigerio"] = t_refrigerio[0]["id_ticket"]
         ctx["qr_talmuerzo"] = generate_qr_image(
-            t_almuerzo["id_ticket"], id_beneficiario
+            t_almuerzo[0]["id_ticket"], g.user["username"]
         )
         ctx["qr_refrigerio"] = generate_qr_image(
-            t_refrigerio["id_ticket"], id_beneficiario
+            t_refrigerio[0]["id_ticket"], g.user["username"]
         )
         return render_template("tickets.html", actividades=actividades, ctx=ctx)
     flash("No tienes asignado un beneficiario")

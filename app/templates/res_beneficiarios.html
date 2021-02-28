@@ -1,6 +1,9 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
 
 <body>
@@ -9,14 +12,17 @@
     <div id="admin" class="col s12">
       <div class="card material-table">
         <div class="table-header">
-          <span class="table-title">Material Datatable</span>
+          <h2> Resultados Convocatoria </h2>
         </div>
-        <table id="datatable">
+        <table class="table" border="3">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Nombre</th>
-              <th>Tipo de almuerzo asignado</th>
+              <th scope="col">Identificación</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Apellido</th>
+              <th scope="col">Proyecto Curricular</th>
+              <th scope="col">Puntaje</th>
+              <th scope="col">Tipo de almuerzo asignado</th>
             </tr>
           </thead>
           <tbody>
@@ -25,7 +31,10 @@
             <tr>
               <td>{{r['identificacion']}}</td>
               <td>{{r['nombre1']}}</td>
-              <td>{{r['nombre']}}</td>
+              <td>{{r['apellido1']}}</td>
+              <td>{{r['proyecto_curricular']}}</td>
+              <td>{{r['puntaje']}}</td>
+              <td>{{r['ntipo_subsidio']}}</td>
             </tr>
             {% endfor %}
             {% endif %}

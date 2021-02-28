@@ -30,6 +30,7 @@ create ROLE creadorUsuarios LOGIN CREATEROLE;
 /* Students of testing */
 /* Note: this two registers must already exist in the table 'student' */
 DROP ROLE IF EXISTS e20131020001 ;
+DROP ROLE IF EXISTS e20131020016 ;
 create ROLE e20131020001 LOGIN INHERIT;
 DROP ROLE IF EXISTS e20132005002 ;
 create ROLE e20132005002 LOGIN INHERIT;
@@ -49,10 +50,10 @@ ALTER ROLE asistente with PASSWORD 'apass';
 ALTER ROLE creadorUsuarios with PASSWORD 'cpass';
 
 
-ALTER ROLE e20131020001 with PASSWORD 'epass';
-ALTER ROLE e20132005002 with PASSWORD 'epass';
-ALTER ROLE f1020141478 with PASSWORD 'fpass';
-ALTER ROLE f1010121110 with PASSWORD 'fpass';
+ALTER ROLE e20131020001 with PASSWORD 'alberto123';
+ALTER ROLE e20132005002 with PASSWORD 'gabriela123';
+ALTER ROLE f1020141478 with PASSWORD 'kevin1020';
+ALTER ROLE f1010121110 with PASSWORD 'juana78';
 
 
 
