@@ -1,6 +1,7 @@
  -- warning: this drop all data.
 \i drop_database.sql
  -- create elements
+\i create_tablespace.sql
 \i create_database.sql
 \i populate_database.sql
 \i create_roles.sql
