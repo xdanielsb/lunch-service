@@ -511,7 +511,11 @@ create table actividad_beneficiario(
   id_actividad number(2,0),
   id_estado_actividad number(2,0),
   --id_responsable number(2,0),
-  constraint actividad_beneficiario_pk primary key (id_actividad_beneficiario) enable);
+  constraint actividad_beneficiario_pk primary key (id_actividad_beneficiario) enable,
+  constraint id_beneficiario_ab_fk foreign key (id_beneficiario) references beneficiario(id_beneficiario),
+  constraint id_actividad_ab_fk foreign key (id_actividad) references actividad(id_actividad),
+  constraint id_estado_actividad_ab_fk foreign key (id_estado_actividad) references estado_actividad(id_estado_actividad)
+);
 
 
 /**************** PARAMETROS ************************/
