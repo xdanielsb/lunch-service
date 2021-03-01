@@ -23,6 +23,9 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 ```sh
  $ python3 -m venv env-lunch/
  $ source env-lunch/bin/activate
+ #Windows
+ .\env-lunch\Scripts\activate.bat
+
  (env-lunch)$ pip3 install -r requirements.txt
  (env-lunch)$ cd app/
  (env-lunch)$ flask run # export FLASK_APP=app.py
