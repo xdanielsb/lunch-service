@@ -9,6 +9,11 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 ### Instructions
 
 #### Database
+```
+  # Inicio de servicio postgres en instancia AWS
+  pg_ctlcluster 13 main start
+```
+
 ```sh
   $ cd schema
   # creates the db apoyo_alimentario and connect to the schema using psql
@@ -18,6 +23,7 @@ A simple prototype application to manage the logic behind restaurant tickets in 
   # exit of psql
   apoyo_alimentario=# \q
 ```
+
 
 #### App
 ```sh
