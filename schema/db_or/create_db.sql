@@ -260,7 +260,7 @@ create table solicitud(
   id_estado_solicitud number(2,0) default 1,
   id_convocatoria number(2,0) not null,
   constraint solicitud_pk primary key (id_solicitud) enable,
-  constraint chk_estrato check(estrato >=0 and puntaje <=6),
+  constraint chk_estrato check(estrato >=0 and estrato <=6),
   constraint chk_puntaje_in_zero check(puntaje >=0 and puntaje <=100),
   constraint id_convocatoria_fk foreign key (id_convocatoria) references convocatoria(id_convocatoria),
   constraint id_estado_solicitud_fk foreign key (id_estado_solicitud) references estado_solicitud(id_estado_solicitud),

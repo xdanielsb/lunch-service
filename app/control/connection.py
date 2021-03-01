@@ -117,9 +117,10 @@ def query(query):
         cur = conn.cursor()
         cur.execute(query)
         #cur.rowfactory = makeDictFactory(cur)
+    else:    
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(query)
         
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute(query)
     ans = [row for row in cur]
     cur.close()
     #print(type(ans))
