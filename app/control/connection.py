@@ -17,10 +17,10 @@ def get_db(username=None, password=None):
     try:
         if not hasattr(g, "dbconn"):
             #src = os.environ.get("DB_SOURCE")
-            src = "POSTGRES"
+            src = "ORACLE"
             if src is None or src == "POSTGRES":
                 g.dbconn = psycopg2.connect(
-                    host="localhost",
+                    host="52.206.143.56",
                     database="apoyo_alimentario",
                     user=username if (username is not None) else g.user["username"],
                     password=password if (password is not None) else g.user["password"],
@@ -29,8 +29,8 @@ def get_db(username=None, password=None):
                 g.dbconn = cx_Oracle.connect(
                     username if (username is not None) else g.user["username"],
                     password if (password is not None) else g.user["password"],
-                    "localhost/xe",
-                    #"52.206.143.56/xe",
+                    #"localhost/xe",
+                    "52.206.143.56/xe",
                 )
     except Exception as ex:
         err = str(ex)
@@ -41,7 +41,7 @@ def get_db(username=None, password=None):
 def adapt_db(func):
     def inner(q):
         #src = os.environ.get("DB_SOURCE")
-        src = "POSTGRES"
+        src = "ORACLE"
         if src == "ORACLE":                 
             if q.count('select nextval')>0:
                 if q.count('id_convocatoria')>0:
@@ -112,15 +112,14 @@ def query(query):
     if not hasattr(g, "dbconn"):
         get_db()
     conn = g.dbconn
-    src = "POSTGRES"
+    src = "ORACLE"
     if src =="ORACLE": 
         cur = conn.cursor()
         cur.execute(query)
         #cur.rowfactory = makeDictFactory(cur)
-    else:
-        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute(query)
-    
+        
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(query)
     ans = [row for row in cur]
     cur.close()
     #print(type(ans))
@@ -148,5 +147,5 @@ def makeDictFactory(cursor):
 
 if __name__ == "__main__":
     conn = psycopg2.connect(
-        host="localhost", database="apoyo_alimentario", user="", password=""
+        host="52.206.143.56", database="apoyo_alimentario", user="", password=""
     )
