@@ -2,7 +2,7 @@
 -- insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (1, '2020-3','2020-10-27 00:00:00', '2021-4-27 23:59:59');
 -- insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (2, '2020-1','2020-02-01 00:00:00', '2020-05-29 23:59:59');
 
-insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (1, '2020-3',to_date('2020-10-27 00:00:00', 'yyyy-mm-dd hh24:mi:ss'), to_date('2020-12-27 23:59:59','yyyy-mm-dd hh24:mi:ss'));
+insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (1, '2020-3',to_date('2020-10-27 00:00:00', 'yyyy-mm-dd hh24:mi:ss'), to_date('2021-4-27 23:59:59','yyyy-mm-dd hh24:mi:ss'));
 insert into periodo(id_periodo, nombre, fecha_inicio, fecha_fin) values (2, '2020-1',to_date('2020-02-01 00:00:00','yyyy-mm-dd hh24:mi:ss'), to_date('2020-05-29 23:59:59', 'yyyy-mm-dd hh24:mi:ss'));
 
 

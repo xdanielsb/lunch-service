@@ -54,7 +54,7 @@ class Convocatoria:
     def lunch_facs_equal_lunch_types(self, id_convocatoria):
         # verify the sum of tipo_subsidio_convocatoria is the same of convocatoria_facultad
         q1 = query(
-            "select sum(cantidad_de_almuerzos_ofertados) from tipo_subsidio_convocatoria where id_convocatoria={}".format(
+            "select sum(cant_almuerzos_ofertados) from tipo_subsidio_convocatoria where id_convocatoria={}".format(
                 id_convocatoria
             )
         )
@@ -86,7 +86,7 @@ class Convocatoria:
         # get the number of lunches per convocatoria and tipo subsidio
         q3 = dict(
             query(
-                "select id_tipo_subsidio, cantidad_de_almuerzos_ofertados from tipo_subsidio_convocatoria where id_convocatoria={}".format(
+                "select id_tipo_subsidio, cant_almuerzos_ofertados from tipo_subsidio_convocatoria where id_convocatoria={}".format(
                     id_convocatoria
                 )
             )

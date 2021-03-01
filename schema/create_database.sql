@@ -151,8 +151,8 @@ create table convocatoria_facultad(
 create table tipo_subsidio_convocatoria(
   id_convocatoria integer not null, 
   id_tipo_subsidio integer not null, 
-  cantidad_de_almuerzos_ofertados smallint constraint chk_subsidio_periodo_cantidad_almuerzos_positive check(
-    cantidad_de_almuerzos_ofertados >= 0
+  cant_almuerzos_ofertados smallint constraint chk_subsidio_periodo_cantidad_almuerzos_positive check(
+    cant_almuerzos_ofertados >= 0
   ), 
   foreign key(id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio), 
   foreign key (id_convocatoria) references convocatoria(id_convocatoria) on delete cascade, 

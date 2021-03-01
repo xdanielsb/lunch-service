@@ -16,6 +16,7 @@
 import functools
 import os
 from datetime import date
+import json
 
 import pdfkit
 import psycopg2
@@ -142,8 +143,9 @@ def convocatoria(id_convocatoria=None):
     convocatoria = Convocatoria()
 
     if request.method == "POST":
+        
         isUpdate = convocatoria.exist(request.form["id_convocatoria"])
-
+        
         if isUpdate:
             convocatoria.update(request.form)
             flash("Convocatoria actualizada exitosamente")
@@ -172,7 +174,7 @@ def convocatoria(id_convocatoria=None):
                 data = {
                     "id_tipo_subsidio": id_tipo_subsidio,
                     "id_convocatoria": request.form["id_convocatoria"],
-                    "cantidad_de_almuerzos_ofertados": request.form[field],
+                    "cant_almuerzos_ofertados": request.form[field],
                 }
                 if isUpdate:
                     cts.update(data)
@@ -196,6 +198,7 @@ def convocatoria(id_convocatoria=None):
     active_periodo = Periodo().get_active_period(
         fecha_actual=date.today().strftime("%Y-%m-%d")
     )
+    
     if len(active_periodo) == 0:
         flash("No hay periodos activos.")
         return redirect(url_for("home"))
@@ -208,7 +211,9 @@ def convocatoria(id_convocatoria=None):
 
     if id_convocatoria is not None:
         if convocatoria.exist(id_convocatoria):
+            print(type(data))
             data.update(convocatoria.get(id_convocatoria=id_convocatoria)[0])
+            print(data)
             for id_fac, num in ConvocatoriaFacultad().get(
                 id_convocatoria=id_convocatoria
             ):
@@ -220,6 +225,7 @@ def convocatoria(id_convocatoria=None):
     else:
         data["id_convocatoria"] = convocatoria.get_next_id()
         data["fecha_creacion"] = date.today().strftime("%Y-%m-%d")
+        
 
     return render_template("convocatoria.html", data=data)
 

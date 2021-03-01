@@ -49,6 +49,12 @@ create table periodo(
   constraint chk_periodo_fin_inicio check(fecha_fin>fecha_inicio),
   constraint periodo_pk primary key (id_periodo) enable
 ); 
+--SELECT TO_TIMESTAMP('2021-02-28') FROM DUAL;
+--select id_periodo, nombre from periodo where to_char(FECHA_CREACION, 'DD/MM/YYYY')= TO_DATE ('2021-02-28', 'yyyy-mm-dd') and fecha_fin>=TO_DATE ('2021-02-28', 'yyyy-mm-dd');
+
+--select id_periodo, to_char(fecha_inicio, 'YYYY-MM-DD') "FECHA_IN", to_char(fecha_fin, 'YYYY-MM-DD') "FECHA_FN" from periodo where 'FECHA_IN' <= '2021-02-28' and 'FECHA_FN' >= '2021-02-28';
+--select * from periodo ;
+--select id_periodo, nombre from periodo where fecha_inicio<=TO_DATE ('2021-02-28', 'yyyy-mm-dd') and fecha_fin >=TO_DATE ('2021-02-28', 'yyyy-mm-dd');
 
 --alter table periodo add constraint chk_periodo_fin_inicio check(fecha_fin>fecha_inicio);
 
@@ -76,6 +82,10 @@ create table convocatoria(
   constraint chk_conv_fecha_cerrada check(fecha_cerrada>fecha_abierta),
   constraint chk_conv_fecha_publicacion  check(fecha_publicacion_resultados>fecha_cerrada)
 );
+
+CREATE SEQUENCE seq_id_convocatoria INCREMENT BY 1 START WITH 1;
+--select seq_id_convocatoria.nextval from dual;
+--select seq_id_convocatoria.currval from dual;
 
 --alter table convocatoria add constraint convocatoria_periodo_fk foreign key (id_periodo) references periodo (id_periodo) enable;
 --alter table convocatoria add constraint chk_conv_fecha_abierta check(fecha_cerrada>=fecha_creacion);
@@ -258,7 +268,8 @@ create table solicitud(
   constraint uq_id_convocatoria unique(id_convocatoria),
   constraint uq_id_estudiante unique(id_estudiante)
 );
-  
+
+CREATE SEQUENCE seq_id_solicitud INCREMENT BY 1 START WITH 1; 
   
 --alter table solicitud add constraint chk_estrato check(estrato >=0 and puntaje <=6);
 --alter table solicitud add constraint chk_puntaje_in_zero check(puntaje >=0 and puntaje <=100);
@@ -288,7 +299,7 @@ create table historico_solicitud(
   constraint historico_solicitud_pk primary key (id_historico_solicitud) enable,
   constraint id_estado_his_solicitud_fk foreign key(id_estado_solicitud) references estado_solicitud(id_estado_solicitud),
   constraint id_solicitud_fk foreign key(id_solicitud) references solicitud(id_solicitud)
-  );
+);
 
 --alter table historico_solicitud add constraint id_estado_his_solicitud_fk foreign key(id_estado_solicitud) references estado_solicitud(id_estado_solicitud);
 --alter table historico_solicitud add constraint id_solicitud_fk foreign key(id_solicitud) references solicitud(id_solicitud);
@@ -322,7 +333,7 @@ create table documento_solicitud(
   constraint id_solicitud_documento_fk foreign key(id_solicitud) references solicitud(id_solicitud) on delete cascade,
   constraint id_puntaje_tipo_documento_fk foreign key(id_puntaje_tipo_documento) references puntaje_tipo_documento(id_puntaje_tipo_documento),
   constraint id_tipo_documento_solicitud_fk foreign key(id_tipo_documento) references tipo_documento(id_tipo_documento)
-  );
+);
   
 --alter table documento_solicitud add constraint id_estado_documento_fk foreign key(id_estado_documento) references estado_documento(id_estado_documento);
 --alter table documento_solicitud add constraint id_solicitud_documento_fk foreign key(id_solicitud) references solicitud(id_solicitud) on delete cascade;
@@ -351,7 +362,7 @@ create table tipo_subsidio(
   constraint tipo_subsidio_pk primary key (id_tipo_subsidio) enable,
   constraint chk_tipo_subsidiado_porcentaje check(porcentaje_subsidiado>=0 and porcentaje_subsidiado<=100),
   constraint chk_tipo_subsidiado_puntos check( puntos_requeridos>=0)
-  );
+);
 
 --alter table tipo_subsidio add constraint chk_tipo_subsidiado_porcentaje check(porcentaje_subsidiado>=0 and porcentaje_subsidiado<=100);
 --alter table tipo_subsidio add constraint chk_tipo_subsidiado_puntos check( puntos_requeridos>=0);
@@ -374,7 +385,7 @@ create table convocatoria_facultad(
   constraint id_convocatoria_facultad_fk foreign key( id_convocatoria) references convocatoria(id_convocatoria)  on delete cascade,
   constraint id_facultad__fk foreign key( id_facultad) references facultad(id_facultad),
   constraint chk_conv_facultad_cantidad check(cantidad_de_almuerzos>=0)
-  );
+);
 
 --alter table convocatoria_facultad add constraint id_convocatoria_facultad_fk foreign key( id_convocatoria) references convocatoria(id_convocatoria)  on delete cascade;
 --alter table convocatoria_facultad add constraint id_facultad__fk foreign key( id_facultad) references facultad(id_facultad);
@@ -384,7 +395,7 @@ create table convocatoria_facultad(
 -- create table tipo_subsidio_convocatoria(
   -- id_convocatoria integer not null,
   -- id_tipo_subsidio integer not null,
-  -- cantidad_de_almuerzos_ofertados  smallint constraint chk_subsidio_periodo_cantidad_almuerzos_positive check(cantidad_de_almuerzos_ofertados>=0),
+  -- cant_almuerzos_ofertados  smallint constraint chk_subsidio_periodo_cantidad_almuerzos_positive check(cant_almuerzos_ofertados>=0),
   -- foreign key( id_tipo_subsidio) references tipo_subsidio(id_tipo_subsidio),
   -- foreign key (id_convocatoria) references convocatoria(id_convocatoria) on delete cascade,
   -- primary key(id_tipo_subsidio, id_convocatoria)

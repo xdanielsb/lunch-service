@@ -20,3 +20,6 @@ drop table actividad CASCADE CONSTRAINTS ;
 drop table actividad_beneficiario CASCADE CONSTRAINTS ;
 drop table parametro CASCADE CONSTRAINTS ;
 drop table funcionario CASCADE CONSTRAINTS ;
+
+drop sequence seq_id_convocatoria;
+drop sequence seq_id_solicitud;
