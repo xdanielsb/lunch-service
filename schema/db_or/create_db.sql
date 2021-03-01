@@ -257,7 +257,7 @@ create table solicitud(
   puntaje number(3,0),
   ultima_actualizacion timestamp not null,
   estrato number(1,0) not null,
-  id_estado_solicitud number(1,0) default 1,
+  id_estado_solicitud number(2,0) default 1,
   id_convocatoria number(2,0) not null,
   constraint solicitud_pk primary key (id_solicitud) enable,
   constraint chk_estrato check(estrato >=0 and puntaje <=6),
