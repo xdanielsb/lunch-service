@@ -43,14 +43,14 @@
   <h5>Documentos solicitud</h5>
   {% for  id_tipo_documento, nombre, url, id_estado_documento, comentarios, current_id_puntaje_tipo_doc in documentos_solicitud %}
   <div class="row">
-    <div class="col md-6">
+    <div class="col-12  col-md-6">
       <div class="card mb-4">
         {% set doc_checked = 'doc{}'.format(id_tipo_documento)%}
         <input type="hidden" name="{{doc_checked}}" value="{{id_tipo_documento}}">
         <iframe src="{{ url_for('static', filename='uploads/{}'.format(url))}}" style="width:100%;height:700px;"></iframe>
       </div>
     </div>
-    <div class="col md-6">
+    <div class="col-12 col-md-6">
       <div class="card mb-4">
         {% if puntajes and g.user["rol"][0] != "e" %}
         <label class="mt-2 mb-2" for="sel1"><b>{{nombre}}</b></label>

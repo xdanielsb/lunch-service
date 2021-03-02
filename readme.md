@@ -6,6 +6,13 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 
 ***It is worth to say it is just a prototype and it is develop for academic purposes for the subject databases, then the backend contains "many" problems.***
 
+
+#### Demo 
+
+<img src="assets/Slide1.png" />
+<img src="assets/Slide2.png" />
+<img src="assets/Slide3.png" />
+
 ### Instructions
 
 #### Database
@@ -36,9 +43,10 @@ A simple prototype application to manage the logic behind restaurant tickets in 
 
 
 #### Email
-
-Configure  env variable MAIL_USERNAME & MAIL_PASSWORD to be able to send 
-emails.
+```sh
+ $ export MAIL_USERNAME=XXXXX
+ $ export MAIL_PASSWORD=XXXXX
+```
 
 
 #### Domain Model
