@@ -1,26 +1,34 @@
-CREATE OR REPLACE TRIGGER TG_CONV_FECHA
-BEFORE INSERT or UPDATE ON CONVOCATORIA
-FOR EACH ROW
--- Variables
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('TRIGGER DE FECHAS');
+/* historico solicitud */
 
-    IF INSERTING THEN
-        --INSERT INTO CONVOCATORIA(id_convocatoria, fecha_creacion, fecha_abierta, fecha_cerrada, fecha_publicacion_resultados, id_periodo) 
-        --VALUES (seq_id_convocatoria.nextval,TO_DATE(':new.fecha_creacion', 'yyyy-mm-dd'), TO_DATE (':new.fecha_abierta', 'yyyy-mm-dd'), TO_DATE (':new.fecha_cerrada', 'yyyy-mm-dd'), TO_DATE (':new.fecha_publicacion_resultados', 'yyyy-mm-dd'), :new.id_periodo)
-        :new.id_convocatoria := seq_id_convocatoria.nextval;
-        :new.fecha_creacion := TO_DATE (':new.fecha_abierta', 'yyyy-mm-dd');
-        :new.fecha_abierta := TO_DATE (':new.fecha_abierta', 'yyyy-mm-dd');
-        :new.fecha_cerrada := TO_DATE (':new.fecha_cerrada', 'yyyy-mm-dd');
-        :new.fecha_cerrada := TO_DATE (':new.fecha_publicacion_resultados', 'yyyy-mm-dd');
-    END IF;
+create or replace trigger solicitud_insert_trigger 
+after insert on solicitud
+for each row 
+declare
 
-    IF UPDATING THEN
-        :new.fecha_abierta := TO_DATE (':new.fecha_abierta', 'yyyy-mm-dd');
-        :new.fecha_cerrada := TO_DATE (':new.fecha_cerrada', 'yyyy-mm-dd');
-        :new.fecha_cerrada := TO_DATE (':new.fecha_publicacion_resultados', 'yyyy-mm-dd');
-    END IF;
-    
-END TG_CONV_FECHA;
+t_solicitud VARCHAR2 (10);
+begin
+ select user into t_solicitud from dual ;
+ insert into historico_solicitud
+      (id_historico_solicitud,id_solicitud, id_estado_solicitud, modificado_por, fecha)
+      values
+      (SEQ_HISTORICO_SOLICITUD.NEXTVAL,:new.id_solicitud, :new.id_estado_solicitud, t_solicitud, current_timestamp);
+    return ;
+end solicitud_insert_trigger; 
 
-insert into convocatoria values (2, '2021-02-28', '2021-02-24', '2021-02-25', '2021-02-26', 1)
+-------------------------------------------------------------------------  
+
+create or replace trigger solicitud_updated_trigger
+after update on solicitud
+for each row
+declare 
+ t_solicitud VARCHAR2 (10);
+begin
+if UPDATING THEN 
+    select user into t_solicitud from dual ;
+    insert into historico_solicitud
+          (id_historico_solicitud, id_solicitud, id_estado_solicitud, modificado_por, fecha)
+          values
+          (SEQ_HISTORICO_SOLICITUD.NEXTVAL,:new.id_solicitud, :new.id_estado_solicitud, t_solicitud, current_timestamp);
+    return;
+end if ;
+end solicitud_updated_trigger;

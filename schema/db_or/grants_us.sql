@@ -1,0 +1,86 @@
+/* PERMISOS */
+GRANT connect TO ASISTENTE;
+GRANT connect TO ADMIN;
+GRANT connect TO STUDENT;
+GRANT connect TO CREADORUSUARIOS;
+
+-- AdminRol Grants
+/* ADMIN */
+GRANT ALL ON ADMIN.periodo to ADMIN; 
+GRANT ALL ON ADMIN.tipo_subsidio to ADMIN; 
+GRANT ALL ON ADMIN.facultad to ADMIN; 
+GRANT ALL ON ADMIN.convocatoria to ADMIN; 
+GRANT ALL ON ADMIN.convocatoria_facultad to ADMIN; 
+GRANT ALL ON ADMIN.tipo_subsidio_convocatoria to ADMIN; 
+GRANT ALL ON ADMIN.tipo_documento to ADMIN; 
+GRANT ALL ON ADMIN.solicitud to ADMIN; 
+GRANT ALL ON ADMIN.documento_solicitud to ADMIN; 
+GRANT ALL ON ADMIN.puntaje_tipo_documento to ADMIN; 
+GRANT ALL ON ADMIN.estado_documento to ADMIN;
+GRANT ALL ON ADMIN.estado_solicitud to ADMIN;  
+GRANT ALL ON ADMIN.estudiante to ADMIN; 
+GRANT ALL ON ADMIN.proyecto_curricular to ADMIN; 
+GRANT ALL ON ADMIN.actividad_beneficiario to ADMIN; 
+GRANT ALL ON ADMIN.ticket to ADMIN; 
+GRANT ALL ON ADMIN.actividad to ADMIN; 
+GRANT ALL ON ADMIN.estado_actividad to ADMIN;
+GRANT ALL ON ADMIN.beneficiario to ADMIN;
+GRANT ALL ON ADMIN.historico_solicitud to ADMIN;
+GRANT ALL ON ADMIN.estado_actividad to ADMIN;
+
+GRANT CREATE ANY SEQUENCE, ALTER ANY SEQUENCE, DROP ANY SEQUENCE, SELECT ANY SEQUENCE to ADMIN;
+GRANT GRANT ANY OBJECT PRIVILEGE TO ADMIN;
+GRANT GRANT ANY ROLE TO ADMIN;
+
+/* CREADORUSUARIOS */
+GRANT SELECT ON ADMIN.estudiante to CREADORUSUARIOS;
+
+/* ASISTENTE */
+GRANT ALL ON ADMIN.convocatoria to ASISTENTE;
+GRANT ALL ON ADMIN.convocatoria_facultad to ASISTENTE;
+GRANT ALL ON ADMIN.tipo_subsidio_convocatoria to ASISTENTE;
+GRANT SELECT ON ADMIN.periodo to ASISTENTE;
+GRANT SELECT ON ADMIN.documento_solicitud to ASISTENTE;
+GRANT SELECT ON ADMIN.tipo_documento to ASISTENTE;
+GRANT ALL ON ADMIN.documento_solicitud to ASISTENTE;
+GRANT SELECT ON ADMIN.tipo_subsidio to ASISTENTE;
+GRANT SELECT ON ADMIN.facultad to ASISTENTE;
+GRANT SELECT ON ADMIN.estudiante to ASISTENTE;
+GRANT SELECT,UPDATE ON ADMIN.solicitud to ASISTENTE;
+GRANT SELECT ON ADMIN.estado_documento to ASISTENTE;
+GRANT SELECT ON ADMIN.estado_solicitud to ASISTENTE;
+GRANT SELECT ON ADMIN.funcionario to ASISTENTE;
+GRANT SELECT ON ADMIN.proyecto_curricular to ASISTENTE;
+GRANT ALL ON ADMIN.puntaje_tipo_documento to ASISTENTE;
+GRANT ALL ON ADMIN.beneficiario to ASISTENTE;
+GRANT INSERT,UPDATE,SELECT ON ADMIN.historico_solicitud to ASISTENTE;
+GRANT ALL ON ADMIN.ticket	 to ASISTENTE;
+GRANT ALL ON ADMIN.actividad to ASISTENTE;
+GRANT SELECT ON ADMIN.estado_actividad to ASISTENTE;
+
+
+/* STUDENT */
+GRANT SELECT ON ADMIN.periodo to STUDENT;
+GRANT SELECT ON ADMIN.estado_documento to STUDENT;
+GRANT SELECT ON ADMIN.convocatoria to STUDENT;
+GRANT SELECT ON ADMIN.tipo_documento to STUDENT;
+GRANT SELECT ON ADMIN.estudiante to STUDENT;
+GRANT SELECT ON ADMIN.tipo_subsidio to STUDENT;
+GRANT SELECT ON ADMIN.facultad to STUDENT;
+GRANT SELECT ON ADMIN.proyecto_curricular to STUDENT;
+GRANT SELECT ON ADMIN.puntaje_tipo_documento to STUDENT;
+GRANT SELECT ON ADMIN.estado_actividad to STUDENT;
+GRANT SELECT ON ADMIN.beneficiario to STUDENT;
+GRANT SELECT ON ADMIN.actividad_beneficiario to STUDENT;
+GRANT ALL ON ADMIN.solicitud to STUDENT;
+GRANT ALL ON ADMIN.documento_solicitud to STUDENT;
+GRANT INSERT,UPDATE,SELECT ON ADMIN.historico_solicitud to STUDENT;
+GRANT ALL ON ADMIN.ticket to STUDENT;
+GRANT SELECT ON ADMIN.actividad to STUDENT;
+GRANT SELECT ON ADMIN.estado_actividad to STUDENT;
+
+
+GRANT ADMIN TO ADMIN WITH ADMIN OPTION;
+GRANT CREADORUSUARIOS TO creadorUsuarios;
+GRANT ASISTENTE TO asistente;
+GRANT STUDENT TO student;

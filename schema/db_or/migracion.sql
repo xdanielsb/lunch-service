@@ -3,7 +3,6 @@
 /* \d table_tame */
 /* list tables \dt 8*/
 
-
 /* TABLESPACE */
 
 /* DEFAULT */
@@ -29,8 +28,9 @@ GRANT connect, resource TO APAL;
 */
 
 /*
-CREATE DATABASE apoyo_alimentario
 USER APAL IDENTIFIED BY apal
+
+CREATE DATABASE apoyo_alimentario
 EXTENT MANAGEMENT LOCAL
 DEFAULT TEMPORARY TABLESPACE APALTMP
 DEFAULT TABLESPACE APALDEF;
